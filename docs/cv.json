@@ -1,0 +1,96 @@
+{
+  "fullName": "Lütfi Tekin",
+  "contact": {
+    "phone": "+49 1517 0680387",
+    "email": "luetfi.tekin@gmail.com",
+    "linkedin": "https://linkedin.com/in/lutfitekin",
+    "github": "https://github.com/LutfiTekin"
+  },
+  "summary": "Android dev since 2017. Kotlin/Java pro, with Swift/JS exposure. Remote/hybrid/on-site versatility. Moved to Germany (2023). English C1, German B1.",
+  "experience": [
+    {
+      "title": "Senior Android Developer",
+      "type": "Consultant",
+      "company": "Bestnet",
+      "location": "Remote",
+      "period": "2024-09 to 2025-03",
+      "stack": ["Kotlin", "Play Store", "Architecture", "Performance"],
+      "notes": [
+        "Refactored architecture for an existing Android app",
+        "Handled end-to-end Google Play release ops",
+        "Improved scalability & best practice alignment"
+      ]
+    },
+    {
+      "title": "Senior Android Developer",
+      "type": "Full Time",
+      "company": "Appsfactory",
+      "location": "Leipzig, Germany (On-Site)",
+      "period": "2023-01 to 2024-08",
+      "projects": ["Tagesschau", "BILD+", "Vattenfall Highlights", "DB-Ausflug"],
+      "notes": [
+        "Owned the Android stack for Tagesschau app",
+        "Contributed to several high-visibility apps"
+      ]
+    },
+    {
+      "title": "Senior Android Developer",
+      "type": "Full Time",
+      "company": "PATH",
+      "location": "Remote",
+      "period": "2021-03 to 2022-10",
+      "project": "tuttur.com",
+      "notes": [
+        "Modernized legacy codebase",
+        "Implemented full feature sets solo"
+      ]
+    },
+    {
+      "title": "Mobile Application Developer",
+      "type": "Full Time",
+      "company": "Bestnet",
+      "location": "Antalya, Türkiye (On-Site)",
+      "period": "2020-02 to 2021-03",
+      "stack": ["Kotlin", "AndroidX", "Retrofit", "Spring Boot", "Firebase"],
+      "notes": [
+        "Led Android dev solo",
+        "Implemented REST integrations & Firebase services"
+      ]
+    },
+    {
+      "title": "Mobile Application Developer",
+      "type": "Freelance",
+      "company": "Self-Employed",
+      "location": "Remote",
+      "period": "2017-02 to 2019-12",
+      "stack": ["Kotlin", "Swift"],
+      "notes": [
+        "Built and shipped Android/iOS apps",
+        "Delivered projects E2E under tight deadlines",
+        "Provided backend dev support when needed"
+      ]
+    }
+  ],
+  "languages": {
+    "english": "C1",
+    "german": "B1",
+    "turkish": "native"
+  },
+  "techStack": {
+    "languages": ["Kotlin", "Java", "Swift", "JavaScript"],
+    "android": [
+      "Jetpack Compose", "CameraX", "Dagger", "Hilt", "Koin",
+      "Coroutines", "Flows", "Gradle", "MVVM", "MVP", "Retrofit",
+      "ViewBinding", "DataBinding"
+    ],
+    "backend": ["Node.js", "Spring Boot", "REST APIs"],
+    "devOps": ["Docker", "Azure", "Appcenter", "Fastlane"],
+    "tools": ["Git", "GitHub", "GitLab", "Bitbucket", "JIRA"],
+    "design": ["Figma", "Zeplin"],
+    "firebase": [
+      "Analytics", "Crashlytics", "Hosting", "Push Notifications",
+      "App Distribution", "Cloud Functions", "Realtime DB",
+      "Firestore", "Authentication", "Remote Config"
+    ]
+  }
+}
