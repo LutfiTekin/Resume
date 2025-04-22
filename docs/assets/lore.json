@@ -61,12 +61,28 @@
             "story": "Standing observant before imposing modern monoliths, this sentinel watches the world with a keen eye. They find the extraordinary within the monumental, ever alert to the flicker of surprise in the urban landscape, embodying readiness for the unexpected."
         },
         {
-            "code": "THE_BADDIES_I_III",
+            "code": "THE_BADDIES",
             "effects": [
                 "Introduces an element of playful mischief and unpredictable energy.",
-                "If multiple cards featuring the energetic 'Mistress of Mayhem' persona appear, expect moments of sharp clarity amidst the fun."
+                "If other cards featuring this figure appear, moments of sharp clarity will emerge."
             ],
-            "story": "A trio united in playful rebellion, these figures embrace delightful chaos. Their combined energy is a whirlwind of spontaneity and vibrant intensity, signaling that while trouble may be brewing, it's undoubtedly the fun kind. Expect the unexpected when they appear."
+            "story": "The first in a series of playful disruptors, this figure embraces delightful chaos. Their energy is a whirlwind of spontaneity and vibrant intensity, signaling that while trouble may be brewing, it's undoubtedly the fun kind. Expect the unexpected when they appear."
+        },
+        {
+            "code": "THE_BADDIES_II",
+            "effects": [
+                "Introduces an element of playful mischief and unpredictable energy.",
+                "Multiple appearances of this figure bring surprisingly lucid insights."
+            ],
+            "story": "Following close behind the first, this 'Baddie' continues the theme of delightful chaos. Their presence amplifies the whirlwind of spontaneity and vibrant intensity, ensuring life is unpredictable and fun when they are around."
+        },
+        {
+            "code": "THE_BADDIES_III",
+            "effects": [
+                "Introduces an element of playful mischief and unpredictable energy.",
+                "Recurring appearances of this figure grant moments of profound understanding amidst the chaos."
+            ],
+            "story": "The final figure in this playful trio, this 'Baddie' solidifies the presence of delightful chaos. Their combined energy is a powerful force of spontaneity and vibrant intensity, guaranteeing the story is filled with unexpected, yet fun, developments."
         },
         {
             "code": "ALE_OF_THE_ACHE",
