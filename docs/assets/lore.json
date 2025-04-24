@@ -664,6 +664,14 @@
                 "Highlights themes of beauty, romance, history, and perhaps vulnerability or decay."
             ],
             "story": "Floating on water, a city built on art and history, slowly sinking back into the lagoon. Venice is a place of unparalleled beauty and fragile romance, where time seems to move differently, inviting exploration down silent canals and ancient alleys."
+        },
+        {
+            "code": "LONDON",
+            "effects": [
+                "Adds layers of historical depth or complexity to the narrative.",
+                "May introduce unexpected encounters or challenges related to navigation within a vast network."
+            ],
+            "story": "A sprawling metropolis built on centuries of history, where ancient landmarks stand watch over bustling modernity. London is a nexus of culture, finance, and countless intersecting lives, a city of hidden corners and iconic vistas."
         }
     ]
 }
