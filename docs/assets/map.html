@@ -3,24 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Amor Fati Map Version Tigers of Tokyo</title>
+  <title>Amor Fati Map Version Panthers of Prague</title>
+
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- MarkerCluster CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+
   <style>
     /* Fullscreen map container */
-    body, html { margin: 0; padding: 0; height: 100%; }
-    #map { height: 100%; }
+    html, body { margin: 0; padding: 0; height: 100%; }
+    #map { width: 100%; height: 100%; }
 
-    /* Tarot card marker styling */
-    .tarot-marker { width: 50px; height: 75px; background-size: cover; border: 1px solid #333; border-radius: 4px; }
+    /* Marker styling uses L.icon (no extra divs) */
 
     /* Flippable card styling */
-    .flip-card { width: 120px; height: 180px; perspective: 1000px; overflow: hidden; cursor: pointer; flex-shrink: 0; }
-    .flip-card-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s; }
-    .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
-    .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; }
+    .flip-card {
+      width: 120px; height: 180px;
+      perspective: 1000px;
+      overflow: hidden;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%; height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+    }
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%; height: 100%;
+      backface-visibility: hidden;
+    }
     .flip-card-back { transform: rotateY(180deg); }
-    .flip-card-front img, .flip-card-back img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
+    .flip-card-front img, .flip-card-back img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+    }
 
     /* Popup layout */
     .popup-container { display: flex; align-items: flex-start; }
@@ -28,75 +54,106 @@
     .popup-text strong { display: block; margin-bottom: 4px; }
     .popup-text em { display: block; margin-bottom: 6px; font-style: italic; }
     .popup-text ul { padding-left: 18px; margin: 0; }
+
+    /* Disable flip animation on mobile */
+    @media (max-width: 767px) {
+      .flip-card-inner { transition: none; }
+      .flip-card { cursor: default; }
+    }
   </style>
 </head>
+
 <body>
   <div id="map"></div>
+
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- MarkerCluster JS -->
+  <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
   <script>
     // Fetch lore and coordinates
     Promise.all([
-      fetch('lore.json').then(res => res.json()),
-      fetch('coordinates.json').then(res => res.json())
+      fetch('lore.json').then(r => r.json()),
+      fetch('coordinates.json').then(r => r.json())
     ])
     .then(([loreData, coordinates]) => {
       const lore = loreData.cards;
+      const isMobile = window.innerWidth < 768;
+
       // Pick a random card to center on
       const randomCard = lore[Math.floor(Math.random() * lore.length)];
       const centerLoc = coordinates[randomCard.code] || { lat: 51.0, lng: 13.5 };
 
-      // Initialize the map centered on the random card in Saxony by default zoom 7
+      // Initialize map
       const map = L.map('map').setView([centerLoc.lat, centerLoc.lng], 7);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+      // Base layer selection
+      const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(map);
+      });
+      const light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+      });
+      (isMobile ? light : osm).addTo(map);
 
-      // Add tarot markers
-      lore.forEach(card => {
-        const loc = coordinates[card.code];
-        if (!loc) return;
+      // Marker clustering
+      const cluster = L.markerClusterGroup({ chunkedLoading: true });
+      map.addLayer(cluster);
+
+      // Prepare and add markers within viewport
+      const markers = lore.map(card => {
+        const loc = coordinates[card.code]; if (!loc) return null;
         const codeLower = card.code.toLowerCase();
-        const thumbUrl = `${codeLower}.png`;
-        const fullUrl  = `${codeLower}.png`;
-        const backUrl  = `${codeLower}_back.png`;
-        const fallbackBack = 'back.png';
+        const thumbUrl = `thumbnails/${codeLower}.png`;
+        const icon = L.icon({ iconUrl: thumbUrl, iconSize: [50, 75], iconAnchor: [25, 75] });
 
-        const icon = L.divIcon({
-          html: `<div class=\"tarot-marker\" style=\"background-image:url('${thumbUrl}')\"></div>`,
-          iconSize: [50, 75]
+        const marker = L.marker([loc.lat, loc.lng], { icon });
+        marker.card = card; marker.loaded = false;
+        marker.bindPopup('Loading…');
+        marker.on('popupopen', () => {
+          if (!marker.loaded) {
+            const content = renderPopup(marker.card);
+            marker.setPopupContent(content);
+            if (!isMobile) addFlipListener(marker);
+            marker.loaded = true;
+          }
         });
+        return marker;
+      }).filter(m => m);
 
-        const popupContent = `
-          <div class=\"popup-container\">
-            <div class=\"flip-card\">
-              <div class=\"flip-card-inner\">
-                <div class=\"flip-card-front\">
-                  <img src=\"${fullUrl}\" alt=\"${card.code}\" />
-                </div>
-                <div class=\"flip-card-back\">
-                  <img src=\"${backUrl}\" alt=\"Back of ${card.code}\" onerror=\"this.onerror=null;this.src='${fallbackBack}'\" />
-                </div>
+      function updateMarkers() {
+        const bounds = map.getBounds(); cluster.clearLayers();
+        markers.forEach(marker => { if (bounds.contains(marker.getLatLng())) cluster.addLayer(marker); });
+      }
+      map.on('moveend', updateMarkers); updateMarkers();
+
+      function renderPopup(card) {
+        const codeLower = card.code.toLowerCase();
+        const fullUrl = `${codeLower}.png`;
+        const backUrl = `${codeLower}_back.png`;
+        const fallbackBack = 'back.png';
+        return `
+          <div class="popup-container">
+            <div class="flip-card">
+              <div class="flip-card-inner">
+                <div class="flip-card-front"><img src="${fullUrl}" alt="${card.code}" /></div>
+                <div class="flip-card-back"><img src="${backUrl}" alt="Back of ${card.code}" onerror="this.onerror=null;this.src='${fallbackBack}'" /></div>
               </div>
             </div>
-            <div class=\"popup-text\">
-              <strong>${card.code.replace(/_/g, ' ')}</strong>
+            <div class="popup-text">
+              <strong>${card.code.replace(/_/g,' ')}</strong>
               <em>${card.story}</em>
-              <ul>
-                ${card.effects.map(e => `<li>${e}</li>`).join('')}
-              </ul>
+              <ul>` + card.effects.map(e => `<li>${e}</li>`).join('') + `</ul>
             </div>
           </div>
         `;
+      }
 
-        const marker = L.marker([loc.lat, loc.lng], { icon }).addTo(map);
-        marker.bindPopup(popupContent, { maxWidth: 300 });
-        marker.on('popupopen', () => {
-          const popupEl = marker.getPopup().getElement();
-          const flip = popupEl.querySelector('.flip-card');
-          if (flip) flip.addEventListener('click', () => flip.classList.toggle('flipped'));
-        });
-      });
+      function addFlipListener(marker) {
+        const el = marker.getPopup().getElement();
+        const flip = el.querySelector('.flip-card');
+        if (flip) flip.addEventListener('click', () => flip.classList.toggle('flipped'));
+      }
     })
     .catch(err => console.error('Error loading map data:', err));
   </script>
