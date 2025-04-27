@@ -20,11 +20,64 @@
       border-radius: 4px;
     }
 
-    /* Popup image styling */
-    .popup-card-img {
+    /* Flippable card styling */
+    .flip-card {
+      background: transparent;
+      width: 120px;
+      height: 180px;
+      perspective: 1000px;
+      overflow: hidden;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+    }
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+    }
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front img, .flip-card-back img {
       display: block;
-      max-width: 120px;
-      margin: 5px 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    /* Popup layout */
+    .popup-container {
+      display: flex;
+      align-items: flex-start;
+    }
+    .popup-container .popup-text {
+      margin-left: 12px;
+      text-align: left;
+    }
+    .popup-text strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+    .popup-text em {
+      display: block;
+      margin-bottom: 6px;
+      font-style: italic;
+    }
+    .popup-text ul {
+      padding-left: 18px;
+      margin: 0;
     }
   </style>
 </head>
@@ -52,30 +105,52 @@
         const loc = coordinates[card.code];
         if (!loc) return;
 
-        // Lowercase code for URLs
         const codeLower = card.code.toLowerCase();
         const thumbUrl = `${codeLower}.png`;
         const fullUrl  = `${codeLower}.png`;
+        const backUrl  = `${codeLower}_back.png`;
+        const fallbackBack = 'back.png';
 
-        // Create custom marker with thumbnail applied directly to container
+        // Marker icon
         const icon = L.divIcon({
-          className: '',
           html: `<div class="tarot-marker" style="background-image: url('${thumbUrl}')"></div>`,
           iconSize: [50, 75]
         });
 
-        // Place marker and bind popup with full image
-        L.marker([loc.lat, loc.lng], { icon })
-          .addTo(map)
-          .bindPopup(
-            `<strong>${card.code.replace(/_/g, ' ')}</strong>` +
-            `<img class="popup-card-img" src="${fullUrl}" alt="${card.code}" />` +
-            `<em>${card.story}</em><br>` +
-            `<ul>${card.effects.map(e => `<li>${e}</li>`).join('')}</ul>`
-          );
+        // Popup content container
+        const popupContent = `
+          <div class="popup-container">
+            <div class="flip-card">
+              <div class="flip-card-inner">
+                <div class="flip-card-front">
+                  <img src="${fullUrl}" alt="${card.code}" />
+                </div>
+                <div class="flip-card-back">
+                  <img src="${backUrl}" alt="Back of ${card.code}" onerror="this.onerror=null;this.src='${fallbackBack}'" />
+                </div>
+              </div>
+            </div>
+            <div class="popup-text">
+              <strong>${card.code.replace(/_/g, ' ')}</strong>
+              <em>${card.story}</em>
+              <ul>
+                ${card.effects.map(e => `<li>${e}</li>`).join('')}
+              </ul>
+            </div>
+          </div>
+        `;
+
+        const marker = L.marker([loc.lat, loc.lng], { icon }).addTo(map);
+        marker.bindPopup(popupContent, { maxWidth: 300 });
+
+        marker.on('popupopen', () => {
+          const popupEl = marker.getPopup().getElement();
+          const flip = popupEl.querySelector('.flip-card');
+          if (flip) flip.addEventListener('click', () => flip.classList.toggle('flipped'));
+        });
       });
     })
-    .catch(console.error);
+    .catch(err => console.error('Error loading map data:', err));
   </script>
 </body>
 </html>
