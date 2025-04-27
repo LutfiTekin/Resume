@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tarot Map MVP</title>
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -34,7 +34,7 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-    // Load lore and coordinates from same directory
+    // Fetch lore and coordinates
     Promise.all([
       fetch('lore.json').then(r => r.json()),
       fetch('coordinates.json').then(r => r.json())
@@ -42,7 +42,7 @@
     .then(([loreData, coordinates]) => {
       const lore = loreData.cards;
 
-      // Initialize map
+      // Initialize the map
       const map = L.map('map').setView([20, 0], 2);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
@@ -52,34 +52,30 @@
         const loc = coordinates[card.code];
         if (!loc) return;
 
-        // Build filenames (lowercase)
+        // Lowercase code for URLs
         const codeLower = card.code.toLowerCase();
-        const thumbUrl = `thumbnails/${codeLower}.png`;
+        const thumbUrl = `${codeLower}.png`;
         const fullUrl  = `${codeLower}.png`;
 
-        // Create marker icon with thumbnail
+        // Create custom marker with thumbnail applied directly to container
         const icon = L.divIcon({
+          className: '',
           html: `<div class="tarot-marker" style="background-image: url('${thumbUrl}')"></div>`,
           iconSize: [50, 75]
         });
 
-        // Popup content
-        const popupContent = `
-          <strong>${card.code.replace(/_/g, ' ')}</strong><br>
-          <img class="popup-card-img" src="${fullUrl}" alt="${card.code}" /><br>
-          <em>${card.story}</em><br>
-          <ul>
-            ${card.effects.map(e => `<li>${e}</li>`).join('')}
-          </ul>
-        `;
-
-        // Add marker & popup
+        // Place marker and bind popup with full image
         L.marker([loc.lat, loc.lng], { icon })
           .addTo(map)
-          .bindPopup(popupContent);
+          .bindPopup(
+            `<strong>${card.code.replace(/_/g, ' ')}</strong>` +
+            `<img class="popup-card-img" src="${fullUrl}" alt="${card.code}" />` +
+            `<em>${card.story}</em><br>` +
+            `<ul>${card.effects.map(e => `<li>${e}</li>`).join('')}</ul>`
+          );
       });
     })
-    .catch(err => console.error('Error loading map data:', err));
+    .catch(console.error);
   </script>
 </body>
 </html>
