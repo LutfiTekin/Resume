@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tarot Map MVP</title>
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -34,7 +34,7 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-    // Load lore and coordinates
+    // Load lore and coordinates from same directory
     Promise.all([
       fetch('lore.json').then(r => r.json()),
       fetch('coordinates.json').then(r => r.json())
@@ -52,18 +52,18 @@
         const loc = coordinates[card.code];
         if (!loc) return;
 
-        // Prepare URLs (lowercased codes)
+        // Build filenames (lowercase)
         const codeLower = card.code.toLowerCase();
         const thumbUrl = `thumbnails/${codeLower}.png`;
         const fullUrl  = `${codeLower}.png`;
 
-        // Create marker icon
+        // Create marker icon with thumbnail
         const icon = L.divIcon({
           html: `<div class="tarot-marker" style="background-image: url('${thumbUrl}')"></div>`,
           iconSize: [50, 75]
         });
 
-        // Build popup content
+        // Popup content
         const popupContent = `
           <strong>${card.code.replace(/_/g, ' ')}</strong><br>
           <img class="popup-card-img" src="${fullUrl}" alt="${card.code}" /><br>
@@ -73,7 +73,7 @@
           </ul>
         `;
 
-        // Add marker
+        // Add marker & popup
         L.marker([loc.lat, loc.lng], { icon })
           .addTo(map)
           .bindPopup(popupContent);
