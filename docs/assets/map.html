@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarot Map MVP</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    /* Fullscreen map container with parchment background */
+    body, html { margin: 0; padding: 0; height: 100%; }
+    #map { height: 100%; background: url('parchment.jpg') center/cover no-repeat; }
+
+    /* Style OSM tiles to blend into the parchment */
+    .leaflet-tile {
+      mix-blend-mode: multiply;
+      opacity: 0.8;
+      filter: sepia(0.7) brightness(1.2) contrast(1.1) hue-rotate(-10deg);
+    }
+
+    /* Tarot card marker styling */
+    .tarot-marker {
+      width: 50px;
+      height: 75px;
+      background-size: cover;
+      border: 2px solid #5c4220;
+      border-radius: 4px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // MVP: inline minimal data for two city cards
+    const cardLocations = {
+      "TEHRAN": { lat: 35.6892, lng: 51.3890 },
+      "HONG_KONG": { lat: 22.3193, lng: 114.1694 }
+    };
+
+    const lore = [
+      {
+        code: "TEHRAN",
+        story: "A city built on empires, where ancient and modern intertwine.",
+        effects: [
+          "May reveal hidden truths or connections to ancient histories.",
+          "Suggests layers of complexity beneath the surface."
+        ]
+      },
+      {
+        code: "HONG_KONG",
+        story: "A vertical city of neon and glass, where East and West collide.",
+        effects: [
+          "Accelerates the pace of events.",
+          "Introduces themes of finance, trade, or unexpected opportunities."
+        ]
+      }
+    ];
+
+    // Initialize the map
+    const map = L.map('map').setView([30, 60], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add each card as a marker
+    lore.forEach(card => {
+      const loc = cardLocations[card.code];
+      if (!loc) return;
+
+      const icon = L.divIcon({
+        className: 'tarot-marker',
+        html: `<div style="background-image:url('${card.code}.png')"></div>`,
+        iconSize: [50, 75]
+      });
+
+      L.marker([loc.lat, loc.lng], { icon })
+        .addTo(map)
+        .bindPopup(`
+          <strong>${card.code}</strong><br>
+          <em>${card.story}</em><br>
+          <ul>${card.effects.map(e => `<li>${e}</li>`).join('')}</ul>
+        `);
+    });
+  </script>
+</body>
+</html>
