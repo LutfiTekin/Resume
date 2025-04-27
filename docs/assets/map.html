@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Amor Fati Map Version Panthers of Prague</title>
+  <title>Amor Fati Map Version Foxes of Florence</title>
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -55,9 +55,7 @@
     .popup-text em { display: block; margin-bottom: 6px; font-style: italic; }
     .popup-text ul { padding-left: 18px; margin: 0; }
 
-    /* Disable flip animation on mobile */
-    @media (max-width: 767px) {
-      .flip-card-inner { transition: none; }
+    
       .flip-card { cursor: default; }
     }
   </style>
@@ -114,7 +112,7 @@
           if (!marker.loaded) {
             const content = renderPopup(marker.card);
             marker.setPopupContent(content);
-            if (!isMobile) addFlipListener(marker);
+            addFlipListener(marker);
             marker.loaded = true;
           }
         });
