@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Amor Fati Map Version Foxes of Florence</title>
+  <title>Amor Fati Map Version Lions of London</title>
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -16,7 +16,17 @@
     html, body { margin: 0; padding: 0; height: 100%; }
     #map { width: 100%; height: 100%; }
 
-    /* Marker styling uses L.icon (no extra divs) */
+    /* Popup parchment-style background */
+    .leaflet-popup-content-wrapper {
+      background: linear-gradient(#fdf1c7, #e8d0a9);
+      border: 2px solid #c2a66b;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .leaflet-popup-tip {
+      background: linear-gradient(#fdf1c7, #e8d0a9);
+    }
+    .leaflet-popup-content { margin: 8px; }
 
     /* Flippable card styling */
     .flip-card {
@@ -54,10 +64,6 @@
     .popup-text strong { display: block; margin-bottom: 4px; }
     .popup-text em { display: block; margin-bottom: 6px; font-style: italic; }
     .popup-text ul { padding-left: 18px; margin: 0; }
-
-    
-      .flip-card { cursor: default; }
-    }
   </style>
 </head>
 
@@ -80,7 +86,7 @@
 
       // Pick a random card to center on
       const randomCard = lore[Math.floor(Math.random() * lore.length)];
-      const centerLoc = coordinates[randomCard.code] || { lat: 51.0, lng: 13.5 };
+      const centerLoc = coordinates[randomCard.code] || { lat: 51.5, lng: -0.1 };
 
       // Initialize map
       const map = L.map('map').setView([centerLoc.lat, centerLoc.lng], 7);
@@ -98,12 +104,13 @@
       const cluster = L.markerClusterGroup({ chunkedLoading: true });
       map.addLayer(cluster);
 
-      // Prepare and add markers within viewport
+      // Prepare markers
       const markers = lore.map(card => {
-        const loc = coordinates[card.code]; if (!loc) return null;
+        const loc = coordinates[card.code];
+        if (!loc) return null;
         const codeLower = card.code.toLowerCase();
         const thumbUrl = `thumbnails/${codeLower}.png`;
-        const icon = L.icon({ iconUrl: thumbUrl, iconSize: [50, 75], iconAnchor: [25, 75] });
+        const icon = L.icon({ iconUrl: thumbUrl, iconSize: [50,75], iconAnchor: [25,75] });
 
         const marker = L.marker([loc.lat, loc.lng], { icon });
         marker.card = card; marker.loaded = false;
@@ -120,10 +127,14 @@
       }).filter(m => m);
 
       function updateMarkers() {
-        const bounds = map.getBounds(); cluster.clearLayers();
-        markers.forEach(marker => { if (bounds.contains(marker.getLatLng())) cluster.addLayer(marker); });
+        const bounds = map.getBounds();
+        cluster.clearLayers();
+        markers.forEach(marker => {
+          if (bounds.contains(marker.getLatLng())) cluster.addLayer(marker);
+        });
       }
-      map.on('moveend', updateMarkers); updateMarkers();
+      map.on('moveend', updateMarkers);
+      updateMarkers();
 
       function renderPopup(card) {
         const codeLower = card.code.toLowerCase();
@@ -134,17 +145,16 @@
           <div class="popup-container">
             <div class="flip-card">
               <div class="flip-card-inner">
-                <div class="flip-card-front"><img src="${fullUrl}" alt="${card.code}" /></div>
-                <div class="flip-card-back"><img src="${backUrl}" alt="Back of ${card.code}" onerror="this.onerror=null;this.src='${fallbackBack}'" /></div>
+                <div class="flip-card-front"><img src="${fullUrl}" alt="${card.code}"/></div>
+                <div class="flip-card-back"><img src="${backUrl}" alt="Back of ${card.code}" onerror="this.onerror=null;this.src='${fallbackBack}'"/></div>
               </div>
             </div>
             <div class="popup-text">
               <strong>${card.code.replace(/_/g,' ')}</strong>
               <em>${card.story}</em>
-              <ul>` + card.effects.map(e => `<li>${e}</li>`).join('') + `</ul>
+              <ul>${card.effects.map(e => `<li>${e}</li>`).join('')}</ul>
             </div>
-          </div>
-        `;
+          </div>`;
       }
 
       function addFlipListener(marker) {
