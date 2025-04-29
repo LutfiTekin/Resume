@@ -679,6 +679,13 @@
                 "Expands the narrative, drawing out events and weaving in additional layers of detail."
             ],
             "story": "Gathered around a table, three figures share hushed whispers and knowing glances over steaming cups. Their quiet conversation holds sway, revealing hidden threads of connection and allowing the story to unfold with careful deliberation, revealing truths layer by layer."
+        }, {
+            "code": "CHORNOBYL",
+            "effects": [
+                "Reveals hidden consequences or lingering effects from past events.",
+                "May introduce unexpected environmental or psychological challenges."
+            ],
+            "story": "A silent sentinel in the exclusion zone, frozen in a moment of catastrophic consequence. Chernobyl stands as a stark reminder of forces unleashed, its empty streets and abandoned buildings holding a haunting stillness and the potential for unexpected discoveries or lingering dangers."
         }
     ]
 }
