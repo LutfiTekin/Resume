@@ -1,16 +1,102 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2022.1">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV - Lütfi Tekin</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; color: #333; }
+    header { text-align: center; margin-bottom: 40px; }
+    header h1 { margin: 0; font-size: 2.5em; }
+    header .contact a { margin: 0 10px; color: #0073b1; text-decoration: none; }
+    section { margin-bottom: 30px; }
+    section h2 { border-bottom: 2px solid #eee; padding-bottom: 5px; }
+    .experience-item { margin-bottom: 20px; }
+    .experience-item h3 { margin: 0; font-size: 1.2em; }
+    .experience-item span { font-weight: normal; color: #666; font-size: 0.9em; }
+    .stack-list, .notes-list, .tech-list { list-style-type: disc; margin-left: 20px; }
+    .tech-category { margin-bottom: 15px; }
+    .tech-category h4 { margin-bottom: 5px; text-transform: uppercase; font-size: 1em; }
   </style>
 </head>
 <body>
-<p class="p1">Hello world</p>
+  <header>
+    <h1 id="name"></h1>
+    <div class="contact">
+      <a id="email" href=""></a>
+      <a id="linkedin" href="" target="_blank">LinkedIn</a>
+      <a id="github" href="" target="_blank">GitHub</a>
+    </div>
+  </header>
+  <section id="summary">
+    <h2>Summary</h2>
+    <p></p>
+  </section>
+  <section id="experience">
+    <h2>Experience</h2>
+    <div id="experience-list"></div>
+  </section>
+  <section id="languages">
+    <h2>Languages</h2>
+    <ul id="languages-list"></ul>
+  </section>
+  <section id="tech-stack">
+    <h2>Tech Stack</h2>
+    <div id="tech-stack-categories"></div>
+  </section>
+  <script>
+    fetch('./cv.json')
+      .then(response => response.json())
+      .then(data => {
+        // Header
+        document.getElementById('name').textContent = data.name;
+        const emailLink = document.getElementById('email');
+        emailLink.href = 'mailto:' + data.contact.email;
+        emailLink.textContent = data.contact.email;
+        document.getElementById('linkedin').href = data.contact.linkedin;
+        document.getElementById('github').href = data.contact.github;
+        // Summary
+        document.querySelector('#summary p').textContent = data.summary;
+        // Experience
+        const expContainer = document.getElementById('experience-list');
+        data.experience.forEach(exp => {
+          const div = document.createElement('div');
+          div.className = 'experience-item';
+          div.innerHTML = `
+            <h3>${exp.title} - ${exp.company} <span>[${exp.period}]</span></h3>
+            <p><em>${exp.location} | ${exp.type}</em></p>
+            ${exp.notes ? '<ul class="notes-list">' + exp.notes.map(note => '<li>' + note + '</li>').join('') + '</ul>' : ''}
+            ${exp.stack ? '<p><strong>Tech:</strong> ' + exp.stack.join(', ') + '</p>' : ''}
+          `;
+          expContainer.appendChild(div);
+        });
+        // Languages
+        const langList = document.getElementById('languages-list');
+        Object.entries(data.languages).forEach(([lang, level]) => {
+          const li = document.createElement('li');
+          li.textContent = `${lang.charAt(0).toUpperCase() + lang.slice(1)}: ${level}`;
+          langList.appendChild(li);
+        });
+        // Tech Stack
+        const techContainer = document.getElementById('tech-stack-categories');
+        Object.entries(data.techStack).forEach(([category, items]) => {
+          const div = document.createElement('div');
+          div.className = 'tech-category';
+          const heading = document.createElement('h4');
+          heading.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+          const ul = document.createElement('ul');
+          ul.className = 'tech-list';
+          items.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            ul.appendChild(li);
+          });
+          div.appendChild(heading);
+          div.appendChild(ul);
+          techContainer.appendChild(div);
+        });
+      })
+      .catch(err => console.error('Error loading CV:', err));
+  </script>
 </body>
 </html>
