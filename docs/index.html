@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lütfi Tekin Resume</title>
+  <title>CV - Lütfi Tekin</title>
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pVftV0ZPHKyw+zYhYqH2Y0+3bXjxL1R38sBc7Z7PZKg9xIX7j/Yn7PW3+hp3V8edhgUJ5QLO1o3rcM6C6xwTLg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
@@ -15,14 +15,13 @@
     section h2 { border-bottom: 2px solid #eee; padding-bottom: 5px; text-transform: uppercase; }
     .experience-item { margin-bottom: 20px; }
     .experience-item h3 { margin: 0; font-size: 1.2em; }
-    .experience-item h3 span { font-weight: normal; color: #666; font-size: 0.9em; }
+    .experience-item h3 span { font-weight: normal; color: #666; font-size: 0.9em; margin-left: 10px; }
     .experience-item h4.company { margin: 5px 0 10px; font-size: 1em; font-style: italic; color: #555; }
     .experience-item p em { color: #666; font-size: 0.9em; }
-    .notes-list, .tech-list, #languages-list, .projects-list { list-style-type: disc; margin-left: 20px; }
+    .notes-list, .tech-list, #languages-list { list-style-type: disc; margin-left: 20px; }
     .tech-category { margin-bottom: 15px; }
     .tech-category h4 { margin-bottom: 5px; text-transform: uppercase; font-size: 1em; display: flex; align-items: center; }
     .tech-category h4 i { margin-right: 8px; font-size: 1.2em; }
-    .projects-list .project-link { text-decoration: none; color: #0073b1; }
   </style>
 </head>
 <body>
@@ -51,6 +50,25 @@
     <div id="tech-stack-categories"></div>
   </section>
   <script>
+    // Utility to format YYYY-MM to MMM YYYY, e.g., "2024-09" → "SEP 2024"
+    function formatDate(ym) {
+      const [year, month] = ym.split('-');
+      const months = {
+        '01':'JAN','02':'FEB','03':'MAR','04':'APR','05':'MAY','06':'JUN',
+        '07':'JUL','08':'AUG','09':'SEP','10':'OCT','11':'NOV','12':'DEC'
+      };
+      return `${months[month] || month} ${year}`;
+    }
+
+    function formatPeriod(period) {
+      // expects formats like "YYYY-MM to YYYY-MM" or "YYYY-MM"
+      const parts = period.split(/\s*(?:to|–|-+)\s*/);
+      if (parts.length === 2) {
+        return `${formatDate(parts[0])} - ${formatDate(parts[1])}`;
+      }
+      return formatDate(parts[0]);
+    }
+
     // Map category keys to FontAwesome classes
     const iconMap = {
       android: 'fab fa-android',
@@ -73,15 +91,18 @@
         emailLink.textContent = data.contact.email;
         document.getElementById('linkedin').href = data.contact.linkedin;
         document.getElementById('github').href = data.contact.github;
+
         // Summary
         document.querySelector('#summary p').textContent = data.summary;
+
         // Experience
         const expContainer = document.getElementById('experience-list');
         data.experience.forEach(exp => {
           const div = document.createElement('div');
           div.className = 'experience-item';
+          const formatted = formatPeriod(exp.period);
           let html = `
-            <h3>${exp.title} <span>[${exp.period}]</span></h3>
+            <h3>${exp.title} <span>${formatted}</span></h3>
             <h4 class="company">${exp.company}</h4>
             <p><em>${exp.location} | ${exp.type}</em></p>
           `;
@@ -91,12 +112,10 @@
           if (exp.stack) {
             html += '<p><strong>Tech:</strong> ' + exp.stack.join(', ') + '</p>';
           }
-          if (exp.projects) {
-            html += '<h4>PROJECTS</h4><ul class="projects-list">' + exp.projects.map(proj => '<li><a href="' + (proj.url || '#') + '" class="project-link">' + proj.name + '</a></li>').join('') + '</ul>';
-          }
           div.innerHTML = html;
           expContainer.appendChild(div);
         });
+
         // Languages
         const langList = document.getElementById('languages-list');
         Object.entries(data.languages).forEach(([lang, level]) => {
@@ -104,6 +123,7 @@
           li.textContent = `${lang.charAt(0).toUpperCase() + lang.slice(1)}: ${level}`;
           langList.appendChild(li);
         });
+
         // Tech Stack
         const techContainer = document.getElementById('tech-stack-categories');
         Object.entries(data.techStack).forEach(([category, items]) => {
