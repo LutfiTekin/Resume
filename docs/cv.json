@@ -26,9 +26,9 @@
       "company": "Appsfactory",
       "location": "Leipzig, Germany (On-Site)",
       "period": "2023-01 to 2024-08",
-      "projects": ["Tagesschau", "BILD+", "Vattenfall Highlights", "DB-Ausflug"],
+      "projects": [],
       "notes": [
-        "Owned the Android stack for Tagesschau app",
+        "Owned the Android stack for major news app",
         "Contributed to several high-visibility apps"
       ]
     },
