@@ -4,19 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CV - Lütfi Tekin</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pVftV0ZPHKyw+zYhYqH2Y0+3bXjxL1R38sBc7Z7PZKg9xIX7j/Yn7PW3+hp3V8edhgUJ5QLO1o3rcM6C6xwTLg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; color: #333; }
-    header { text-align: center; margin-bottom: 40px; }
+    body { font-family: Arial, sans-serif; color: #333; margin: 0; padding: 20px; max-width: 900px; margin: auto; }
+    header { text-align: center; margin-bottom: 30px; }
     header h1 { margin: 0; font-size: 2.5em; }
-    header .contact a { margin: 0 10px; color: #0073b1; text-decoration: none; }
+    header .contact a { margin: 0 10px; color: #0073b1; text-decoration: none; font-size: 0.9em; }
+    .container { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; }
+    .sidebar { padding-right: 10px; border-right: 1px solid #eee; }
+    .main { padding-left: 10px; }
     section { margin-bottom: 30px; }
-    section h2 { border-bottom: 2px solid #eee; padding-bottom: 5px; }
+    section h2 { border-bottom: 2px solid #eee; padding-bottom: 5px; margin-bottom: 15px; }
     .experience-item { margin-bottom: 20px; }
-    .experience-item h3 { margin: 0; font-size: 1.2em; }
+    .experience-item h3 { margin: 0; font-size: 1.1em; }
     .experience-item span { font-weight: normal; color: #666; font-size: 0.9em; }
-    .stack-list, .notes-list, .tech-list { list-style-type: disc; margin-left: 20px; }
+    .notes-list, .tech-list, #languages-list { list-style-type: disc; margin-left: 20px; padding-left: 0; }
     .tech-category { margin-bottom: 15px; }
-    .tech-category h4 { margin-bottom: 5px; text-transform: uppercase; font-size: 1em; }
+    .tech-category h4 { margin-bottom: 5px; text-transform: uppercase; font-size: 1em; display: flex; align-items: center; }
+    .tech-category h4 i { margin-right: 8px; font-size: 1.2em; }
   </style>
 </head>
 <body>
@@ -28,23 +34,41 @@
       <a id="github" href="" target="_blank">GitHub</a>
     </div>
   </header>
-  <section id="summary">
-    <h2>Summary</h2>
-    <p></p>
-  </section>
-  <section id="experience">
-    <h2>Experience</h2>
-    <div id="experience-list"></div>
-  </section>
-  <section id="languages">
-    <h2>Languages</h2>
-    <ul id="languages-list"></ul>
-  </section>
-  <section id="tech-stack">
-    <h2>Tech Stack</h2>
-    <div id="tech-stack-categories"></div>
-  </section>
+  <div class="container">
+    <aside class="sidebar">
+      <section id="summary">
+        <h2>Summary</h2>
+        <p></p>
+      </section>
+      <section id="languages">
+        <h2>Languages</h2>
+        <ul id="languages-list"></ul>
+      </section>
+      <section id="tech-stack">
+        <h2>Tech Stack</h2>
+        <div id="tech-stack-categories"></div>
+      </section>
+    </aside>
+    <main class="main">
+      <section id="experience">
+        <h2>Experience</h2>
+        <div id="experience-list"></div>
+      </section>
+    </main>
+  </div>
   <script>
+    // Map category keys to FontAwesome classes
+    const iconMap = {
+      android: 'fab fa-android',
+      ios: 'fab fa-apple',
+      backend: 'fas fa-server',
+      frontend: 'fas fa-code',
+      devops: 'fas fa-docker',
+      firebase: 'fas fa-bolt',
+      databases: 'fas fa-database',
+      tools: 'fas fa-tools'
+    };
+
     fetch('./cv.json')
       .then(response => response.json())
       .then(data => {
@@ -83,7 +107,8 @@
           const div = document.createElement('div');
           div.className = 'tech-category';
           const heading = document.createElement('h4');
-          heading.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+          const iconClass = iconMap[category.toLowerCase()] || 'fas fa-code';
+          heading.innerHTML = `<i class="${iconClass}"></i>${category.charAt(0).toUpperCase() + category.slice(1)}`;
           const ul = document.createElement('ul');
           ul.className = 'tech-list';
           items.forEach(item => {
