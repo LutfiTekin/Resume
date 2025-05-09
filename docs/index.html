@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CV - Lütfi Tekin</title>
+  <title>Lütfi Tekin Resume</title>
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pVftV0ZPHKyw+zYhYqH2Y0+3bXjxL1R38sBc7Z7PZKg9xIX7j/Yn7PW3+hp3V8edhgUJ5QLO1o3rcM6C6xwTLg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
@@ -12,14 +12,17 @@
     header h1 { margin: 0; font-size: 2.5em; }
     header .contact a { margin: 0 10px; color: #0073b1; text-decoration: none; }
     section { margin-bottom: 30px; }
-    section h2 { border-bottom: 2px solid #eee; padding-bottom: 5px; }
+    section h2 { border-bottom: 2px solid #eee; padding-bottom: 5px; text-transform: uppercase; }
     .experience-item { margin-bottom: 20px; }
     .experience-item h3 { margin: 0; font-size: 1.2em; }
-    .experience-item span { font-weight: normal; color: #666; font-size: 0.9em; }
-    .stack-list, .notes-list, .tech-list { list-style-type: disc; margin-left: 20px; }
+    .experience-item h3 span { font-weight: normal; color: #666; font-size: 0.9em; }
+    .experience-item h4.company { margin: 5px 0 10px; font-size: 1em; font-style: italic; color: #555; }
+    .experience-item p em { color: #666; font-size: 0.9em; }
+    .notes-list, .tech-list, #languages-list, .projects-list { list-style-type: disc; margin-left: 20px; }
     .tech-category { margin-bottom: 15px; }
     .tech-category h4 { margin-bottom: 5px; text-transform: uppercase; font-size: 1em; display: flex; align-items: center; }
     .tech-category h4 i { margin-right: 8px; font-size: 1.2em; }
+    .projects-list .project-link { text-decoration: none; color: #0073b1; }
   </style>
 </head>
 <body>
@@ -77,12 +80,21 @@
         data.experience.forEach(exp => {
           const div = document.createElement('div');
           div.className = 'experience-item';
-          div.innerHTML = `
-            <h3>${exp.title} - ${exp.company} <span>[${exp.period}]</span></h3>
+          let html = `
+            <h3>${exp.title} <span>[${exp.period}]</span></h3>
+            <h4 class="company">${exp.company}</h4>
             <p><em>${exp.location} | ${exp.type}</em></p>
-            ${exp.notes ? '<ul class="notes-list">' + exp.notes.map(note => '<li>' + note + '</li>').join('') + '</ul>' : ''}
-            ${exp.stack ? '<p><strong>Tech:</strong> ' + exp.stack.join(', ') + '</p>' : ''}
           `;
+          if (exp.notes) {
+            html += '<ul class="notes-list">' + exp.notes.map(note => '<li>' + note + '</li>').join('') + '</ul>';
+          }
+          if (exp.stack) {
+            html += '<p><strong>Tech:</strong> ' + exp.stack.join(', ') + '</p>';
+          }
+          if (exp.projects) {
+            html += '<h4>PROJECTS</h4><ul class="projects-list">' + exp.projects.map(proj => '<li><a href="' + (proj.url || '#') + '" class="project-link">' + proj.name + '</a></li>').join('') + '</ul>';
+          }
+          div.innerHTML = html;
           expContainer.appendChild(div);
         });
         // Languages

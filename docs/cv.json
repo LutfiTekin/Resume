@@ -5,10 +5,10 @@
     "linkedin": "https://linkedin.com/in/lutfitekin",
     "github": "https://github.com/LutfiTekin"
   },
-  "summary": "Android dev since 2017. Kotlin/Java pro, with Swift/JS exposure. Remote/hybrid/on-site versatility. Moved to Germany (2023). English C1, German B1.",
+  "summary": "Android developer since 2017. Kotlin/Java pro, with Swift/JS exposure. Remote/hybrid/on-site versatility. Moved to Germany (2023). English C1, German B1.",
   "experience": [
     {
-      "title": "Senior Android Developer",
+      "title": "Android Developer",
       "type": "Consultant",
       "company": "Bestnet",
       "location": "Remote",
@@ -21,19 +21,19 @@
       ]
     },
     {
-      "title": "Senior Android Developer",
+      "title": "Android Developer",
       "type": "Full Time",
       "company": "Appsfactory",
       "location": "Leipzig, Germany (On-Site)",
       "period": "2023-01 to 2024-08",
       "projects": [],
       "notes": [
-        "Owned the Android stack for major news app",
+        "Owned the Android stack for a major news app",
         "Contributed to several high-visibility apps"
       ]
     },
     {
-      "title": "Senior Android Developer",
+      "title": "Android Developer",
       "type": "Full Time",
       "company": "PATH",
       "location": "Remote",
