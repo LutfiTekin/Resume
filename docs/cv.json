@@ -1,5 +1,6 @@
 {
   "name": "Lütfi Tekin",
+  "careerStart": "2017-02",
   "contact": {
     "email": "contact@lutfitek.in",
     "linkedin": "https://linkedin.com/in/lutfitekin",
@@ -12,14 +13,14 @@
       "type": "Full Time",
       "company": "AQMS GmbH",
       "location": "Radebeul, Germany (Hybrid)",
-      "period": "2025-05 to now",
+      "period": "2025-04 to now",
       "stack": ["Kotlin", "Java", "Jetpack Compose"],
       "notes": []
     },
     {
       "title": "Android Developer",
       "type": "Consultant",
-      "company": "BestNET",
+      "company": "Bestnet",
       "location": "Remote",
       "period": "2024-09 to 2025-03",
       "stack": ["Kotlin", "Play Store", "Architecture", "Performance"],
@@ -43,7 +44,7 @@
     {
       "title": "Android Developer",
       "type": "Full Time",
-      "company": "PATH - Product and Software House",
+      "company": "PATH",
       "location": "Remote",
       "period": "2021-03 to 2022-10",
       "project": "tuttur.com",
@@ -55,7 +56,7 @@
     {
       "title": "Mobile Application Developer",
       "type": "Full Time",
-      "company": "BestNET",
+      "company": "Bestnet",
       "location": "Antalya, Türkiye (On-Site)",
       "period": "2020-02 to 2021-03",
       "stack": ["Kotlin", "AndroidX", "Retrofit", "Spring Boot", "Firebase"],

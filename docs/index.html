@@ -26,7 +26,7 @@
     .experience-item h3 span { font-weight: normal; color: #666; font-size: 0.9em; margin-left: 10px; }
     .experience-item h4.company { margin: 5px 0 10px; font-size: 1em; font-style: italic; color: #555; }
     .experience-item p em { color: #666; font-size: 0.9em; }
-    .notes-list, .tech-list, #languages-list { list-style-type: disc; margin-left: 20px; }
+    .notes-list, #languages-list { list-style-type: disc; margin-left: 20px; }
     /* Staggered two-column tech stack */
     #tech-stack-categories { column-count: 2; column-gap: 20px; }
     .tech-category { break-inside: avoid-column; margin-bottom: 20px; }
@@ -116,14 +116,16 @@
         document.getElementById('github').href = data.contact.github;
         document.getElementById('summary-text').textContent = data.summary;
 
+        // Timeline based on careerStart
+        const careerStartYear = parseInt(data.careerStart.split('-')[0], 10);
         const startYears = data.experience.map(exp => parseInt(exp.period.split(/\s*(?:to|–)\s*/)[0].split('-')[0], 10));
-        const minYear = Math.min(...startYears, 2017);
+        const minYear = Math.min(careerStartYear, ...startYears);
         const years = buildTimeline(minYear);
         const tl = document.getElementById('timeline-years');
         years.forEach(year => {
           const li = document.createElement('li');
-          li.textContent = year;
           if (startYears.includes(year)) li.innerHTML = `<strong>${year}</strong>`;
+          else li.textContent = year;
           tl.appendChild(li);
         });
 
@@ -137,14 +139,9 @@
             <h4 class="company">${exp.company}</h4>
             <p><em>${exp.location} | ${exp.type}</em></p>
           `;
-          if (exp.notes && exp.notes.length) {
-            html += '<ul class="notes-list">' + exp.notes.map(n => `<li>${n}</li>`).join('') + '</ul>';
-          }
-          if (exp.stack) {
-            html += `<p><strong>Tech:</strong> ${exp.stack.join(', ')}</p>`;
-          }
-          div.innerHTML = html;
-          expContainer.appendChild(div);
+          if (exp.notes && exp.notes.length) html += '<ul class="notes-list">' + exp.notes.map(n => `<li>${n}</li>`).join('') + '</ul>';
+          if (exp.stack) html += `<p><strong>Tech:</strong> ${exp.stack.join(', ')}</p>`;
+          div.innerHTML = html; expContainer.appendChild(div);
         });
 
         const langList = document.getElementById('languages-list');
@@ -162,14 +159,8 @@
           hd.innerHTML = `<i class="${iconMap[cat.toLowerCase()] || 'fas fa-code'}"></i>${cat.charAt(0).toUpperCase() + cat.slice(1)}`;
           const ul = document.createElement('ul');
           ul.className = 'tech-list';
-          items.forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item;
-            ul.appendChild(li);
-          });
-          div.appendChild(hd);
-          div.appendChild(ul);
-          techCont.appendChild(div);
+          items.forEach(item => { const li = document.createElement('li'); li.textContent = item; ul.appendChild(li); });
+          div.appendChild(hd); div.appendChild(ul); techCont.appendChild(div);
         });
       })
       .catch(e => console.error('Error loading CV:', e));
