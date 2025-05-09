@@ -13,7 +13,7 @@
       "type": "Full Time",
       "company": "AQMS GmbH",
       "location": "Radebeul, Germany (Hybrid)",
-      "period": "2025-04 to now",
+      "period": "2025-05 to now",
       "stack": ["Kotlin", "Java", "Jetpack Compose"],
       "notes": []
     },
@@ -48,7 +48,7 @@
       "location": "Remote",
       "period": "2021-03 to 2022-10",
       "project": "tuttur.com",
-      "stack": ["Kotlin", "Java", "Retrofit", "Spring Boot", "Firebase"],
+      "stack": ["Kotlin", "Java", "Retrofit", "Firebase"],
       "notes": [
         "Modernized legacy codebase",
         "Implemented full feature sets solo"
