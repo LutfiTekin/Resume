@@ -64,7 +64,9 @@
       // expects formats like "YYYY-MM to YYYY-MM" or "YYYY-MM"
       const parts = period.split(/\s*(?:to|–|-+)\s*/);
       if (parts.length === 2) {
-        return `${formatDate(parts[0])} - ${formatDate(parts[1])}`;
+        const start = parts[0];
+        const end = parts[1].toLowerCase() === 'now' ? 'PRESENT' : parts[1];
+        return `${formatDate(start)} - ${end === 'PRESENT' ? 'PRESENT' : formatDate(end)}`;
       }
       return formatDate(parts[0]);
     }

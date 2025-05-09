@@ -9,6 +9,15 @@
   "experience": [
     {
       "title": "Android Developer",
+      "type": "Full Time",
+      "company": "AQMS GmbH",
+      "location": "Radebeul, Germany (Hybrid)",
+      "period": "2025-05 to now",
+      "stack": ["Kotlin", "Java", "Jetpack Compose"],
+      "notes": []
+    },
+    {
+      "title": "Android Developer",
       "type": "Consultant",
       "company": "Bestnet",
       "location": "Remote",
@@ -26,7 +35,6 @@
       "company": "Appsfactory",
       "location": "Leipzig, Germany (On-Site)",
       "period": "2023-01 to 2024-08",
-      "projects": [],
       "notes": [
         "Owned the Android stack for a major news app",
         "Contributed to several high-visibility apps"
