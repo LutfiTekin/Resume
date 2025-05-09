@@ -20,7 +20,7 @@
     {
       "title": "Android Developer",
       "type": "Consultant",
-      "company": "Bestnet",
+      "company": "BestNET",
       "location": "Remote",
       "period": "2024-09 to 2025-03",
       "stack": ["Kotlin", "Play Store", "Architecture", "Performance"],
@@ -33,7 +33,7 @@
     {
       "title": "Android Developer",
       "type": "Full Time",
-      "company": "Appsfactory",
+      "company": "Appsfactory GmbH",
       "location": "Leipzig, Germany (On-Site)",
       "period": "2023-01 to 2024-08",
       "notes": [
@@ -44,10 +44,11 @@
     {
       "title": "Android Developer",
       "type": "Full Time",
-      "company": "PATH",
+      "company": "PATH - Product and Software House",
       "location": "Remote",
       "period": "2021-03 to 2022-10",
       "project": "tuttur.com",
+      "stack": ["Kotlin", "Java", "Retrofit", "Spring Boot", "Firebase"],
       "notes": [
         "Modernized legacy codebase",
         "Implemented full feature sets solo"
@@ -56,7 +57,7 @@
     {
       "title": "Mobile Application Developer",
       "type": "Full Time",
-      "company": "Bestnet",
+      "company": "BestNET",
       "location": "Antalya, Türkiye (On-Site)",
       "period": "2020-02 to 2021-03",
       "stack": ["Kotlin", "AndroidX", "Retrofit", "Spring Boot", "Firebase"],
@@ -71,7 +72,7 @@
       "company": "Self-Employed",
       "location": "Remote",
       "period": "2017-02 to 2019-12",
-      "stack": ["Kotlin", "Swift"],
+      "stack": ["Kotlin", "Swift", "Java"],
       "notes": [
         "Built and shipped Android/iOS apps",
         "Delivered projects E2E under tight deadlines",
