@@ -17,7 +17,7 @@
     #experience-content { display: flex; }
     #timeline { width: 80px; margin-right: 20px; }
     #timeline ul { list-style: none; padding: 0; margin: 0; position: relative; display: flex; flex-direction: column; height: 100%; }
-    #timeline ul::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: #ccc; }
+    #timeline ul::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; border-left: 2px dotted #ccc; }
     #timeline li { flex: 1; display: flex; align-items: center; justify-content: flex-start; font-size: 0.9em; color: #666; }
     #timeline li strong { color: #333; }
     .experience-list { flex: 1; }
@@ -64,7 +64,7 @@
     <h2>Tech Stack</h2>
     <div id="tech-stack-categories"></div>
   </section>
-  <script>
+  <script type="text/javascript">
     function formatDate(ym) {
       const [year, month] = ym.split('-');
       const months = {
