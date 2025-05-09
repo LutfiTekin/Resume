@@ -88,8 +88,19 @@
         [endYear, endMonth] = end.split('-').map(Number);
         end = formatDate(end);
       }
-      const months = (endYear - sy) * 12 + (endMonth - sm) + 1;
-      return `${formatDate(start)} - ${end} (${months} month${months > 1 ? 's' : ''})`;
+      const totalMonths = (endYear - sy) * 12 + (endMonth - sm) + 1;
+      const yearsCount = Math.floor(totalMonths / 12);
+      const monthsCount = totalMonths % 12;
+      let duration = '';
+      if (yearsCount > 0) {
+        duration += `${yearsCount} year${yearsCount > 1 ? 's' : ''}`;
+      }
+      if (monthsCount > 0) {
+        if (duration) duration += ' ';
+        duration += `${monthsCount} month${monthsCount > 1 ? 's' : ''}`;
+      }
+      if (!duration) duration = '0 months';
+      return `${formatDate(start)} - ${end} (${duration})`;
     }
 
     function buildTimeline(startYear) {
@@ -116,7 +127,6 @@
         document.getElementById('github').href = data.contact.github;
         document.getElementById('summary-text').textContent = data.summary;
 
-        // Timeline based on careerStart
         const careerStartYear = parseInt(data.careerStart.split('-')[0], 10);
         const startYears = data.experience.map(exp => parseInt(exp.period.split(/\s*(?:to|–)\s*/)[0].split('-')[0], 10));
         const minYear = Math.min(careerStartYear, ...startYears);
