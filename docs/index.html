@@ -11,9 +11,9 @@
     header { text-align: center; margin-bottom: 40px; }
     header h1 { margin: 0; font-size: 2.5em; }
     header .contact a { margin: 0 10px; color: #0073b1; text-decoration: none; }
+    #openness { margin-top: 10px; font-weight: bold; }
     section { margin-bottom: 30px; }
     section h2 { border-bottom: 2px solid #eee; padding-bottom: 5px; text-transform: uppercase; }
-    /* Experience with timeline */
     #experience-content { display: flex; }
     #timeline { width: 80px; margin-right: 20px; }
     #timeline ul { list-style: none; padding: 0; margin: 0; position: relative; display: flex; flex-direction: column; height: 100%; }
@@ -27,7 +27,6 @@
     .experience-item h4.company { margin: 5px 0 10px; font-size: 1em; font-style: italic; color: #555; }
     .experience-item p em { color: #666; font-size: 0.9em; }
     .notes-list, #languages-list { list-style-type: disc; margin-left: 20px; }
-    /* Staggered two-column tech stack */
     #tech-stack-categories { column-count: 2; column-gap: 20px; }
     .tech-category { break-inside: avoid-column; margin-bottom: 20px; }
     .tech-category h4 { margin-bottom: 5px; text-transform: uppercase; font-size: 1em; display: flex; align-items: center; }
@@ -42,6 +41,7 @@
       <a id="linkedin" href="" target="_blank">LinkedIn</a>
       <a id="github" href="" target="_blank">GitHub</a>
     </div>
+    <div id="openness"></div>
   </header>
   <section id="summary">
     <h2>Summary</h2>
@@ -126,6 +126,16 @@
         document.getElementById('linkedin').href = data.contact.linkedin;
         document.getElementById('github').href = data.contact.github;
         document.getElementById('summary-text').textContent = data.summary;
+
+        const opennessMap = {
+          actively_looking: 'Actively looking for new opportunities',
+          passive: 'Open to interesting offers',
+          not_interested: 'Not currently seeking new roles'
+        };
+        const openDiv = document.getElementById('openness');
+        if (data.openToOpportunities && opennessMap[data.openToOpportunities]) {
+          openDiv.textContent = opennessMap[data.openToOpportunities];
+        }
 
         const careerStartYear = parseInt(data.careerStart.split('-')[0], 10);
         const startYears = data.experience.map(exp => parseInt(exp.period.split(/\s*(?:to|–)\s*/)[0].split('-')[0], 10));
