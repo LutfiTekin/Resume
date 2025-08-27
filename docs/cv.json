@@ -94,7 +94,7 @@
       "ViewBinding", "DataBinding"
     ],
     "backend": ["Node.js", "Spring Boot", "REST APIs"],
-    "devOps": ["Docker", "Azure", "Appcenter", "Fastlane"],
+    "devOps": ["Github Actions", "Azure", "Appcenter", "Fastlane"],
     "tools": ["Git", "GitHub", "GitLab", "Bitbucket", "JIRA"],
     "design": ["Figma", "Zeplin"],
     "firebase": [
