@@ -82,12 +82,11 @@
     }
   ],
   "languages": {
-    "english": "C1",
-    "german": "B1",
-    "turkish": "native"
+    "english": "Fluent",
+    "german": "intermediate"
   },
   "techStack": {
-    "languages": ["Kotlin", "Java", "Swift", "JavaScript"],
+    "languages": ["Kotlin", "Java", "JavaScript"],
     "android": [
       "Jetpack Compose", "CameraX", "Dagger", "Hilt", "Koin",
       "Coroutines", "Flows", "Gradle", "MVVM", "MVP", "Retrofit",
