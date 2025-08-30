@@ -7,6 +7,11 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import androidx.compose.material3.Typography
 
 val CvGreen = Color(0xFF27AE60)
 val CvBlue = Color(0xFF0073B1)
@@ -38,6 +43,39 @@ val DarkColors: ColorScheme = darkColorScheme(
     outline = CvTimeline
 )
 
+val CvTypography = Typography(
+    displayLarge = TextStyle(
+        fontWeight = FontWeight.Bold,
+        fontSize = 32.sp,
+        letterSpacing = 0.sp
+    ),
+    headlineSmall = TextStyle(
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 20.sp,
+        letterSpacing = 0.15.sp
+    ),
+    titleMedium = TextStyle(
+        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp,
+        letterSpacing = 0.15.sp
+    ),
+    titleSmall = TextStyle(
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        fontStyle = FontStyle.Italic
+    ),
+    bodyMedium = TextStyle(
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        letterSpacing = 0.25.sp
+    ),
+    bodySmall = TextStyle(
+        fontWeight = FontWeight.Light,
+        fontSize = 12.sp,
+        color = Color.Gray
+    )
+)
+
 @Composable
 fun CvTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -50,7 +88,7 @@ fun CvTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = CvTypography,
         content = content
     )
 }
