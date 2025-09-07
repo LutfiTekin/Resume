@@ -88,7 +88,8 @@ fun Home(
             ContactSection(cv)
         }
 
-        item {
+
+        stickyHeader {
             TabRow(selectedTabIndex = selectedTab) {
                 tabs.forEachIndexed { index, title ->
                     Tab(
