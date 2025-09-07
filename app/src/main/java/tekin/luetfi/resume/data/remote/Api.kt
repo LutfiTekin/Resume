@@ -1,11 +1,12 @@
 package tekin.luetfi.resume.data.remote
 
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import tekin.luetfi.resume.domain.model.Cv
 
 interface Api {
 
-
+    @Headers("Cache-Control: no-cache")
     @GET("cv.json")
     suspend fun getCv(): Cv
 
