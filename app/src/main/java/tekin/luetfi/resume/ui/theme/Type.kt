@@ -35,7 +35,7 @@ val CvTypography = Typography(
         letterSpacing = 0.25.sp
     ),
     bodySmall = TextStyle(
-        fontWeight = FontWeight.Light,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 12.sp,
         color = Color.Gray
     )
