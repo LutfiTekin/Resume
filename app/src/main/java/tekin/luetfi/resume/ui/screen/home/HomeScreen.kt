@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tekin.luetfi.resume.domain.model.Contact
 import tekin.luetfi.resume.domain.model.Cv
+import tekin.luetfi.resume.ui.component.ContactSection
 import tekin.luetfi.resume.ui.component.ExperienceCard
 import tekin.luetfi.resume.ui.theme.CvTheme
 import java.util.Locale
@@ -84,33 +85,7 @@ fun Home(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         item {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text(
-                    text = cv.summary,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Text(
-                    text = cv.contact.email,
-                    style = MaterialTheme.typography.bodySmall
-                )
-                cv.contact.linkedin?.let {
-                    Text(
-                        text = "LinkedIn: $it",
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-                cv.contact.github?.let {
-                    Text(
-                        text = "GitHub: $it",
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-                Spacer(modifier = Modifier.height(32.dp))
-            }
+            ContactSection(cv)
         }
 
         item {
