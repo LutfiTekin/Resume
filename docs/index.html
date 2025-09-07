@@ -34,7 +34,7 @@
     .tech-category h4 { margin-bottom: 5px; text-transform: uppercase; font-size: 1em; display: flex; align-items: center; }
     .tech-category h4 i { margin-right: 8px; font-size: 1.2em; }
 
-    /* Hide download button and openness section in PDF/print */
+    /* Hide in real prints or Print to PDF */
     @media print {
       #download-pdf,
       #openness {
@@ -107,9 +107,7 @@
     const yearsCount = Math.floor(totalMonths / 12);
     const monthsCount = totalMonths % 12;
     let duration = '';
-    if (yearsCount > 0) {
-      duration += `${yearsCount} year${yearsCount > 1 ? 's' : ''}`;
-    }
+    if (yearsCount > 0) duration += `${yearsCount} year${yearsCount > 1 ? 's' : ''}`;
     if (monthsCount > 0) {
       if (duration) duration += ' ';
       duration += `${monthsCount} month${monthsCount > 1 ? 's' : ''}`;
@@ -205,6 +203,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
   document.getElementById('download-pdf').addEventListener('click', () => {
+    const button = document.getElementById('download-pdf');
+    const openness = document.getElementById('openness');
+
+    // Temporarily hide elements for html2pdf rendering
+    const prevButtonDisplay = button.style.display;
+    const prevOpenDisplay = openness ? openness.style.display : null;
+    button.style.display = 'none';
+    if (openness) openness.style.display = 'none';
+
     const element = document.getElementById('cv-container');
     const opt = {
       margin: 0.5,
@@ -213,7 +220,16 @@
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     };
-    html2pdf().from(element).set(opt).save();
+
+    html2pdf().from(element).set(opt).save().then(() => {
+      // Restore visibility after save
+      button.style.display = prevButtonDisplay;
+      if (openness) openness.style.display = prevOpenDisplay ?? '';
+    }).catch(() => {
+      // Ensure restore on error too
+      button.style.display = prevButtonDisplay;
+      if (openness) openness.style.display = prevOpenDisplay ?? '';
+    });
   });
 </script>
 </body>
