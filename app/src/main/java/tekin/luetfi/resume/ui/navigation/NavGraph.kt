@@ -12,8 +12,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import tekin.luetfi.resume.ui.screen.experience.ExperienceScreen
-import tekin.luetfi.resume.ui.screen.experience.ExperienceViewModel
 import tekin.luetfi.resume.ui.screen.home.HomeScreen
 import tekin.luetfi.resume.ui.screen.home.HomeViewModel
 
@@ -41,14 +39,7 @@ fun AppNavHost(
         }
 
         composable<ExperienceRoute> {
-            val vm: ExperienceViewModel = hiltViewModel()
-            val uiState by vm.uiState.collectAsState()
-            ExperienceScreen(
-                modifier = modifier,
-                uiState = uiState,
-                onBack = { navController.popBackStack() },
-                onDetailClick = { company -> navController.navigate(ExperienceDetailRoute(company)) }
-            )
+
         }
 
         /*

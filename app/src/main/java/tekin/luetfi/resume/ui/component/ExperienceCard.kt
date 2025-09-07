@@ -60,7 +60,9 @@ fun ExperienceCard(
             }
 
             if (item.stack.isNotEmpty()) {
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     item.stack.forEach { tech ->
                         AssistChip(onClick = {}, label = {
                             Text(text = tech, color = MaterialTheme.colorScheme.primary)

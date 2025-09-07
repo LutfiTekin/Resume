@@ -3,6 +3,7 @@ package tekin.luetfi.resume.ui.screen.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -30,8 +32,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tekin.luetfi.resume.domain.model.Contact
 import tekin.luetfi.resume.domain.model.Cv
-import tekin.luetfi.resume.ui.screen.experience.ExperienceCard
+import tekin.luetfi.resume.ui.component.ExperienceCard
 import tekin.luetfi.resume.ui.theme.CvTheme
+import java.util.Locale
 
 
 const val TAB_EXPERIENCE = 0
@@ -50,11 +53,13 @@ fun HomeScreen(
                 CircularProgressIndicator()
             }
         }
+
         uiState.error != null -> {
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text("Error: ${uiState.error}")
             }
         }
+
         uiState.resume != null -> {
             Home(
                 modifier = modifier,
@@ -86,10 +91,26 @@ fun Home(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Text(text = cv.summary, style = MaterialTheme.typography.bodyMedium)
-                Text(text = "📧 ${cv.contact.email}", style = MaterialTheme.typography.bodySmall)
-                cv.contact.linkedin?.let { Text(text = "🔗 LinkedIn: $it", style = MaterialTheme.typography.bodySmall) }
-                cv.contact.github?.let { Text(text = "💻 GitHub: $it", style = MaterialTheme.typography.bodySmall) }
+                Text(
+                    text = cv.summary,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = cv.contact.email,
+                    style = MaterialTheme.typography.bodySmall
+                )
+                cv.contact.linkedin?.let {
+                    Text(
+                        text = "LinkedIn: $it",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+                cv.contact.github?.let {
+                    Text(
+                        text = "GitHub: $it",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
                 Spacer(modifier = Modifier.height(32.dp))
             }
         }
@@ -108,15 +129,37 @@ fun Home(
 
         when (selectedTab) {
             TAB_EXPERIENCE -> {
-                items(cv.experience){ experience ->
+                items(cv.experience) { experience ->
                     //List of experience
-                    ExperienceCard(experience){
+                    ExperienceCard(experience) {
 
                     }
                 }
             }
+
             TAB_TECH -> {
-                items(cv.techStack.keys.toList()){
+                item {
+                    cv.techStack.forEach { stack ->
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(text = stack.key.replaceFirstChar {
+                                if (it.isLowerCase()) it.titlecase(
+                                    Locale.ENGLISH
+                                ) else it.toString()
+                            }, style = MaterialTheme.typography.titleMedium)
+                            FlowRow(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                stack.value.forEach { tech ->
+                                    AssistChip(onClick = {}, label = {
+                                        Text(text = tech, color = MaterialTheme.colorScheme.primary)
+                                    })
+                                }
+                            }
+                        }
+                    }
 
                 }
             }
@@ -131,20 +174,20 @@ fun Home(
 fun HomePreview() {
     CvTheme {
         Home(
-            cv =  Cv(
+            cv = Cv(
                 name = "Lütfi Tekin",
-        openToOpportunities = "actively_looking",
-        careerStart = "2017-02",
-        contact = Contact(
-            email = "contact@lutfitek.in",
-            linkedin = "https://linkedin.com/in/lutfitekin",
-            github = "https://github.com/LutfiTekin"
-        ),
-        summary = "Seasoned Android Developer with over eight years of experience. Kotlin, Jetpack Compose, Firebase.",
-        experience = emptyList(),
-        languages = mapOf("english" to "Fluent", "german" to "Intermediate"),
-        techStack = emptyMap()
-        )
+                openToOpportunities = "actively_looking",
+                careerStart = "2017-02",
+                contact = Contact(
+                    email = "contact@lutfitek.in",
+                    linkedin = "https://linkedin.com/in/lutfitekin",
+                    github = "https://github.com/LutfiTekin"
+                ),
+                summary = "Seasoned Android Developer with over eight years of experience. Kotlin, Jetpack Compose, Firebase.",
+                experience = emptyList(),
+                languages = mapOf("english" to "Fluent", "german" to "Intermediate"),
+                techStack = emptyMap()
+            )
         )
     }
 }
