@@ -1,5 +1,6 @@
 package tekin.luetfi.resume.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,12 +17,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
+import tekin.luetfi.resume.domain.model.Cv
+import tekin.luetfi.resume.openToOpportunities
 import tekin.luetfi.resume.ui.navigation.AppNavHost
 import tekin.luetfi.resume.ui.navigation.HomeRoute
 import tekin.luetfi.resume.ui.screen.home.HomeViewModel
@@ -33,7 +40,8 @@ fun AppScaffold(
 ) {
     val snackbarHost = remember { SnackbarHostState() }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val viewModel: HomeViewModel = hiltViewModel()
+    val vm: HomeViewModel = hiltViewModel()
+    val cv by vm.uiState.mapNotNull { it.resume }.collectAsStateWithLifecycle(Cv())
 
     Scaffold(
         modifier = Modifier
@@ -41,14 +49,18 @@ fun AppScaffold(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
-                title = { Text("Lütfi Tekin", style = MaterialTheme.typography.titleLarge) },
-                scrollBehavior = scrollBehavior,
-                actions = {
-
-                     IconButton(onClick = viewModel::refresh) {
-                         Icon(Icons.Rounded.Refresh, contentDescription = "Refresh")
-                     }
-                }
+                title = {
+                    Column {
+                        Text(
+                            text = "Lütfi Tekin"
+                        )
+                        Text(
+                            text = cv.openToOpportunities(),
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    }
+                     },
+                scrollBehavior = scrollBehavior
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHost) }

@@ -1,6 +1,10 @@
 package tekin.luetfi.resume
 
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import tekin.luetfi.resume.domain.model.Cv
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -55,6 +59,16 @@ fun computePeriod(period: String, now: LocalDate = LocalDate.now()): PeriodInfo 
         totalMonths = totalMonths,
         durationText = duration
     )
+}
+
+@Composable
+fun Cv.openToOpportunities(): String {
+    return when (openToOpportunities) {
+        "actively_looking" -> stringResource(R.string.op_active)
+        "passive" -> stringResource(R.string.op_passive)
+        "not_interested" -> stringResource(R.string.op_not_interested)
+        else -> ""
+    }
 }
 
 sealed interface Result<out T> {

@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Cv(
-    val name: String,
+    val name: String = "",
     @SerialName("openToOpportunities") val openToOpportunities: String? = null,
     @SerialName("careerStart") val careerStart: String? = null,   // "YYYY-MM"
-    val contact: Contact,
-    val summary: String,
+    val contact: Contact = Contact(""),
+    val summary: String = "",
     val experience: List<ExperienceItem> = emptyList(),
     val languages: Map<String, String> = emptyMap(),              // "english" to "Fluent"
     @SerialName("techStack") val techStack: Map<String, List<String>> = emptyMap()

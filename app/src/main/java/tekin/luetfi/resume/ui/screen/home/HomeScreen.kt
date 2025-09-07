@@ -3,22 +3,39 @@ package tekin.luetfi.resume.ui.screen.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import tekin.luetfi.resume.domain.model.Contact
+import tekin.luetfi.resume.domain.model.Cv
+import tekin.luetfi.resume.ui.screen.experience.ExperienceCard
 import tekin.luetfi.resume.ui.theme.CvTheme
 
+
+const val TAB_EXPERIENCE = 0
+const val TAB_TECH = 1
 
 @Composable
 fun HomeScreen(
@@ -41,13 +58,7 @@ fun HomeScreen(
         uiState.resume != null -> {
             Home(
                 modifier = modifier,
-                summary = uiState.resume.summary,
-                email = uiState.resume.contact.email,
-                linkedin = uiState.resume.contact.linkedin,
-                github = uiState.resume.contact.github,
-                openToOpportunities = uiState.resume.openToOpportunities,
-                onNavigateExperience = onNavigateExperience,
-                onNavigateTech = onNavigateTech
+                cv = uiState.resume
             )
         }
     }
@@ -57,44 +68,61 @@ fun HomeScreen(
 @Composable
 fun Home(
     modifier: Modifier = Modifier,
-    summary: String,
-    email: String,
-    linkedin: String?,
-    github: String?,
-    openToOpportunities: String?,
-    onNavigateExperience: () -> Unit = {},
-    onNavigateTech: () -> Unit = {}
+    cv: Cv
 ) {
-    Column(
+    var selectedTab by remember { mutableIntStateOf(0) }
+    val tabs = listOf("Experience", "Tech Stack")
+
+    LazyColumn(
         modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
+            .fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Text(text = summary, style = MaterialTheme.typography.bodyMedium)
-        Text(text = "📧 $email", style = MaterialTheme.typography.bodySmall)
-        linkedin?.let { Text(text = "🔗 LinkedIn: $it", style = MaterialTheme.typography.bodySmall) }
-        github?.let { Text(text = "💻 GitHub: $it", style = MaterialTheme.typography.bodySmall) }
-
-        openToOpportunities?.let {
-            Text(
-                text = when (it) {
-                    "actively_looking" -> "Actively looking for new opportunities"
-                    "passive" -> "Open to interesting offers"
-                    "not_interested" -> "Not currently seeking new roles"
-                    else -> ""
-                },
-                style = MaterialTheme.typography.bodyMedium
-            )
+        item {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(text = cv.summary, style = MaterialTheme.typography.bodyMedium)
+                Text(text = "📧 ${cv.contact.email}", style = MaterialTheme.typography.bodySmall)
+                cv.contact.linkedin?.let { Text(text = "🔗 LinkedIn: $it", style = MaterialTheme.typography.bodySmall) }
+                cv.contact.github?.let { Text(text = "💻 GitHub: $it", style = MaterialTheme.typography.bodySmall) }
+                Spacer(modifier = Modifier.height(32.dp))
+            }
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Button(onClick = onNavigateExperience) { Text("Experience") }
-            Button(onClick = onNavigateTech) { Text("Tech Stack") }
+        item {
+            TabRow(selectedTabIndex = selectedTab) {
+                tabs.forEachIndexed { index, title ->
+                    Tab(
+                        selected = selectedTab == index,
+                        onClick = { selectedTab = index },
+                        text = { Text(title) }
+                    )
+                }
+            }
         }
+
+        when (selectedTab) {
+            TAB_EXPERIENCE -> {
+                items(cv.experience){ experience ->
+                    //List of experience
+                    ExperienceCard(experience){
+
+                    }
+                }
+            }
+            TAB_TECH -> {
+                items(cv.techStack.keys.toList()){
+
+                }
+            }
+        }
+
+
     }
 }
 
@@ -103,11 +131,20 @@ fun Home(
 fun HomePreview() {
     CvTheme {
         Home(
-            summary = "Seasoned Android Developer with over eight years of experience. Kotlin, Jetpack Compose, Firebase.",
+            cv =  Cv(
+                name = "Lütfi Tekin",
+        openToOpportunities = "actively_looking",
+        careerStart = "2017-02",
+        contact = Contact(
             email = "contact@lutfitek.in",
             linkedin = "https://linkedin.com/in/lutfitekin",
-            github = "https://github.com/LutfiTekin",
-            openToOpportunities = "actively_looking"
+            github = "https://github.com/LutfiTekin"
+        ),
+        summary = "Seasoned Android Developer with over eight years of experience. Kotlin, Jetpack Compose, Firebase.",
+        experience = emptyList(),
+        languages = mapOf("english" to "Fluent", "german" to "Intermediate"),
+        techStack = emptyMap()
+        )
         )
     }
 }

@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Resume</string>
+    <string name="op_active">Actively looking for new opportunities</string>
+    <string name="op_passive">Open to interesting offers</string>
+    <string name="op_not_interested">Not currently seeking new roles</string>
 </resources>
