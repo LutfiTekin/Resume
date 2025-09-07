@@ -43,9 +43,7 @@ const val TAB_TECH = 1
 @Composable
 fun HomeScreen(
     modifier: Modifier,
-    uiState: HomeUiState,
-    onNavigateExperience: () -> Unit = {},
-    onNavigateTech: () -> Unit = {}
+    uiState: HomeUiState
 ) {
     when {
         uiState.isLoading -> {

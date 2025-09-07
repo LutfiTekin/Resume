@@ -32,33 +32,13 @@ fun AppNavHost(
 
             HomeScreen(
                 modifier = modifier,
-                uiState = uiState,
-                onNavigateExperience = { navController.navigate(ExperienceRoute) },
-                onNavigateTech = { navController.navigate(TechStackRoute) }
+                uiState = uiState
             )
         }
 
-        composable<ExperienceRoute> {
-
-        }
 
         /*
-        // Experience list
-        composable<ExperienceRoute> {
-            ExperienceScreen(
-                onBack = { navController.popBackStack() },
-                onDetailClick = { company ->
-                    navController.navigate(ExperienceDetailRoute(company))
-                }
-            )
-        }
 
-        // Tech stack
-        composable<TechStackRoute> {
-            TechStackScreen(
-                onBack = { navController.popBackStack() }
-            )
-        }
 
         // Experience detail: typed arg
         composable<ExperienceDetailRoute> { backStackEntry ->
@@ -78,13 +58,6 @@ fun AppNavHost(
 
 @Serializable
 object HomeRoute
-
-@Serializable
-object ExperienceRoute
-
-@Serializable
-object TechStackRoute
-
 
 @Serializable
 data class ExperienceDetailRoute(val company: String)
