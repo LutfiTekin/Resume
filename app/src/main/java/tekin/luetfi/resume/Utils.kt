@@ -7,6 +7,13 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.floor
 
+
+/**
+ * Constants
+ */
+const val BASE_URL = "https://lutfitek.in/"
+
+
 data class PeriodInfo(
     val startLabel: String,         // "MAY 2025"
     val endLabel: String,           // "PRESENT" or "AUG 2024"
