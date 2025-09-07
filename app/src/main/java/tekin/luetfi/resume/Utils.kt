@@ -28,7 +28,9 @@ fun computePeriod(period: String, now: LocalDate = LocalDate.now()): PeriodInfo 
     val parts = period.split(Regex("\\s*(?:to|–)\\s*"), limit = 2)
     val startYm = YearMonth.parse(parts[0], ymFmtIn)
 
-    val (endYear, endMonth, endLabel) = if (parts.getOrNull(1)?.equals("now", ignoreCase = true) == true) {
+    val (endYear, endMonth, endLabel) = if (parts.getOrNull(1)
+            ?.equals("now", ignoreCase = true) == true
+    ) {
         Triple(now.year, now.monthValue, "PRESENT")
     } else {
         val endYm = YearMonth.parse(parts[1], ymFmtIn)
