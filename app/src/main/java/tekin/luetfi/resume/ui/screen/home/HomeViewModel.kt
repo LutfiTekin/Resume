@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import tekin.luetfi.resume.domain.repository.CvRepository
 import javax.inject.Inject
@@ -15,18 +18,21 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState: StateFlow<HomeUiState> = _uiState
+    val uiState: StateFlow<HomeUiState> =
+        _uiState
+            .onStart {
+                loadCv()
+            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HomeUiState())
 
-    init {
-        loadCv()
-    }
 
     private fun loadCv() {
         viewModelScope.launch {
             _uiState.value = HomeUiState(isLoading = true)
             runCatching { repository.load() }
                 .onSuccess { cv -> _uiState.value = HomeUiState(isLoading = false, resume = cv) }
-                .onFailure { e -> _uiState.value = HomeUiState(isLoading = false, error = e.message) }
+                .onFailure { e ->
+                    _uiState.value = HomeUiState(isLoading = false, error = e.message)
+                }
         }
     }
 
@@ -34,7 +40,9 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching { repository.refresh() }
                 .onSuccess { cv -> _uiState.value = HomeUiState(isLoading = false, resume = cv) }
-                .onFailure { e -> _uiState.value = HomeUiState(isLoading = false, error = e.message) }
+                .onFailure { e ->
+                    _uiState.value = HomeUiState(isLoading = false, error = e.message)
+                }
         }
     }
 }
