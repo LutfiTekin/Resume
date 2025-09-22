@@ -3,6 +3,7 @@ package tekin.luetfi.resume.ui.screen.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -38,6 +39,7 @@ class HomeViewModel @Inject constructor(
 
     fun refresh() {
         viewModelScope.launch {
+            _uiState.value = HomeUiState(isLoading = true)
             runCatching { repository.refresh() }
                 .onSuccess { cv -> _uiState.value = HomeUiState(isLoading = false, resume = cv) }
                 .onFailure { e ->

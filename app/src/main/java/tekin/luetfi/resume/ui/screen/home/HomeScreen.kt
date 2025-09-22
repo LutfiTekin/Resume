@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package tekin.luetfi.resume.ui.screen.home
 
 import androidx.compose.foundation.layout.Arrangement
@@ -8,12 +10,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -40,8 +44,11 @@ const val TAB_TECH = 1
 @Composable
 fun HomeScreen(
     modifier: Modifier,
-    uiState: HomeUiState
+    uiState: HomeUiState,
+    onRefresh: () -> Unit = {}
 ) {
+
+    val pullToRefreshState = rememberPullToRefreshState()
     when {
         uiState.isLoading -> {
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -54,11 +61,16 @@ fun HomeScreen(
                 Text("Error: ${uiState.error}")
             }
         }
-
-        uiState.resume != null -> {
+    }
+    PullToRefreshBox(
+        isRefreshing = uiState.isLoading,
+        onRefresh = onRefresh,
+        state = pullToRefreshState
+    ) {
+        uiState.resume?.let { cv ->
             Home(
                 modifier = modifier,
-                cv = uiState.resume
+                cv = cv
             )
         }
     }

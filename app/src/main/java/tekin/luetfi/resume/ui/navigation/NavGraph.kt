@@ -33,7 +33,9 @@ fun AppNavHost(
             HomeScreen(
                 modifier = modifier,
                 uiState = uiState
-            )
+            ){
+                vm.refresh()
+            }
         }
 
 
