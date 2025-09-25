@@ -32,6 +32,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -57,8 +58,7 @@ fun AnalyzeStart(
 
     var selectedModel by remember { mutableStateOf(AnalyzeModel.GROK_4_FAST) }
 
-
-    var jobDescription by remember(initialText) { mutableStateOf(initialText) }
+    var jobDescription by rememberSaveable(initialText) { mutableStateOf(initialText) }
 
     val minChars = 50
     val maxChars = 10000
