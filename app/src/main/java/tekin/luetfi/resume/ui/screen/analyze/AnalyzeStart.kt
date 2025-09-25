@@ -112,7 +112,7 @@ fun AnalyzeStart(
                 .fillMaxWidth()
                 .heightIn(min = 160.dp),
             label = { Text("Job description") },
-            placeholder = { Text("Paste the full posting: responsibilities, requirements, nice to have, languages, location, and company info.") },
+            placeholder = { Text("Paste the full posting: responsibilities, requirements, nice to have, languages, location, and company info. Or simple paste the link.") },
             minLines = 6,
             maxLines = 12,
             enabled = !isAnalyzing,
