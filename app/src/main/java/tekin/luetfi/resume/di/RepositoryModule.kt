@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
+import tekin.luetfi.resume.data.local.JobReportDao
 import tekin.luetfi.resume.data.remote.Api
 import tekin.luetfi.resume.data.remote.OpenRouterAiApi
 import tekin.luetfi.resume.data.repository.DefaultCvRepository
@@ -37,12 +38,14 @@ object RepositoryModule {
     fun provideJobAnalyzerRepository(
         api: Api,
         openRouterAiApi: OpenRouterAiApi,
-        moshi: Moshi
+        moshi: Moshi,
+        db: JobReportDao
     ): JobAnalyzerRepository =
         DefaultJobAnalyzerRepository(
             api = api,
             openRouterAiApi = openRouterAiApi,
-            moshi = moshi
+            moshi = moshi,
+            db = db
         )
 
 

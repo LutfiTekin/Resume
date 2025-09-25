@@ -6,11 +6,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,7 +31,10 @@ import tekin.luetfi.resume.domain.model.MatchResponse
 @Composable
 fun AnalyzeReport(
     modifier: Modifier = Modifier,
-    report: MatchResponse
+    report: MatchResponse,
+    onSaveReport: (MatchResponse) -> Unit = {},
+    onDeleteReport: (MatchResponse) -> Unit = {},
+    online: Boolean
 ) {
     val scroll = rememberScrollState()
     Column(
@@ -34,6 +43,37 @@ fun AnalyzeReport(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+
+        // Header + Save
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Analysis",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(Modifier.weight(1f))
+            if (online){
+                FilledTonalButton(
+                    onClick = { onSaveReport(report) }
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text("Save report")
+                }
+            }else {
+                FilledTonalButton(
+                    onClick = { onDeleteReport(report) }
+                ) {
+                    Icon(Icons.Default.Delete, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text("Delete report")
+                }
+            }
+        }
+
         VerdictHeader(
             recommendation = report.finalRecommendation,
             score = report.score1to5

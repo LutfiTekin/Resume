@@ -20,8 +20,8 @@ import kotlin.math.floor
 const val CV_BASE_URL = "https://lutfitek.in/"
 const val OPEN_ROUTER_AI_BASE_URL = "https://openrouter.ai/api/v1/"
 
-const val CV_RETROFIT = "cv"
-const val OPEN_ROUTER_AI_RETROFIT = "oai"
+const val REPORTS_DATABASE = "rdb"
+const val REPORTS_TABLE = "rt"
 
 private val ymFmtIn = DateTimeFormatter.ofPattern("yyyy-MM")
 private val ymOut = DateTimeFormatter.ofPattern("MMM yyyy", Locale.ENGLISH)

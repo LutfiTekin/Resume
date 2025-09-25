@@ -35,6 +35,8 @@ fun AnalyzeScreen(
     val viewModel: AnalyzeJobViewModel = hiltViewModel()
     val analyzeJobState by viewModel.state.collectAsStateWithLifecycle(AnalyzeJobState.Start)
 
+    val previousReports by viewModel.previousReports.collectAsStateWithLifecycle(emptyList())
+
     LaunchedEffect(Unit) {
         viewModel.reset()
     }
@@ -47,14 +49,23 @@ fun AnalyzeScreen(
                 viewModel.reset()
             }
         )
-        AnalyzeJobState.Loading -> AnalyzeLoading(modifier.fillMaxSize())
+
+        is AnalyzeJobState.Loading -> AnalyzeLoading(
+            modifier = modifier.fillMaxSize(),
+            message = state.message)
+
         is AnalyzeJobState.ReportReady -> AnalyzeReport(
             modifier = modifier.fillMaxSize(),
-            report = state.report
+            online = state.online,
+            report = state.report,
+            onSaveReport = viewModel::saveReport,
+            onDeleteReport = viewModel::deleteReport
         )
+
         AnalyzeJobState.Start -> {
             AnalyzeStart(
-                modifier = modifier
+                modifier = modifier,
+                previousReports = previousReports,
             ) { jobDesc, model ->
                 viewModel.analyze(
                     jobDescription = jobDesc,
@@ -66,7 +77,7 @@ fun AnalyzeScreen(
 }
 
 @Composable
-private fun AnalyzeLoading(modifier: Modifier = Modifier) {
+private fun AnalyzeLoading(modifier: Modifier = Modifier, message: String) {
     Box(
         modifier = modifier.padding(24.dp),
         contentAlignment = Alignment.Center
@@ -74,7 +85,7 @@ private fun AnalyzeLoading(modifier: Modifier = Modifier) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             CircularProgressIndicator()
             Spacer(Modifier.height(12.dp))
-            Text("Analyzing the job description...")
+            Text(message)
         }
     }
 }
@@ -108,7 +119,7 @@ private fun AnalyzeError(
 @Preview(showBackground = true)
 @Composable
 private fun LoadingPreview() {
-    CvTheme { AnalyzeLoading(Modifier.fillMaxSize()) }
+    CvTheme { AnalyzeLoading(Modifier.fillMaxSize(), "Loading") }
 }
 
 

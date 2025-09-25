@@ -111,6 +111,10 @@ dependencies {
     implementation(libs.retrofit.converter.moshi)
     implementation(libs.logging.interceptor)
 
+    //Local Data
+    implementation(libs.androidx.room)
+    ksp(libs.androidx.room.compiler)
+
     // Dependency Injection - Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

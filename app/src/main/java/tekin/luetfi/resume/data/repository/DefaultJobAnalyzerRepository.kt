@@ -4,6 +4,8 @@ import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import tekin.luetfi.resume.data.local.JobReportDao
+import tekin.luetfi.resume.data.local.toEntity
 import tekin.luetfi.resume.data.remote.Api
 import tekin.luetfi.resume.data.remote.OpenRouterAiApi
 import tekin.luetfi.resume.domain.model.AnalyzeModel
@@ -15,6 +17,7 @@ import tekin.luetfi.resume.domain.repository.JobAnalyzerRepository
 class DefaultJobAnalyzerRepository(
     private val api: Api,
     private val openRouterAiApi: OpenRouterAiApi,
+    private val db: JobReportDao,
     private val io: CoroutineDispatcher = Dispatchers.IO,
     private val moshi: Moshi
 ): JobAnalyzerRepository {
@@ -43,6 +46,22 @@ class DefaultJobAnalyzerRepository(
         )
 
         return@withContext completionResponse.matchResponseOrThrow(moshi)
+    }
 
+
+    override suspend fun saveJobReport(report: MatchResponse) = withContext(io){
+        db.saveReport(report.toEntity())
+    }
+
+    override suspend fun getJobReports(): List<MatchResponse> = withContext(io){
+        return@withContext db.loadReports().map { it.result }
+    }
+
+    override suspend fun getJobReport(id: String): MatchResponse? = withContext(io){
+        return@withContext db.loadReport(id)?.result
+    }
+
+    override suspend fun deleteReport(report: MatchResponse) = withContext(io){
+        db.deleteReport(report.toEntity())
     }
 }
