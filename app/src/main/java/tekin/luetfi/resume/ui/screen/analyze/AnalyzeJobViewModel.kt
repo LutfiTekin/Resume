@@ -1,5 +1,8 @@
 package tekin.luetfi.resume.ui.screen.analyze
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,6 +13,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import tekin.luetfi.resume.domain.model.AnalyzeModel
 import tekin.luetfi.resume.domain.model.Cv
 import tekin.luetfi.resume.domain.repository.JobAnalyzerRepository
 import javax.inject.Inject
@@ -27,12 +31,13 @@ class AnalyzeJobViewModel @Inject constructor(
         AnalyzeJobState.Start)
 
 
-    fun analyze(jobDescription: String, cv: Cv) {
+
+    fun analyze(jobDescription: String, cv: Cv, model: AnalyzeModel) {
         val json = Json.encodeToString(Cv.serializer(), cv)
         viewModelScope.launch {
             _state.emit(AnalyzeJobState.Loading)
             runCatching {
-                repository.analyzeJob(jobDescription, json)
+                repository.analyzeJob(jobDescription, json, model)
             }.onSuccess {
                 _state.emit(AnalyzeJobState.ReportReady(it))
             }.onFailure {

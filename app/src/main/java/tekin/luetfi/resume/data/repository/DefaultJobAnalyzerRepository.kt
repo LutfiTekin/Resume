@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import tekin.luetfi.resume.data.remote.Api
 import tekin.luetfi.resume.data.remote.OpenRouterAiApi
+import tekin.luetfi.resume.domain.model.AnalyzeModel
 import tekin.luetfi.resume.domain.model.MatchResponse
 import tekin.luetfi.resume.domain.prompt.CVAnalyzePrompt
 import tekin.luetfi.resume.domain.prompt.CVAnalyzePrompt.buildOpenRouterRequest
@@ -20,7 +21,8 @@ class DefaultJobAnalyzerRepository(
 
     override suspend fun analyzeJob(
         jobDescription: String,
-        cvJson: String
+        cvJson: String,
+        model: AnalyzeModel
     ): MatchResponse = withContext(io){
 
         val systemPrompt = try {
@@ -35,7 +37,8 @@ class DefaultJobAnalyzerRepository(
             body = buildOpenRouterRequest(
                 systemPrompt = systemPrompt,
                 jobDescription = jobDescription,
-                cvJson = cvJson
+                cvJson = cvJson,
+                model = model.id
             )
         )
 

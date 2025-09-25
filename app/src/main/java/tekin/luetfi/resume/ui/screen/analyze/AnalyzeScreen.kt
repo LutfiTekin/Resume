@@ -50,8 +50,11 @@ fun AnalyzeScreen(
         AnalyzeJobState.Start -> {
             AnalyzeStart(
                 modifier = modifier
-            ) { jobDesc ->
-                viewModel.analyze(jobDesc, cv)
+            ) { jobDesc, model ->
+                viewModel.analyze(
+                    jobDescription = jobDesc,
+                    cv = cv,
+                    model = model)
             }
         }
     }

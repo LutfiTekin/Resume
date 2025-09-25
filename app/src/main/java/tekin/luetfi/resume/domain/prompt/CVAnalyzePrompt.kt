@@ -116,7 +116,8 @@ Validation:
     fun buildOpenRouterRequest(
         jobDescription: String,
         cvJson: String,
-        systemPrompt: String
+        systemPrompt: String,
+        model: String
     ): ChatRequest {
         val messages = listOf(
             ChatMessage(role = "system", content = systemPrompt),
@@ -124,7 +125,8 @@ Validation:
         )
         return ChatRequest(
             messages = messages,
-            responseFormat = ResponseFormat("json_object")
+            responseFormat = ResponseFormat("json_object"),
+            model = model
         )
     }
 }

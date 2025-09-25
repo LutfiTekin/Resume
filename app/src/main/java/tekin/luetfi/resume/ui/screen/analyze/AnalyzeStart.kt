@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package tekin.luetfi.resume.ui.screen.analyze
 
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -40,6 +41,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import tekin.luetfi.resume.domain.model.AnalyzeModel
 import tekin.luetfi.resume.getTextOrNull
 
 @Composable
@@ -47,11 +49,13 @@ fun AnalyzeStart(
     modifier: Modifier = Modifier,
     isAnalyzing: Boolean = false,
     initialText: String = "",
-    onAnalyze: (String) -> Unit = {}
+    onAnalyze: (String, AnalyzeModel) -> Unit = { _, _ -> }
 ) {
     val focus = LocalFocusManager.current
     val clipboard = LocalClipboard.current
     val context = LocalContext.current
+
+    var selectedModel by remember { mutableStateOf(AnalyzeModel.GROK_4_FAST) }
 
 
     var jobDescription by remember(initialText) { mutableStateOf(initialText) }
@@ -94,6 +98,10 @@ fun AnalyzeStart(
             )
         }
 
+        ModelPicker(
+            selected = selectedModel,
+            onSelect = { selectedModel = it })
+
 
         OutlinedTextField(
             value = jobDescription,
@@ -116,7 +124,7 @@ fun AnalyzeStart(
                     tooLong -> "You reached the limit of $maxChars characters. Consider trimming the posting."
                     else -> "Tip: include stack, seniority, location, language needs, and company context."
                 }
-                Column (
+                Column(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -129,7 +137,7 @@ fun AnalyzeStart(
                 onDone = {
                     if (isValid && !isAnalyzing) {
                         focus.clearFocus()
-                        onAnalyze(jobDescription.trim())
+                        onAnalyze(jobDescription.trim(), AnalyzeModel.GROK_4_FAST)
                     }
                 }
             ),
@@ -153,9 +161,50 @@ fun AnalyzeStart(
         ) {
             Button(
                 enabled = isValid && !isAnalyzing,
-                onClick = { onAnalyze(jobDescription.trim()) }
+                onClick = { onAnalyze(jobDescription.trim(), selectedModel) }
             ) {
                 Text(if (isAnalyzing) "Analyzing…" else "Analyze")
+            }
+        }
+    }
+}
+
+@Composable
+fun ModelPicker(
+    selected: AnalyzeModel,
+    onSelect: (AnalyzeModel) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded }
+    ) {
+        OutlinedTextField(
+            value = selected.displayName,
+            onValueChange = {},
+            readOnly = true,
+            label = { Text("Model") },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+            modifier = Modifier
+                .menuAnchor()
+                .fillMaxWidth()
+        )
+        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            AnalyzeModel.entries.forEach { model ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            "${model.displayName} • ${
+                                model.category.name.lowercase().replaceFirstChar { it.uppercase() }
+                            }"
+                        )
+                    },
+                    onClick = {
+                        onSelect(model)
+                        expanded = false
+                    }
+                )
             }
         }
     }
