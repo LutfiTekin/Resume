@@ -10,7 +10,7 @@ import tekin.luetfi.resume.REPORTS_TABLE
 @Dao
 interface JobReportDao {
 
-    @Query("SELECT * FROM $REPORTS_TABLE")
+    @Query("SELECT * FROM $REPORTS_TABLE ORDER BY added DESC")
     suspend fun loadReports(): List<JobReportEntity>
 
     @Query("SELECT * FROM $REPORTS_TABLE WHERE id = :id")

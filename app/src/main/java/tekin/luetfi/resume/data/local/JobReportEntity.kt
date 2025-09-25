@@ -1,5 +1,6 @@
 package tekin.luetfi.resume.data.local
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.ProvidedTypeConverter
@@ -12,7 +13,9 @@ import tekin.luetfi.resume.domain.model.MatchResponse
 data class JobReportEntity(
     @PrimaryKey
     val id: String,
-    val result: MatchResponse
+    val result: MatchResponse,
+    @ColumnInfo(defaultValue = "0")
+    val added: Long = System.currentTimeMillis()
 )
 
 

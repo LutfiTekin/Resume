@@ -10,6 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import tekin.luetfi.resume.REPORTS_DATABASE
 import tekin.luetfi.resume.data.local.JobReportTypeConverter
+import tekin.luetfi.resume.data.local.MIGRATION_1_2
 import tekin.luetfi.resume.data.local.ReportsDatabase
 import javax.inject.Singleton
 
@@ -24,7 +25,10 @@ object DataModule {
             context = context,
             klass = ReportsDatabase::class.java,
             name = REPORTS_DATABASE
-        ).addTypeConverter(JobReportTypeConverter(moshi)).build()
+        )
+            .addMigrations(MIGRATION_1_2)
+            .addTypeConverter(JobReportTypeConverter(moshi))
+            .build()
 
 
     @Provides
