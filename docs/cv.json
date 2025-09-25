@@ -15,7 +15,7 @@
       "company": "AQMS GmbH",
       "location": "Radebeul, Germany (Hybrid)",
       "period": "2025-05 to now",
-      "stack": ["Kotlin", "Java", "Jetpack Compose","Figma"],
+      "stack": ["Kotlin", "Java", "Jetpack Compose","Figma", "Material 3"],
       "notes": []
     },
     {
@@ -91,7 +91,7 @@
     "android": [
       "Jetpack Compose", "CameraX", "Dagger", "Hilt", "Koin",
       "Coroutines", "Flows", "Gradle", "MVVM", "MVP", "Retrofit",
-      "ViewBinding", "DataBinding"
+      "ViewBinding", "DataBinding", "Material 3"
     ],
     "backend": ["Node.js", "Spring Boot", "REST APIs"],
     "devOps": ["Github Actions", "Azure", "Appcenter", "Fastlane"],
