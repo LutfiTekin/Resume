@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 import tekin.luetfi.resume.data.remote.Api
 import tekin.luetfi.resume.data.remote.OpenRouterAiApi
 import tekin.luetfi.resume.domain.model.MatchResponse
+import tekin.luetfi.resume.domain.prompt.CVAnalyzePrompt
 import tekin.luetfi.resume.domain.prompt.CVAnalyzePrompt.buildOpenRouterRequest
 import tekin.luetfi.resume.domain.repository.JobAnalyzerRepository
 
@@ -22,8 +23,12 @@ class DefaultJobAnalyzerRepository(
         cvJson: String
     ): MatchResponse = withContext(io){
 
-        val systemPrompt = api.getSystemPrompt().use {
-            it.string().trim()
+        val systemPrompt = try {
+            api.getSystemPrompt().use {
+                it.string().trim()
+            }
+        } catch (e: Exception) {
+            CVAnalyzePrompt.SYSTEM
         }
 
         val completionResponse = openRouterAiApi.matchJob(
