@@ -1,5 +1,6 @@
 @file:Suppress("KotlinConstantConditions", "SimplifyBooleanWithConstants")
 package tekin.luetfi.resume.ui
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -56,6 +57,9 @@ fun AppScaffold(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
+                modifier = Modifier.clickable{
+                    navController.navigate(HomeRoute)
+                },
                 title = {
                     Column {
                         Text(
