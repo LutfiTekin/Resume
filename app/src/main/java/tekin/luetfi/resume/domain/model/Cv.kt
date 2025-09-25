@@ -6,13 +6,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Cv(
-    val name: String = "",
+    val name: String = "Lütfi Tekin",
+    val location: String = "Leipzig",
     @SerialName("openToOpportunities") val openToOpportunities: String? = null,
-    @SerialName("careerStart") val careerStart: String? = null,   // "YYYY-MM"
+    @SerialName("careerStart") val careerStart: String? = null,// "YYYY-MM"
     val contact: Contact = Contact(""),
     val summary: String = "",
     val experience: List<ExperienceItem> = emptyList(),
-    val languages: Map<String, String> = emptyMap(),              // "english" to "Fluent"
+    val languages: Map<String, String> = emptyMap(),// "english" to "Fluent"
     @SerialName("techStack") val techStack: Map<String, List<String>> = emptyMap()
 )
 
@@ -27,7 +28,7 @@ data class ExperienceItem(
     val type: String,
     val company: String,
     val location: String,
-    val period: String,                         // e.g. "2025-05 to now"
+    val period: String,
     val project: String? = null,
     val stack: List<String> = emptyList(),
     val notes: List<String> = emptyList()

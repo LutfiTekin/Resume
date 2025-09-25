@@ -19,7 +19,6 @@ class DefaultCvRepository(
 
     override suspend fun load(): Cv = withContext(io) {
         _cv.value?.let { return@withContext it }
-
         val fresh = api.getCv()
         _cv.value = fresh
         fresh

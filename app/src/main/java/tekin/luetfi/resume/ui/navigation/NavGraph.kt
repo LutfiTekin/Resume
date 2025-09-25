@@ -12,6 +12,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import tekin.luetfi.resume.ui.screen.analyze.AnalyzeScreen
 import tekin.luetfi.resume.ui.screen.home.HomeScreen
 import tekin.luetfi.resume.ui.screen.home.HomeViewModel
 
@@ -21,20 +22,33 @@ fun AppNavHost(
     navController: NavHostController,
     startDestination: Any = HomeRoute // typed start
 ) {
+    val vm: HomeViewModel = hiltViewModel()
+    val uiState by vm.uiState.collectAsState()
+
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
+
+
         // Home
         composable<HomeRoute> {
-            val vm: HomeViewModel = hiltViewModel()
-            val uiState by vm.uiState.collectAsState()
+
 
             HomeScreen(
                 modifier = modifier,
                 uiState = uiState
             ){
                 vm.refresh()
+            }
+        }
+
+        composable<JobAnalyzerRoute> {
+            uiState.resume?.let { cv ->
+                AnalyzeScreen(
+                    modifier = modifier,
+                    cv = cv
+                )
             }
         }
 
@@ -60,6 +74,9 @@ fun AppNavHost(
 
 @Serializable
 object HomeRoute
+
+@Serializable
+object JobAnalyzerRoute
 
 @Serializable
 data class ExperienceDetailRoute(val company: String)

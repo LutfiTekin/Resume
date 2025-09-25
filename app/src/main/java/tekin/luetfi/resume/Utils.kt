@@ -63,12 +63,11 @@ fun Cv.openToOpportunities(): String {
         "actively_looking" -> stringResource(R.string.op_active)
         "passive" -> stringResource(R.string.op_passive)
         "not_interested" -> stringResource(R.string.op_not_interested)
-        else -> ""
+        else -> "Loading Content"
     }
 }
 
 sealed interface Result<out T> {
-    data object Loading : Result<Nothing>
     data class Success<T>(val data: T) : Result<T>
     data class Error(val throwable: Throwable) : Result<Nothing>
 }
