@@ -17,7 +17,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideApi(retrofit: Retrofit): Api = retrofit.create(Api::class.java)
+    fun provideApi(@CvApi retrofit: Retrofit): Api = retrofit.create(Api::class.java)
 
     @Provides @Singleton
     fun provideCvRepository(api: Api): CvRepository = DefaultCvRepository(api)

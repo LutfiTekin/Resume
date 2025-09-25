@@ -1,6 +1,30 @@
+
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import java.util.Properties
+import java.io.File
+
+
+fun Project.readSecret(
+    key: String,
+    default: String = "YOUR_OPEN_AI_KEY"
+): String {
+    // 1) local.properties at project root
+    val localFile = File(rootDir, "local.properties")
+    if (localFile.exists()) {
+        Properties().apply {
+            localFile.inputStream().use { load(it) }
+            getProperty(key)?.let { return it }
+        }
+    }
+    // 2) Environment variable
+    System.getenv(key)?.let { return it }
+    // 3) gradle.properties or -Pkey=...
+    (findProperty(key) as String?)?.let { return it }
+    // 4) Fallback
+    return default
+}
 
 plugins {
     alias(libs.plugins.android.application)
@@ -11,6 +35,9 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.parcelize)
 }
+val openAiKey = project.readSecret("OPENAI_API_KEY", "YOUR_OPEN_AI_KEY")
+//A key not provided
+val isMock = openAiKey == "YOUR_OPEN_AI_KEY"
 
 android {
     namespace = "tekin.luetfi.resume"
@@ -24,6 +51,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "OPENAI_API_KEY", "\"$openAiKey\"")
+        buildConfigField("boolean", "IS_MOCK", isMock.toString())
     }
 
     buildTypes {
@@ -41,6 +71,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     hilt {
         enableAggregatingTask = false

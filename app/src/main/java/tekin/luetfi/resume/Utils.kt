@@ -2,9 +2,9 @@ package tekin.luetfi.resume
 
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import tekin.luetfi.resume.domain.model.Cv
+import tekin.luetfi.resume.domain.model.PeriodInfo
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -15,15 +15,11 @@ import kotlin.math.floor
 /**
  * Constants
  */
-const val BASE_URL = "https://lutfitek.in/"
+const val CV_BASE_URL = "https://lutfitek.in/"
+const val OPEN_ROUTER_AI_BASE_URL = "https://openrouter.ai/api/v1/"
 
-
-data class PeriodInfo(
-    val startLabel: String,         // "MAY 2025"
-    val endLabel: String,           // "PRESENT" or "AUG 2024"
-    val totalMonths: Int,           // inclusive
-    val durationText: String        // "2 years 3 months"
-)
+const val CV_RETROFIT = "cv"
+const val OPEN_ROUTER_AI_RETROFIT = "oai"
 
 private val ymFmtIn = DateTimeFormatter.ofPattern("yyyy-MM")
 private val ymOut = DateTimeFormatter.ofPattern("MMM yyyy", Locale.ENGLISH)
