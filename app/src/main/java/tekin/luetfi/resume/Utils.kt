@@ -1,6 +1,8 @@
 package tekin.luetfi.resume
 
 
+import android.content.ClipboardManager
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import tekin.luetfi.resume.domain.model.Cv
@@ -65,6 +67,13 @@ fun Cv.openToOpportunities(): String {
         "not_interested" -> stringResource(R.string.op_not_interested)
         else -> "Loading Content"
     }
+}
+
+
+fun ClipboardManager.getTextOrNull(context: Context): String? {
+    val data = primaryClip ?: return null
+    if (data.itemCount == 0) return null
+    return data.getItemAt(0).coerceToText(context).toString()
 }
 
 sealed interface Result<out T> {
