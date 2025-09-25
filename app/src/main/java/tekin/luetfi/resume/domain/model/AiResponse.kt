@@ -3,10 +3,6 @@ package tekin.luetfi.resume.domain.model
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-// ───────────────────────────────────────────────────────────────────────────────
-// Root
-// ───────────────────────────────────────────────────────────────────────────────
-
 @JsonClass(generateAdapter = true)
 data class MatchResponse(
     val job: JobInfo,
@@ -22,9 +18,6 @@ data class MatchResponse(
     @param:Json(name = "score_1_to_5") val score1to5: Int
 )
 
-// ───────────────────────────────────────────────────────────────────────────────
-// Sections
-// ───────────────────────────────────────────────────────────────────────────────
 
 @JsonClass(generateAdapter = true)
 data class JobInfo(
@@ -84,9 +77,6 @@ data class ResumeActions(
     @param:Json(name = "tailored_summary") val tailoredSummary: String
 )
 
-// ───────────────────────────────────────────────────────────────────────────────
-// Enums
-// ───────────────────────────────────────────────────────────────────────────────
 
 @JsonClass(generateAdapter = false)
 enum class WorkMode {

@@ -42,4 +42,10 @@ class AnalyzeJobViewModel @Inject constructor(
         }
     }
 
+    fun reset(){
+        viewModelScope.launch {
+            _state.emit(AnalyzeJobState.Start)
+        }
+    }
+
 }

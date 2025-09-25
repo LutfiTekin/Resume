@@ -2,26 +2,22 @@
 
 package tekin.luetfi.resume.ui.screen.analyze
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,78 +32,77 @@ fun AnalyzeScreen(
     cv: Cv
 ) {
     val viewModel: AnalyzeJobViewModel = hiltViewModel()
+    val analyzeJobState by viewModel.state.collectAsStateWithLifecycle(AnalyzeJobState.Start)
 
-    val state by viewModel.state.collectAsStateWithLifecycle(AnalyzeJobState.Start)
-
-    when (state) {
-        is AnalyzeJobState.Error -> TODO()
-        AnalyzeJobState.Loading -> TODO()
-        is AnalyzeJobState.ReportReady -> TODO()
+    when (val state = analyzeJobState) {
+        is AnalyzeJobState.Error -> AnalyzeError(
+            modifier = modifier.fillMaxSize(),
+            message = state.message.ifBlank { "Something went wrong" },
+            onRetry = {
+                viewModel.reset()
+            }
+        )
+        AnalyzeJobState.Loading -> AnalyzeLoading(modifier.fillMaxSize())
+        is AnalyzeJobState.ReportReady -> AnalyzeReport(
+            modifier = modifier.fillMaxSize(),
+            report = state.report
+        )
         AnalyzeJobState.Start -> {
             AnalyzeStart(
                 modifier = modifier
-            ){
-                viewModel.analyze(it, cv)
+            ) { jobDesc ->
+                viewModel.analyze(jobDesc, cv)
             }
         }
     }
-
-
-
 }
 
-
 @Composable
-fun AnalyzeStart(
-    modifier: Modifier = Modifier,
-    onAnalyze: (String) -> Unit = {}
-) {
-    var jobDescription by remember { mutableStateOf("") }
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
+private fun AnalyzeLoading(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.padding(24.dp),
+        contentAlignment = Alignment.Center
     ) {
-        TextField(
-            value = jobDescription,
-            onValueChange = { jobDescription = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(160.dp),
-            placeholder = { },
-            minLines = 5,
-            maxLines = 8,
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
-            )
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            Button(
-                enabled = jobDescription.isNotBlank(),
-                onClick = {
-                    onAnalyze(jobDescription)
-                }
-            ) {
-                Text("Analyze")
-            }
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            CircularProgressIndicator()
+            Spacer(Modifier.height(12.dp))
+            Text("Analyzing the job description...")
         }
     }
 }
 
-@Preview(showBackground = true, showSystemUi = false)
 @Composable
-fun HomePreview() {
-    CvTheme {
-        AnalyzeStart(
-        )
+private fun AnalyzeError(
+    modifier: Modifier = Modifier,
+    message: String,
+    onRetry: () -> Unit
+) {
+    Box(
+        modifier = modifier.padding(24.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "Could not analyze",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(message, color = MaterialTheme.colorScheme.error)
+            Spacer(Modifier.height(16.dp))
+            Button(onClick = onRetry) { Text("Try again") }
+        }
     }
 }
+
+
+
+@Preview(showBackground = true)
+@Composable
+private fun LoadingPreview() {
+    CvTheme { AnalyzeLoading(Modifier.fillMaxSize()) }
+}
+
 
 
 
