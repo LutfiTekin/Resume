@@ -34,8 +34,16 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideJobAnalyzerRepository(api: OpenRouterAiApi, moshi: Moshi): JobAnalyzerRepository =
-        DefaultJobAnalyzerRepository(api = api, moshi = moshi)
+    fun provideJobAnalyzerRepository(
+        api: Api,
+        openRouterAiApi: OpenRouterAiApi,
+        moshi: Moshi
+    ): JobAnalyzerRepository =
+        DefaultJobAnalyzerRepository(
+            api = api,
+            openRouterAiApi = openRouterAiApi,
+            moshi = moshi
+        )
 
 
 }

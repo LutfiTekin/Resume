@@ -115,10 +115,11 @@ Validation:
 
     fun buildOpenRouterRequest(
         jobDescription: String,
-        cvJson: String
+        cvJson: String,
+        systemPrompt: String = SYSTEM
     ): ChatRequest {
         val messages = listOf(
-            ChatMessage(role = "system", content = SYSTEM),
+            ChatMessage(role = "system", content = systemPrompt),
             ChatMessage(role = "user", content = userMessage(jobDescription, cvJson))
         )
         return ChatRequest(
