@@ -60,8 +60,8 @@ fun AnalyzeStart(
 
     var jobDescription by remember(initialText) { mutableStateOf(initialText) }
 
-    val minChars = 200
-    val maxChars = 4000
+    val minChars = 50
+    val maxChars = 10000
     val tooShort = jobDescription.trim().length in 1 until minChars
     val tooLong = jobDescription.length > maxChars
     val isValid = jobDescription.trim().length >= minChars && !tooLong
