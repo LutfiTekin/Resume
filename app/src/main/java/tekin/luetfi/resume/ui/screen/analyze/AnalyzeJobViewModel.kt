@@ -1,15 +1,11 @@
 package tekin.luetfi.resume.ui.screen.analyze
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
@@ -25,17 +21,21 @@ class AnalyzeJobViewModel @Inject constructor(
 
     private val _state = MutableStateFlow<AnalyzeJobState>(AnalyzeJobState.Start)
 
-    val state = _state.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
-        AnalyzeJobState.Start)
+    val state = _state
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = AnalyzeJobState.Start
+        )
 
+    private var analyzingJob: Job? = null
 
 
     fun analyze(jobDescription: String, cv: Cv, model: AnalyzeModel) {
-        val json = Json.encodeToString(Cv.serializer(), cv)
-        viewModelScope.launch {
+        analyzingJob?.cancel()
+        analyzingJob = viewModelScope.launch {
             _state.emit(AnalyzeJobState.Loading)
+            val json = Json.encodeToString(Cv.serializer(), cv)
             runCatching {
                 repository.analyzeJob(jobDescription, json, model)
             }.onSuccess {
@@ -43,7 +43,6 @@ class AnalyzeJobViewModel @Inject constructor(
             }.onFailure {
                 _state.emit(AnalyzeJobState.Error(""))
             }
-
         }
     }
 
