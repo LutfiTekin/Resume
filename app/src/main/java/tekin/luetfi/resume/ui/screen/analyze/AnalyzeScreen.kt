@@ -37,9 +37,6 @@ fun AnalyzeScreen(
 
     val previousReports by viewModel.previousReports.collectAsStateWithLifecycle(emptyList())
 
-    LaunchedEffect(Unit) {
-        viewModel.reset()
-    }
 
     when (val state = analyzeJobState) {
         is AnalyzeJobState.Error -> AnalyzeError(
