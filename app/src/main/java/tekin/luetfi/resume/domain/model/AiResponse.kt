@@ -91,3 +91,27 @@ enum class FinalRecommendation {
     @Json(name = "CONSIDER") CONSIDER,
     @Json(name = "SKIP") SKIP
 }
+
+@JsonClass(generateAdapter = true)
+data class MatchError(
+    val error: ErrorInfo
+){
+    val type: String
+        get() {
+            return error.type.name.replace("_", " ")
+        }
+}
+
+@JsonClass(generateAdapter = true)
+data class ErrorInfo(
+    val type: ErrorType,
+    val message: String,
+    val details: String
+)
+
+@JsonClass(generateAdapter = false)
+enum class ErrorType {
+    @Json(name = "validation_error") VALIDATION_ERROR,
+    @Json(name = "processing_error") PROCESSING_ERROR,
+    @Json(name = "input_error") INPUT_ERROR
+}

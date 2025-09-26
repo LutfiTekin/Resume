@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import tekin.luetfi.resume.BuildConfig
 import tekin.luetfi.resume.domain.model.AnalyzeModel
+import tekin.luetfi.resume.domain.model.ChatCompletionResponse
 import tekin.luetfi.resume.domain.model.Cv
 import tekin.luetfi.resume.domain.model.FinalRecommendation
 import tekin.luetfi.resume.domain.model.MatchResponse
@@ -58,7 +59,11 @@ class AnalyzeJobViewModel @Inject constructor(
                 userActionChannel.receive()
                 _state.emit(AnalyzeJobState.ReportReady(it, online = true))
             }.onFailure {
-                _state.emit(AnalyzeJobState.Error(""))
+                if (it is ChatCompletionResponse.JobAnalyzeException) {
+                    _state.emit(AnalyzeJobState.Error(it.error))
+                }else {
+                    _state.emit(AnalyzeJobState.Error(null))
+                }
             }
         }
     }
@@ -71,7 +76,7 @@ class AnalyzeJobViewModel @Inject constructor(
             }.onSuccess {
                 _state.emit(AnalyzeJobState.ReportReady(it, online = false))
             }.onFailure {
-                _state.emit(AnalyzeJobState.Error(""))
+                _state.emit(AnalyzeJobState.Error(null))
             }
         }
     }

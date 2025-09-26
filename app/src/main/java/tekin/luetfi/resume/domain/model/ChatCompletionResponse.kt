@@ -38,9 +38,18 @@ data class ChatCompletionResponse(
             ?: throw IllegalStateException("No JSON object found in message content.")
 
         val adapter = moshi.adapter(MatchResponse::class.java)
-        return adapter.fromJson(json)
-            ?: throw IllegalStateException("Failed to parse MatchResponse JSON.")
+
+        val response: MatchResponse = try {
+            adapter.fromJson(json) ?: throw Exception()
+        }catch (e: Exception){
+            val errorAdapter = moshi.adapter(MatchError::class.java)
+            throw JobAnalyzeException(errorAdapter.fromJson(json))
+        }
+
+        return response
     }
+
+    class JobAnalyzeException(val error: MatchError?): Exception(error?.error?.message)
 
 
 // ───────────────────────────────────────────────────────────────────────────────

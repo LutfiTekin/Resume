@@ -38,7 +38,7 @@ fun AnalyzeScreen(
     when (val state = analyzeJobState) {
         is AnalyzeJobState.Error -> AnalyzeError(
             modifier = modifier.fillMaxSize(),
-            message = state.message.ifBlank { "Something went wrong" },
+            error = state.matchError,
             onRetry = {
                 viewModel.reset()
             }
