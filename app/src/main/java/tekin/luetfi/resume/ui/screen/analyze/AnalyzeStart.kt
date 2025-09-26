@@ -139,7 +139,7 @@ fun AnalyzeStart(
                     onDone = {
                         if (isValid && !isAnalyzing) {
                             focus.clearFocus()
-                            onAnalyze(jobDescription.trim(), AnalyzeModel.GROK_4_FAST)
+                            onAnalyze(jobDescription.trim(), selectedModel)
                         }
                     }
                 ),
