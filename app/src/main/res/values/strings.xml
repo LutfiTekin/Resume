@@ -17,4 +17,25 @@
     <string name="paste_from_clipboard">Paste from clipboard</string>
     <string name="clear">Clear</string>
     <string name="analyze_a_job_description">Analyze a job description</string>
+    <string name="analyzing_text_1">Analyzing the job description…</string>
+    <string name="analyzing_text_2">Examining the job posting…</string>
+    <string name="analyzing_text_3">Processing job requirements…</string>
+    <string name="analyzing_text_4">Reviewing the position details…</string>
+    <string name="analyzing_text_5">Scanning job specifications…</string>
+    <string name="analyzing_text_6">Evaluating the job listing…</string>
+    <string name="analyzing_text_7">Parsing job information…</string>
+    <string name="analyzing_text_8">Studying the role description…</string>
+    <string name="analyzing_text_9">Assessing job criteria…</string>
+    <string name="analyzing_text_10">Reading through job details…</string>
+    <string name="analyzing_text_11">Processing position information…</string>
+    <string name="analyzing_text_12">Examining role requirements…</string>
+    <string name="analyzing_text_13">Analyzing job qualifications…</string>
+    <string name="analyzing_text_14">Reviewing employment details…</string>
+    <string name="analyzing_text_15">Interpreting job posting…</string>
+    <string name="analyzing_text_16">Checking job specifications…</string>
+    <string name="analyzing_text_17">Evaluating position requirements…</string>
+    <string name="analyzing_text_18">Processing job content…</string>
+    <string name="analyzing_text_19">Scanning position details…</string>
+    <string name="analyzing_text_20">Examining job opportunity…</string>
+    <string name="analyzing_text_21">Final Verdict</string>
 </resources>

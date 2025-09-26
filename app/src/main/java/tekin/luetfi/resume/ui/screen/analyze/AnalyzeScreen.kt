@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,7 +35,6 @@ fun AnalyzeScreen(
 
     val previousReports by viewModel.previousReports.collectAsStateWithLifecycle(emptyList())
 
-
     when (val state = analyzeJobState) {
         is AnalyzeJobState.Error -> AnalyzeError(
             modifier = modifier.fillMaxSize(),
@@ -48,7 +46,9 @@ fun AnalyzeScreen(
 
         is AnalyzeJobState.Loading -> AnalyzeLoading(
             modifier = modifier.fillMaxSize(),
-            message = state.message)
+            verdict = state.finalRecommendation){
+            viewModel.onUserContinue()
+        }
 
         is AnalyzeJobState.ReportReady -> AnalyzeReport(
             modifier = modifier.fillMaxSize(),
@@ -72,19 +72,7 @@ fun AnalyzeScreen(
     }
 }
 
-@Composable
-private fun AnalyzeLoading(modifier: Modifier = Modifier, message: String) {
-    Box(
-        modifier = modifier.padding(24.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            CircularProgressIndicator()
-            Spacer(Modifier.height(12.dp))
-            Text(message)
-        }
-    }
-}
+
 
 @Composable
 private fun AnalyzeError(
@@ -115,7 +103,7 @@ private fun AnalyzeError(
 @Preview(showBackground = true)
 @Composable
 private fun LoadingPreview() {
-    CvTheme { AnalyzeLoading(Modifier.fillMaxSize(), "Loading") }
+    CvTheme { AnalyzeLoading(Modifier.fillMaxSize()) }
 }
 
 
