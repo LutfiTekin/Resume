@@ -34,8 +34,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.AnalyzeModel
 import tekin.luetfi.resume.domain.model.MatchResponse
 import tekin.luetfi.resume.getTextOrNull
@@ -70,7 +72,7 @@ fun AnalyzeStart(
     ) {
         item {
             Text(
-                "Analyze a job description",
+                stringResource(R.string.analyze_a_job_description),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold
             )
@@ -87,12 +89,12 @@ fun AnalyzeStart(
                     onClick = {
                         clipboard.nativeClipboard.getTextOrNull(context)?.let { jobDescription = it }
                     },
-                    label = { Text("Paste from clipboard") }
+                    label = { Text(stringResource(R.string.paste_from_clipboard)) }
                 )
                 AssistChip(
                     enabled = jobDescription.isNotBlank() && !isAnalyzing,
                     onClick = { jobDescription = "" },
-                    label = { Text("Clear") }
+                    label = { Text(stringResource(R.string.clear)) }
                 )
             }
         }
@@ -113,8 +115,8 @@ fun AnalyzeStart(
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = 160.dp),
-                label = { Text("Job description") },
-                placeholder = { Text("Paste the full posting: responsibilities, requirements, nice to have, languages, location, and company info. Or simple paste the link.") },
+                label = { Text(stringResource(R.string.label_job_description)) },
+                placeholder = { Text(stringResource(R.string.hint_job_description)) },
                 minLines = 6,
                 maxLines = 12,
                 enabled = !isAnalyzing,
@@ -122,9 +124,12 @@ fun AnalyzeStart(
                 supportingText = {
                     val len = jobDescription.length
                     val helper = when {
-                        tooShort -> "Add more details for a reliable analysis: at least $minChars characters."
-                        tooLong -> "You reached the limit of $maxChars characters. Consider trimming the posting."
-                        else -> "Tip: include stack, seniority, location, language needs, and company context."
+                        tooShort -> stringResource(
+                            R.string.error_job_description_too_short,
+                            minChars
+                        )
+                        tooLong -> stringResource(R.string.error_job_description_too_long, maxChars)
+                        else -> stringResource(R.string.hint_job_description_tip)
                     }
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -153,7 +158,7 @@ fun AnalyzeStart(
         item {
             AnimatedVisibility(visible = jobDescription.isBlank()) {
                 Text(
-                    "Privacy note: nothing is stored locally after analysis unless you save it explicitly.",
+                    stringResource(R.string.privacy_note),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -169,7 +174,7 @@ fun AnalyzeStart(
                     enabled = isValid && !isAnalyzing,
                     onClick = { onAnalyze(jobDescription.trim(), selectedModel) }
                 ) {
-                    Text(if (isAnalyzing) "Analyzing…" else "Analyze")
+                    Text(if (isAnalyzing) stringResource(R.string.analyzing) else stringResource(R.string.analyze))
                 }
             }
         }
@@ -197,7 +202,7 @@ fun ModelPicker(
             value = selected.displayName,
             onValueChange = {},
             readOnly = true,
-            label = { Text("Model") },
+            label = { Text(stringResource(R.string.model)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             modifier = Modifier
                 .menuAnchor()

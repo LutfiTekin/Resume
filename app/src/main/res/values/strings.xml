@@ -5,4 +5,16 @@
     <string name="op_not_interested">Not currently seeking new roles</string>
     <string name="tab_experience">Experience</string>
     <string name="tab_tech_stack">Tech Stack</string>
+    <string name="label_job_description">Job description</string>
+    <string name="hint_job_description">Paste the full posting: responsibilities, requirements, nice to have, languages, location, and company info. Or simple paste the link.</string>
+    <string name="error_job_description_too_short">Add more details for a reliable analysis: at least %1$d characters.</string>
+    <string name="error_job_description_too_long">You reached the limit of %1$d characters. Consider trimming the posting.</string>
+    <string name="hint_job_description_tip">Tip: include stack, seniority, location, language needs, and company context.</string>
+    <string name="privacy_note">Privacy note: nothing is stored locally after analysis unless you save it explicitly.</string>
+    <string name="analyze">Analyze</string>
+    <string name="analyzing">Analyzing…</string>
+    <string name="model">Model</string>
+    <string name="paste_from_clipboard">Paste from clipboard</string>
+    <string name="clear">Clear</string>
+    <string name="analyze_a_job_description">Analyze a job description</string>
 </resources>
