@@ -74,30 +74,6 @@ fun AnalyzeScreen(
 
 
 
-@Composable
-private fun AnalyzeError(
-    modifier: Modifier = Modifier,
-    message: String,
-    onRetry: () -> Unit
-) {
-    Box(
-        modifier = modifier.padding(24.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = "Could not analyze",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(message, color = MaterialTheme.colorScheme.error)
-            Spacer(Modifier.height(16.dp))
-            Button(onClick = onRetry) { Text("Try again") }
-        }
-    }
-}
-
 
 
 @Preview(showBackground = true)

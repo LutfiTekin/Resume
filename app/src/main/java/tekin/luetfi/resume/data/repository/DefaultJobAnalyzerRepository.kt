@@ -3,7 +3,9 @@ package tekin.luetfi.resume.data.repository
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import tekin.luetfi.resume.BuildConfig
 import tekin.luetfi.resume.data.local.JobReportDao
 import tekin.luetfi.resume.data.local.toEntity
 import tekin.luetfi.resume.data.remote.Api
@@ -27,6 +29,7 @@ class DefaultJobAnalyzerRepository(
         cvJson: String,
         model: AnalyzeModel
     ): MatchResponse = withContext(io){
+
 
         val systemPrompt = try {
             api.getSystemPrompt().use {
