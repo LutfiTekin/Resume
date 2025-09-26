@@ -7,28 +7,33 @@ enum class AnalyzeModel(
 ) {
     GROK_4_FAST(
         id = "x-ai/grok-4-fast:free",
-        displayName = "xAI: Grok 4 Fast",
+        displayName = "Grok",
         category = Category.FAST
     ),
     NEMOTRON_NANO(
         id = "nvidia/nemotron-nano-9b-v2:free",
-        displayName = "NVIDIA: Nemotron Nano 9B V2",
+        displayName = "NVIDIA",
         category = Category.RELIABLE
     ),
-    DEEPSEEK_V31(
-        id = "deepseek/deepseek-chat-v3.1:free",
-        displayName = "DeepSeek: DeepSeek V3.1",
+    DEEPSEEK_R1(
+        id = "deepseek/deepseek-r1-0528:free",
+        displayName = "DeepSeek",
         category = Category.RELIABLE
+    ),
+    META_LLAMA_3_3_8B(
+        id = "meta-llama/llama-3.3-8b-instruct:free",
+        displayName = "Meta",
+        category = Category.FASTEST
+    ),
+    GEMINI_2_0_FLASH(
+        id = "google/gemini-2.0-flash-exp:free",
+        displayName = "Gemini",
+        category = Category.FAST
     ),
     GPT_OSS_120B(
         id = "openai/gpt-oss-120b:free",
-        displayName = "OpenAI: gpt-oss-120b",
+        displayName = "OpenAI",
         category = Category.FASTEST
-    ),
-    GPT_OSS_20B(
-        id = "openai/gpt-oss-20b:free",
-        displayName = "OpenAI: gpt-oss-20b",
-        category = Category.FAST
     );
 
     enum class Category { FAST, RELIABLE, FASTEST }
