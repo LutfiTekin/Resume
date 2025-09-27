@@ -3,17 +3,20 @@ package tekin.luetfi.resume.data.repository
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import tekin.luetfi.resume.BuildConfig
 import tekin.luetfi.resume.data.local.JobReportDao
 import tekin.luetfi.resume.data.local.toEntity
 import tekin.luetfi.resume.data.remote.Api
 import tekin.luetfi.resume.data.remote.OpenRouterAiApi
 import tekin.luetfi.resume.domain.model.AnalyzeModel
+import tekin.luetfi.resume.domain.model.ChatMessage
+import tekin.luetfi.resume.domain.model.ChatRequest
 import tekin.luetfi.resume.domain.model.MatchResponse
+import tekin.luetfi.resume.domain.model.ResponseFormat
+import tekin.luetfi.resume.domain.model.WordAssociationResponse
 import tekin.luetfi.resume.domain.prompt.CVAnalyzePrompt
 import tekin.luetfi.resume.domain.prompt.CVAnalyzePrompt.buildOpenRouterRequest
+import tekin.luetfi.resume.domain.prompt.CVAnalyzePrompt.userMessage
 import tekin.luetfi.resume.domain.repository.JobAnalyzerRepository
 
 class DefaultJobAnalyzerRepository(
@@ -39,7 +42,7 @@ class DefaultJobAnalyzerRepository(
             CVAnalyzePrompt.SYSTEM
         }
 
-        val completionResponse = openRouterAiApi.matchJob(
+        val completionResponse = openRouterAiApi.getChatCompletion(
             body = buildOpenRouterRequest(
                 systemPrompt = systemPrompt,
                 jobDescription = jobDescription,
@@ -49,6 +52,36 @@ class DefaultJobAnalyzerRepository(
         )
 
         return@withContext completionResponse.matchResponseOrThrow(moshi)
+    }
+
+    override suspend fun summarizeJob(
+        summary: String?,
+        model: AnalyzeModel
+    ): WordAssociationResponse? = withContext(io){
+        if (summary == null)
+            return@withContext null
+        val prompt = try {
+            api.getSummaryPrompt().use {
+                it.string().trim()
+            }
+        } catch (e: Exception) {
+            return@withContext null
+        }
+
+        val messages = listOf(
+            ChatMessage(role = "system", content = prompt),
+            ChatMessage(role = "user", content = summary)
+        )
+
+        val request = ChatRequest(
+            messages = messages,
+            responseFormat = ResponseFormat("json_object"),
+            model = model.id
+        )
+
+        val completionResponse = openRouterAiApi.getChatCompletion(request)
+
+        return@withContext completionResponse.matchResponseOrNull(moshi)
     }
 
 

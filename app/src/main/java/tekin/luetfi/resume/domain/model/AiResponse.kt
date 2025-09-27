@@ -51,7 +51,8 @@ data class CvAtAGlance(
 data class FitAnalysis(
     val matched: List<String>,
     val gaps: List<String>,
-    val uncertain: List<String>
+    val uncertain: List<String>,
+    val summary: String? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -115,3 +116,10 @@ enum class ErrorType {
     @Json(name = "processing_error") PROCESSING_ERROR,
     @Json(name = "input_error") INPUT_ERROR
 }
+
+@JsonClass(generateAdapter = true)
+data class WordAssociationResponse(
+    @param:Json(name = "original_phrase") val originalPhrase: String,
+    @param:Json(name = "word_associations") val wordAssociations: Map<String, List<String>>,
+    @param:Json(name = "alternative_phrases") val alternativePhrases: List<String>
+)

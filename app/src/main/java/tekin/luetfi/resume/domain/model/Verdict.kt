@@ -5,6 +5,7 @@ data class Verdict(
     val workMode: String,
     val techKeywords: List<String>,
     val languages: List<String>,
+    var summary: WordAssociationResponse? = null
 )
 
 

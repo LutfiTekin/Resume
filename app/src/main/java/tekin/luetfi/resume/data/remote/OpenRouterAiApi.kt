@@ -10,7 +10,7 @@ interface OpenRouterAiApi {
 
     @POST("chat/completions")
     @Headers("Content-Type: application/json")
-    suspend fun matchJob(
+    suspend fun getChatCompletion(
         @Body body: ChatRequest
     ): ChatCompletionResponse
 }

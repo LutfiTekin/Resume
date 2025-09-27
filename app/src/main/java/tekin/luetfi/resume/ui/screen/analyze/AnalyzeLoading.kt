@@ -41,6 +41,7 @@ import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.FinalRecommendation
 import tekin.luetfi.resume.domain.model.MatchResponse
 import tekin.luetfi.resume.domain.model.Verdict
+import tekin.luetfi.resume.domain.model.WordAssociationResponse
 import tekin.luetfi.resume.ui.component.AnimatedConfirmation
 import tekin.luetfi.resume.ui.component.AnimatedConfirmationIndeterminate
 import tekin.luetfi.resume.ui.component.phoneticMap
@@ -75,13 +76,24 @@ fun AnalyzeLoading(
         }
     }
 
-    // Fill the screen so the center is truly screen center
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
             .padding(24.dp)
     ) {
-        val (progress, msg, belowGroup, actionBtn) = createRefs()
+        val (topGroup, progress, msg, belowGroup, actionBtn) = createRefs()
+
+        verdict?.summary?.let { summary ->
+            SummaryColumn(
+                modifier = Modifier.constrainAs(topGroup) {
+                    bottom.linkTo(msg.top, margin = 16.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    width = androidx.constraintlayout.compose.Dimension.fillToConstraints
+                },
+                summary = summary)
+        }
+
 
         // Center anchor
         Text(
@@ -92,16 +104,16 @@ fun AnalyzeLoading(
         )
 
         if (verdict == null) {
-            // Show a spinner above the centered message
+            // Spinner above the centered message
             CircularProgressIndicator(
                 modifier = Modifier.constrainAs(progress) {
-                    bottom.linkTo(msg.top, margin = 12.dp)
+                    bottom.linkTo(msg.top, margin = if (verdict?.summary == null) 12.dp else 8.dp)
                     start.linkTo(msg.start)
                     end.linkTo(msg.end)
                 }
             )
 
-            // The animated indeterminate rows live below the message
+            // Animated indeterminate rows below the message
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.constrainAs(belowGroup) {
@@ -116,11 +128,10 @@ fun AnalyzeLoading(
                     val list by remember(index) {
                         derivedStateOf {
                             if (Random.nextBoolean()) {
-                                lists.entries
-                                    .flatMap { it.value }
+                                lists.entries.flatMap { it.value }
                             } else {
-                                (cv?.techStack?.values?.flatten()
-                                    ?: emptyList()) + techStackSectionSynonyms.take(10)
+                                (cv?.techStack?.values?.flatten() ?: emptyList()) +
+                                        techStackSectionSynonyms.take(10)
                             }
                                 .shuffled()
                                 .take(if (isEven) 40 else 15)
@@ -135,19 +146,28 @@ fun AnalyzeLoading(
         } else {
             // Confirmation sequence directly below the message
             val list = remember(verdict) { createSynonymsList(verdict.finalRecommendation) }
-            val techKeywords by remember(verdict) { derivedStateOf {
-                createSynonymsList(
-                    subList = verdict.techKeywords,
-                    list = verdict.techKeywords + techStackSectionSynonyms.take(5))
-            } }
-            val workModes by remember(verdict) { derivedStateOf {
-                createSynonymsList(subList = listOf(verdict.workMode), list = allWorkModeSynonyms + listOf(verdict.workMode))
-            }}
+            val techKeywords by remember(verdict) {
+                derivedStateOf {
+                    createSynonymsList(
+                        subList = verdict.techKeywords,
+                        list = verdict.techKeywords + techStackSectionSynonyms.take(5)
+                    )
+                }
+            }
+            val workModes by remember(verdict) {
+                derivedStateOf {
+                    createSynonymsList(
+                        subList = listOf(verdict.workMode),
+                        list = allWorkModeSynonyms + listOf(verdict.workMode)
+                    )
+                }
+            }
             val languages by remember(verdict) {
                 derivedStateOf {
                     createSynonymsList(
                         subList = verdict.languages,
-                        list = spokenLanguagesInTech)
+                        list = spokenLanguagesInTech
+                    )
                 }
             }
             Column(
@@ -159,30 +179,30 @@ fun AnalyzeLoading(
                     width = androidx.constraintlayout.compose.Dimension.wrapContent
                 }
             ) {
-                //Verdict node
+                // Verdict node
                 AnimatedConfirmation(
                     modifier = Modifier.fillMaxWidth(),
                     finalText = verdict.finalRecommendation.name,
                     items = list
-                ) {
-                    showButton = true
-                }
-                //Tech Keywords
-                if (verdict.techKeywords.size > 5){
+                ) { showButton = true }
+
+                // Tech Keywords
+                if (verdict.techKeywords.size > 5) {
                     AnimatedConfirmationIndeterminate(
                         modifier = Modifier.fillMaxWidth(),
                         items = techKeywords
                     )
                 }
 
-                //Work Setting
+                // Work Setting
                 AnimatedConfirmation(
                     modifier = Modifier.fillMaxWidth(),
                     finalText = verdict.workMode,
                     items = workModes
                 )
 
-                if (verdict.languages.isNotEmpty()){
+                // Languages
+                if (verdict.languages.isNotEmpty()) {
                     AnimatedConfirmation(
                         modifier = Modifier.fillMaxWidth(),
                         finalText = verdict.languages.first(),
@@ -208,6 +228,31 @@ fun AnalyzeLoading(
         }
     }
 }
+
+@Composable
+fun SummaryColumn(modifier: Modifier = Modifier, summary: WordAssociationResponse){
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ){
+
+        summary.wordAssociations.entries.forEach { (targetWord, list) ->
+            val list by remember {
+                derivedStateOf {
+                    createSynonymsList(listOf(targetWord), list + listOf(targetWord))
+                }
+            }
+            AnimatedConfirmation(
+                modifier = Modifier.fillMaxWidth(),
+                finalText = targetWord,
+                items = list
+            )
+        }
+
+    }
+}
+
 
 //Multi-Model
 @Composable

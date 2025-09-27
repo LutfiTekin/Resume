@@ -1,6 +1,7 @@
 package tekin.luetfi.resume.domain.model
 
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.adapter
 
 data class ChatCompletionResponse(
     val id: String,
@@ -50,6 +51,34 @@ data class ChatCompletionResponse(
     }
 
     class JobAnalyzeException(val error: MatchError?): Exception(error?.error?.message)
+
+
+    fun String.cleanupCodeFences(): String {
+        return removePrefix("```").removeSuffix("```").trim()
+    }
+
+    fun String.getFirstJsonObject(): String? {
+        val start = indexOf('{')
+        val end = lastIndexOf('}')
+        return if (start >= 0 && end > start) substring(start, end + 1) else null
+    }
+
+    @OptIn(ExperimentalStdlibApi::class)
+    inline fun <reified T : Any> matchResponseOrNull(moshi: Moshi): T? {
+        val content = choices
+            .firstOrNull { it.message.content.isNotBlank() }
+            ?.message?.content
+            ?: return null
+
+        val json = content
+            .cleanupCodeFences()
+            .getFirstJsonObject()
+            ?: return null
+
+        return runCatching {
+            moshi.adapter<T>().fromJson(json)
+        }.getOrNull()
+    }
 
 
 // ───────────────────────────────────────────────────────────────────────────────

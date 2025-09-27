@@ -15,4 +15,8 @@ interface Api {
     @GET("job_analysis_prompt.txt")
     suspend fun getSystemPrompt(): ResponseBody
 
+    @Headers("Cache-Control: no-cache")
+    @GET("fit_summary_prompt.txt")
+    suspend fun getSummaryPrompt(): ResponseBody
+
 }

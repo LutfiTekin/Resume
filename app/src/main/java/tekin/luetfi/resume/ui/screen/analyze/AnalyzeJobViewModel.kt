@@ -57,7 +57,8 @@ class AnalyzeJobViewModel @Inject constructor(
             runCatching {
                 repository.analyzeJob(jobDescription, json, model)
             }.onSuccess {
-                _state.emit(AnalyzeJobState.Loading("Final Verdict", it.verdict))
+                val summary = repository.summarizeJob(it.fitAnalysis.summary, model)
+                _state.emit(AnalyzeJobState.Loading("Final Verdict", it.verdict.copy(summary = summary)))
                 userActionChannel.receive()
                 _state.emit(AnalyzeJobState.ReportReady(it, online = true))
             }.onFailure {
