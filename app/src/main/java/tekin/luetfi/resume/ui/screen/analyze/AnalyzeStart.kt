@@ -22,12 +22,17 @@ import androidx.compose.ui.unit.dp
 
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -48,13 +53,15 @@ fun AnalyzeStart(
     isAnalyzing: Boolean = false,
     initialText: String = "",
     previousReports: List<MatchResponse>,
-    onAnalyze: (String, AnalyzeModel) -> Unit = { _, _ -> }
+    onAnalyze: (String, List<AnalyzeModel>) -> Unit = { _, _ -> }
 ) {
     val focus = LocalFocusManager.current
     val clipboard = LocalClipboard.current
     val context = LocalContext.current
 
     var selectedModel by remember { mutableStateOf(AnalyzeModel.GROK_4_FAST) }
+
+    var selectedModels: List<AnalyzeModel> by remember(selectedModel) { mutableStateOf(listOf(selectedModel)) }
 
     var jobDescription by rememberSaveable(initialText) { mutableStateOf(initialText) }
 
@@ -102,7 +109,12 @@ fun AnalyzeStart(
         item {
             ModelPicker(
                 selected = selectedModel,
-                onSelect = { selectedModel = it })
+                onSelect = {
+                    selectedModel = it
+                },
+                onMultipleModelsSelected = {
+                    selectedModels = it
+                })
         }
 
 
@@ -144,7 +156,7 @@ fun AnalyzeStart(
                     onDone = {
                         if (isValid && !isAnalyzing) {
                             focus.clearFocus()
-                            onAnalyze(jobDescription.trim(), selectedModel)
+                            onAnalyze(jobDescription.trim(), selectedModels)
                         }
                     }
                 ),
@@ -172,7 +184,7 @@ fun AnalyzeStart(
             ) {
                 Button(
                     enabled = isValid && !isAnalyzing,
-                    onClick = { onAnalyze(jobDescription.trim(), selectedModel) }
+                    onClick = { onAnalyze(jobDescription.trim(), selectedModels) }
                 ) {
                     Text(if (isAnalyzing) stringResource(R.string.analyzing) else stringResource(R.string.analyze))
                 }
@@ -190,41 +202,166 @@ fun AnalyzeStart(
 @Composable
 fun ModelPicker(
     selected: AnalyzeModel,
-    onSelect: (AnalyzeModel) -> Unit
+    onSelect: (AnalyzeModel) -> Unit,
+    onMultipleModelsSelected: (List<AnalyzeModel>) -> Unit = {}
 ) {
+    var selectMultipleModels by remember { mutableStateOf(false) }
+    var selectedModels by remember { mutableStateOf(setOf<AnalyzeModel>()) }
     var expanded by remember { mutableStateOf(false) }
 
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded }
-    ) {
-        OutlinedTextField(
-            value = selected.displayName,
-            onValueChange = {},
-            readOnly = true,
-            label = { Text(stringResource(R.string.model)) },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth()
-        )
-        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            AnalyzeModel.entries.forEach { model ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            "${model.displayName} • ${
-                                model.category.name.lowercase().replaceFirstChar { it.uppercase() }
-                            }"
+    Column {
+        // Single model dropdown (shown when multiple models is unchecked)
+        if (!selectMultipleModels) {
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded }
+            ) {
+                OutlinedTextField(
+                    value = selected.displayName,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text(stringResource(R.string.model)) },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                )
+                ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                    AnalyzeModel.entries.forEach { model ->
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    "${model.displayName} • ${
+                                        model.category.name.lowercase().replaceFirstChar { it.uppercase() }
+                                    }"
+                                )
+                            },
+                            onClick = {
+                                onSelect(model)
+                                expanded = false
+                            }
                         )
-                    },
-                    onClick = {
-                        onSelect(model)
-                        expanded = false
                     }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Multiple models checkbox
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = selectMultipleModels,
+                onCheckedChange = { checked ->
+                    selectMultipleModels = checked
+                    if (!checked) {
+                        // Reset to single model when unchecked
+                        selectedModels = emptySet()
+                        onMultipleModelsSelected(emptyList())
+                    } else {
+                        // Initialize with currently selected model
+                        selectedModels = setOf(selected)
+                        onMultipleModelsSelected(listOf(selected))
+                    }
+                }
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "Use multiple models",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
+        // Multiple models selection (shown when checkbox is checked)
+        if (selectMultipleModels) {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Select Models:",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Model selection using FlowRow
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                AnalyzeModel.entries.forEach { model ->
+                    ModelSelectionChip(
+                        model = model,
+                        isSelected = selectedModels.contains(model),
+                        onSelectionChange = { isSelected ->
+                            val newSelection = if (isSelected) {
+                                selectedModels + model
+                            } else {
+                                selectedModels - model
+                            }
+                            selectedModels = newSelection
+                            onMultipleModelsSelected(newSelection.toList())
+                        }
+                    )
+                }
+            }
+
+            // Selected models summary
+            if (selectedModels.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "Selected: ${selectedModels.size} model(s)",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Medium
                 )
             }
         }
     }
 }
+
+@Composable
+fun ModelSelectionChip(
+    model: AnalyzeModel,
+    isSelected: Boolean,
+    onSelectionChange: (Boolean) -> Unit
+) {
+    FilterChip(
+        modifier = Modifier.animateContentSize(),
+        onClick = { onSelectionChange(!isSelected) },
+        label = {
+            Column(modifier = Modifier.padding(4.dp)) {
+                Text(
+                    text = model.displayName,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = model.category.name.lowercase().replaceFirstChar { it.uppercase() },
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (isSelected) {
+                        MaterialTheme.colorScheme.onSecondaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    }
+                )
+            }
+        },
+        selected = isSelected,
+        leadingIcon = if (isSelected) {
+            {
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = null,
+                    modifier = Modifier.size(FilterChipDefaults.IconSize)
+                )
+            }
+        } else null
+    )
+}
+
 

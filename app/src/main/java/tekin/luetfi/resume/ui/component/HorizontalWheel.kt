@@ -17,6 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -27,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import tekin.luetfi.resume.domain.model.FinalRecommendation
+import tekin.luetfi.resume.ui.screen.analyze.createSynonymsList
 import java.util.Locale
 import kotlin.math.abs
 
@@ -36,13 +39,29 @@ fun AnimatedConfirmation(
     modifier: Modifier,
     items: List<String>,
     finalText: String,
-    onAnimationEnd: () -> Unit
+    onAnimationEnd: () -> Unit = {}
 ) {
     // Use the passed list, and scroll to show the finalText
     HorizontalWheelReadOnly(
         modifier = modifier.padding(vertical = 8.dp),
         items = items,
         displayItem = finalText,
+        onAnimationEnd = onAnimationEnd
+    )
+}
+
+@Composable
+fun AnimatedConfirmation(
+    modifier: Modifier,
+    finalRecommendation: FinalRecommendation,
+    onAnimationEnd: () -> Unit = {}
+) {
+    val items by remember { mutableStateOf(createSynonymsList(finalRecommendation)) }
+    // Use the passed list, and scroll to show the finalText
+    HorizontalWheelReadOnly(
+        modifier = modifier.padding(vertical = 8.dp),
+        items = items,
+        displayItem = finalRecommendation.name,
         onAnimationEnd = onAnimationEnd
     )
 }

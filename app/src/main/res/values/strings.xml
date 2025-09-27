@@ -38,6 +38,7 @@
     <string name="analyzing_text_19">Scanning position details…</string>
     <string name="analyzing_text_20">Examining job opportunity…</string>
     <string name="analyzing_text_21">Final Verdict</string>
+    <string name="analyzing_multi_model">Analyzing the job description with selected models</string>
     <string name="error_title">Could not analyze</string>
     <string name="error_description">An unknown error occurred</string>
     <string name="retry_button">Try again</string>

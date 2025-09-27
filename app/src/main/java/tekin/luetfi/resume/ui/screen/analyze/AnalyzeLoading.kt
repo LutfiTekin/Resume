@@ -1,12 +1,21 @@
 package tekin.luetfi.resume.ui.screen.analyze
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,16 +29,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import kotlinx.coroutines.delay
+import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.FinalRecommendation
+import tekin.luetfi.resume.domain.model.MatchResponse
 import tekin.luetfi.resume.ui.component.AnimatedConfirmation
 import tekin.luetfi.resume.ui.component.AnimatedConfirmationIndeterminate
 import tekin.luetfi.resume.ui.component.phoneticMap
 import kotlin.random.Random
 
 const val FINAL_VERDICT = -1
+
+//TODO support multiple models
 
 @Composable
 fun AnalyzeLoading(
@@ -139,6 +153,110 @@ fun AnalyzeLoading(
     }
 }
 
+//Multi-Model
+@Composable
+fun AnalyzeLoading(
+    modifier: Modifier = Modifier,
+    modelResults: List<ModelResult>,
+    onShowReport: (MatchResponse) -> Unit = {}
+) {
+
+    Box(modifier = modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth().align(Alignment.Center),
+            contentPadding = PaddingValues(16.dp)
+        ) {
+            item {
+                Text(
+                    text = stringResource(R.string.analyzing_multi_model),
+                    modifier = Modifier
+                )
+            }
+            items(modelResults) { modelResult ->
+                ModelResultItem(
+                    modelResult = modelResult,
+                    onShowReport = onShowReport
+                )
+                HorizontalDivider()
+            }
+        }
+    }
+}
+
+@Composable
+fun ModelResultItem(
+    modelResult: ModelResult,
+    onShowReport: (MatchResponse) -> Unit
+) {
+    var showButton by remember { mutableStateOf(false) }
+
+    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween) {
+            when(modelResult.status) {
+                ModelStatus.Completed -> {
+                    Text(
+                        text = modelResult.model.displayName + " says:",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+                ModelStatus.Failed -> {
+                    Text(
+                        text = modelResult.model.displayName + ": " + (modelResult.error?.error?.message ?: "An Error Occurred"),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+                ModelStatus.Loading -> {
+                    Text(
+                        text = modelResult.model.displayName,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+            }
+            // Show report button for completed models
+            if (modelResult.status == ModelStatus.Completed && modelResult.report != null && showButton) {
+                Text(
+                    modifier = Modifier.clickable {
+                        onShowReport(modelResult.report)
+                    },
+                    text = "Show Full Report",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.secondary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
+        }
+
+        when (modelResult.status) {
+            ModelStatus.Loading -> {
+                AnimatedConfirmationIndeterminate(
+                    modifier = Modifier.fillMaxWidth(),
+                    items = lists.entries.flatMap { it.value }.shuffled().take(20)
+                )
+            }
+            ModelStatus.Completed -> {
+                modelResult.report?.finalRecommendation?.let {
+                    AnimatedConfirmation(modifier = Modifier, finalRecommendation = it) {
+                        showButton = true
+                    }
+
+                }
+            }
+            ModelStatus.Failed -> {
+                val errorLabel: String = modelResult.error?.type ?: "Failed"
+                val list by remember { mutableStateOf(getFailedMessageList(errorLabel)) }
+                AnimatedConfirmation(
+                    modifier = Modifier,
+                    finalText = errorLabel,
+                    items = list
+                )
+            }
+        }
+    }
+}
+
 
 fun createSynonymsList(finalRecommendation: FinalRecommendation): List<String> {
     val mainList = (lists[finalRecommendation] ?: phoneticMap.values)
@@ -158,7 +276,7 @@ fun createSynonymsList(finalRecommendation: FinalRecommendation): List<String> {
 @SuppressLint("DiscouragedApi", "LocalContextResourcesRead")
 @Composable
 fun loadingText(index: Int): String {
-    if (index == -1) return stringResource(tekin.luetfi.resume.R.string.analyzing_text_21)
+    if (index == -1) return stringResource(R.string.analyzing_text_21)
     val context = LocalContext.current
     val resourceId = remember(index) {
         context.resources.getIdentifier("analyzing_text_$index", "string", context.packageName)

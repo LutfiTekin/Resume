@@ -4,18 +4,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import tekin.luetfi.resume.BuildConfig
 import tekin.luetfi.resume.domain.model.AnalyzeModel
 import tekin.luetfi.resume.domain.model.ChatCompletionResponse
 import tekin.luetfi.resume.domain.model.Cv
-import tekin.luetfi.resume.domain.model.FinalRecommendation
 import tekin.luetfi.resume.domain.model.MatchResponse
 import tekin.luetfi.resume.domain.repository.JobAnalyzerRepository
 import javax.inject.Inject
@@ -26,6 +26,7 @@ class AnalyzeJobViewModel @Inject constructor(
 ): ViewModel() {
 
     private val userActionChannel = Channel<Unit>(Channel.UNLIMITED)
+
 
     private val _state = MutableStateFlow<AnalyzeJobState>(AnalyzeJobState.Start)
 
@@ -47,7 +48,7 @@ class AnalyzeJobViewModel @Inject constructor(
     private var analyzingJob: Job? = null
 
 
-    fun analyze(jobDescription: String, cv: Cv, model: AnalyzeModel) {
+    private fun analyze(jobDescription: String, cv: Cv, model: AnalyzeModel) {
         analyzingJob?.cancel()
         analyzingJob = viewModelScope.launch {
             _state.emit(AnalyzeJobState.Loading("Analyzing the job description..."))
@@ -68,6 +69,73 @@ class AnalyzeJobViewModel @Inject constructor(
         }
     }
 
+    /**
+     * TODO Analyze multiple models concurrently
+     */
+    fun analyze(jobDescription: String, cv: Cv, models: List<AnalyzeModel>) {
+        if (models.size == 1) {
+            // Use existing single model flow
+            analyze(jobDescription, cv, models.first())
+            return
+        }
+
+        analyzingJob?.cancel()
+        analyzingJob = viewModelScope.launch {
+            val json = Json.encodeToString(Cv.serializer(), cv)
+
+            // Initialize loading state with all models
+            val initialResults = models.map { model ->
+                ModelResult(model, ModelStatus.Loading)
+            }
+            _state.emit(AnalyzeJobState.Loading(
+                message = "Analyzing job description...",
+                modelResults = initialResults))
+
+            // Launch concurrent analysis for each model
+            val jobs = models.map { model ->
+                async {
+                    runCatching {
+                        repository.analyzeJob(jobDescription, json, model)
+                    }.fold(
+                        onSuccess = { response ->
+                            ModelResult(model, ModelStatus.Completed, response)
+                        },
+                        onFailure = { error ->
+                            val matchError = if (error is ChatCompletionResponse.JobAnalyzeException) {
+                                error.error
+                            } else null
+                            ModelResult(model, ModelStatus.Failed, error = matchError)
+                        }
+                    )
+                }
+            }
+
+            // Collect results as they complete
+            val completedResults = initialResults.toMutableList()
+            jobs.forEach { job ->
+                val result = job.await()
+                completedResults.removeIf { it.model == result.model }
+                completedResults.add(result)
+
+                _state.update { jobState ->
+                    if (jobState is AnalyzeJobState.Loading) {
+                        jobState.copy(modelResults = completedResults.toList())
+                    } else {
+                        jobState
+                    }
+                }
+
+            }
+
+        }
+    }
+
+    fun loadReport(report: MatchResponse){
+        viewModelScope.launch {
+            _state.emit(AnalyzeJobState.ReportReady(report, online = true))
+        }
+    }
+
     fun loadReport(id: String){
         viewModelScope.launch {
             _state.emit(AnalyzeJobState.Loading("Loading report from list"))
@@ -85,6 +153,7 @@ class AnalyzeJobViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 repository.saveJobReport(report)
+                //save and reload current page with the saved report
                 _state.emit(AnalyzeJobState.ReportReady(report, online = false))
             }
         }
@@ -94,6 +163,7 @@ class AnalyzeJobViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 repository.deleteReport(report)
+                //reload page with current report
                 _state.emit(AnalyzeJobState.ReportReady(report, online = true))
             }
         }
