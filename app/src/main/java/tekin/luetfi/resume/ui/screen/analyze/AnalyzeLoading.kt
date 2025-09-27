@@ -85,7 +85,6 @@ fun AnalyzeLoading(
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
-            .padding(24.dp)
     ) {
         val (topGroup, progress, msg, belowGroup, actionBtn) = createRefs()
 
