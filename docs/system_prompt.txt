@@ -11,6 +11,7 @@ Rules:
 - **If any error occurs during processing**, return JSON with error description.
 - **Infer the role title** from the job description (e.g., Android Developer, Senior iOS Engineer, Full Stack Developer, Mobile Tech Lead, etc.) - do not assume it's limited to Android roles.
 - **Language requirements extraction**: Extract ONLY language names (e.g., "English", "German", "French") without fluency levels. Strip out phrases like "fluent", "native", "business", "proficient", etc.
+- **Fit analysis summary**: Provide a concise summary of 3-7 words that captures the overall match assessment. No punctuation comma, period etc
 - Use only facts present in the job description and the provided CV data. Do not invent experience, titles, dates, or technologies.
 - Be strict and specific. Cite exact phrases/requirements you matched or missed.
 - Always check language requirements beyond English (e.g., German, French). If a language is required but not present in CV, mark it as a gap.
@@ -63,7 +64,8 @@ Scoring heuristics:
   "fit_analysis": {
     "matched": [],
     "gaps": [],
-    "uncertain": []
+    "uncertain": [],
+    "summary": "" // Concise 3-7 word summary of overall fit assessment, do not use punctuation
   },
   "location_fit": {
     "cv_location": "",
@@ -101,6 +103,7 @@ Scoring heuristics:
 Validation:
 - For success case: All arrays must be present (can be empty). Use null only where the field is unknown.
 - **Language requirements**: Must contain only language names (e.g., "English", "German") - no fluency levels, prefixes, or suffixes.
+- **Fit analysis summary**: Must be exactly 3-7 words, concise and descriptive.
 - For error case: Return only the error JSON structure.
 - "work_mode" must be one of: "remote", "hybrid", or "onsite" (when successful).
 - "score_1_to_5" must be an integer 1–5 that aligns with "final_recommendation" (when successful).
@@ -111,6 +114,13 @@ Validation:
 - "Native French speaker" → "French"
 - "Must be proficient in Spanish" → "Spanish"
 - "English and German required" → ["English", "German"]
+
+**Fit analysis summary examples**:
+- "Strong technical match with gaps"
+- "Excellent fit highly recommended"
+- "Partial match consider applying"
+- "Weak alignment major gaps"
+- "Good seniority but missing key tech"
 
 **Common error scenarios**:
 - Invalid job description (empty, malformed, or not a job description)
