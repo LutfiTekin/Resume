@@ -40,8 +40,9 @@ import tekin.luetfi.resume.ui.component.AnimatedConfirmationIndeterminate
 import tekin.luetfi.resume.ui.component.ContactSection
 import tekin.luetfi.resume.ui.component.ExperienceCard
 import tekin.luetfi.resume.ui.component.TechStackChip
-import tekin.luetfi.resume.ui.screen.analyze.failedSynonyms
 import tekin.luetfi.resume.ui.theme.CvTheme
+import tekin.luetfi.resume.util.SynonymsDictionary.errorSynonyms
+import tekin.luetfi.resume.util.SynonymsDictionary.loadingSynonyms
 import java.util.Locale
 
 
@@ -192,30 +193,7 @@ fun Home(
     }
 }
 
-val loadingSynonyms: List<String> = listOf(
-    "Buffering", "Processing", "Fetching", "Retrieving", "Importing",
-    "Downloading", "Uploading", "Parsing", "Reading", "Scanning",
-    "Analyzing", "Extracting", "Initializing", "Preparing", "Opening",
-    "Accessing", "Acquiring", "Collecting", "Gathering", "Obtaining",
-    "Pulling", "Receiving", "Transferring", "Transmitting", "Syncing",
-    "Rendering", "Compiling", "Decoding", "Interpreting", "Translating",
-    "Converting", "Transforming", "Building", "Constructing", "Generating",
-    "Creating", "Assembling", "Organizing", "Structuring", "Formatting",
-    "Validating", "Verifying", "Checking", "Reviewing", "Examining",
-    "In progress", "Please wait", "Stand by", "Working", "Busy"
-)
 
-val errorSynonyms: List<String> = listOf(
-    "Failed", "Crashed", "Blocked", "Denied", "Rejected", "Corrupted",
-    "Invalid", "Unsupported", "Broken", "Damaged", "Malformed", "Expired",
-    "Timeout", "Disconnected", "Offline", "Unreachable", "Forbidden",
-    "Unauthorized", "Not found", "Missing", "Empty", "Incomplete",
-    "Interrupted", "Cancelled", "Aborted", "Terminated", "Suspended",
-    "Overloaded", "Busy", "Unavailable", "Down", "Maintenance", "Locked",
-    "Restricted", "Limited", "Exceeded", "Too large", "Too small",
-    "Format error", "Parse error", "Read error", "Write error", "Network error",
-    "Server error", "Client error", "System error", "Fatal error", "Critical error"
-)
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

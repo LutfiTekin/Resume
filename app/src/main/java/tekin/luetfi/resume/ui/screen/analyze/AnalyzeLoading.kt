@@ -44,8 +44,14 @@ import tekin.luetfi.resume.domain.model.Verdict
 import tekin.luetfi.resume.domain.model.WordAssociationResponse
 import tekin.luetfi.resume.ui.component.AnimatedConfirmation
 import tekin.luetfi.resume.ui.component.AnimatedConfirmationIndeterminate
-import tekin.luetfi.resume.ui.component.phoneticMap
 import tekin.luetfi.resume.ui.screen.home.HomeViewModel
+import tekin.luetfi.resume.util.SynonymsDictionary.allWorkModeSynonyms
+import tekin.luetfi.resume.util.SynonymsDictionary.applySynonyms
+import tekin.luetfi.resume.util.SynonymsDictionary.considerSynonyms
+import tekin.luetfi.resume.util.SynonymsDictionary.createSynonymsList
+import tekin.luetfi.resume.util.SynonymsDictionary.skipSynonyms
+import tekin.luetfi.resume.util.SynonymsDictionary.spokenLanguagesInTech
+import tekin.luetfi.resume.util.SynonymsDictionary.techStackSectionSynonyms
 import kotlin.random.Random
 
 const val FINAL_VERDICT = -1
@@ -369,38 +375,7 @@ fun ModelResultItem(
 }
 
 
-fun createSynonymsList(finalRecommendation: FinalRecommendation): List<String> {
-    val mainList = (lists[finalRecommendation] ?: phoneticMap.values)
 
-    val otherList = lists
-        .asSequence()
-        .filter { it.key != finalRecommendation }
-        .flatMap { it.value }
-        .shuffled()
-        .take(10)
-        .toList()
-    val padding = (lists.flatMap { it.value } - otherList).shuffled().take(10)
-
-    return padding + (mainList + otherList + listOf(finalRecommendation.name)).shuffled() + padding
-}
-
-fun createSynonymsList(subList: List<String>, list: List<String>): List<String> {
-    val otherLanguages = (list + subList).toSet() - subList
-    val shuffledOthers = otherLanguages.shuffled()
-
-    val result = shuffledOthers.toMutableList()
-
-    // Insert verdict languages in middle positions only
-    val availablePositions = (2 until result.size - 2).toList()
-    val insertPositions = availablePositions.shuffled().take(subList.size)
-
-    subList.forEachIndexed { index, lang ->
-        if (index < insertPositions.size) {
-            result.add(insertPositions[index], lang)
-        }
-    }
-    return result
-}
 
 @SuppressLint("DiscouragedApi", "LocalContextResourcesRead")
 @Composable
@@ -416,131 +391,6 @@ fun loadingText(index: Int): String {
         "Analyzing the job description…"
     }
 }
-
-
-val applySynonyms: List<String> = listOf(
-    "Activate", "Adopt", "Administer", "Advance", "Allocate", "Appropriate",
-    "Assemble", "Assign", "Bestow", "Bring to bear", "Build",
-    "Carry out", "Commit", "Configure", "Dedicate", "Deploy", "Develop",
-    "Devote", "Direct", "Drive", "Embrace", "Employ", "Enact", "Enforce",
-    "Engage", "Engineer", "Establish", "Execute", "Exercise", "Exert",
-    "Facilitate", "File", "Fulfill", "Function", "Govern", "Guide",
-    "Harness", "Implement", "Incorporate", "Initiate", "Institute",
-    "Install", "Integrate", "Introduce", "Launch", "Leverage", "Lodge",
-    "Mobilize", "Offer", "Operate", "Orchestrate", "Organize", "Perform",
-    "Pilot", "Pioneer", "Practice", "Present", "Propose", "Pursue",
-    "Put forward", "Put into action", "Recruit", "Register", "Reinforce",
-    "Render", "Roll out", "Submit", "Spearhead", "Steer", "Tender",
-    "Use", "Utilize", "Wield"
-)
-
-val considerSynonyms: List<String> = listOf(
-    "Analyze", "Appraise", "Ascertain", "Assess", "Audit", "Balance",
-    "Bear in mind", "Benchmark", "Brood on", "Calculate", "Check",
-    "Compare", "Contemplate", "Critique", "Debate", "Decode",
-    "Decipher", "Deem", "Deliberate", "Determine", "Diagnose",
-    "Dissect", "Discern", "Esteem", "Estimate", "Evaluate",
-    "Examine", "Explore", "Factor in", "Forecast", "Gauge",
-    "Inspect", "Interpret", "Investigate", "Judge", "Keep in view",
-    "Look at", "Measure", "Meditate", "Monitor", "Mull over",
-    "Muse", "Ponder", "Prioritize", "Probe", "Quantify", "Rank",
-    "Rate", "Reckon", "Reconcile", "Reflect", "Regard", "Research",
-    "Review", "Revolve", "Scrutinize", "Study", "Survey",
-    "Take into account", "Test", "Think over", "Turn over",
-    "Verify", "View", "Weigh"
-)
-
-val skipSynonyms: List<String> = listOf(
-    "Abandon", "Abstain", "Avert", "Avoid", "Bar", "Brush aside",
-    "Bypass", "Cease", "Circumvent", "Cut", "Decline", "Defer",
-    "Delete", "Discard", "Disregard", "Dismiss", "Dodge", "Drop",
-    "Eliminate", "Eschew", "Evade", "Exclude", "Forgo", "Forfeit",
-    "Forego", "Gloss over", "Halt", "Ignore", "Jump", "Jump over",
-    "Leave out", "Leapfrog", "Let slide", "Miss", "Neglect",
-    "Not pursue", "Omit", "Overlook", "Overpass", "Pass",
-    "Pass over", "Preclude", "Reject", "Relinquish", "Remove",
-    "Renounce", "Refrain", "Set aside", "Shun", "Sidestep",
-    "Skim", "Steer clear of", "Suspend", "Waive"
-)
-
-val techStackSectionSynonyms: List<String> = listOf(
-    // From LANGUAGES
-    "Programming Languages", "Coding Languages", "Development Languages",
-    "Script Languages", "Software Languages", "Code",
-
-    // From DEVOPS
-    "Development Operations", "CI/CD", "Deployment", "Infrastructure",
-    "Automation", "Pipeline Tools", "Operations",
-
-    // From ANDROID
-    "Mobile Development", "Mobile Platform", "Mobile Technologies",
-    "Native Development", "Mobile Framework", "App Development",
-
-    // From BACKEND
-    "Server-side", "Backend Technologies", "Server Technologies",
-    "API Development", "Server Development", "Backend Services",
-
-    // From TOOLS
-    "Development Tools", "Software Tools", "Utilities",
-    "Build Tools", "Development Utilities", "Productivity Tools",
-
-    // From DESIGN
-    "UI/UX", "Design Tools", "Visual Design", "Interface Design",
-    "Creative Tools", "Design Software",
-
-    // From FIREBASE
-    "Cloud Services", "Backend Services", "Cloud Platform",
-    "BaaS", "Cloud Infrastructure", "Server Services"
-)
-
-val allWorkModeSynonyms: List<String> = listOf(
-    // Remote synonyms
-    "Telecommuting", "Work From Home", "WFH", "Telework",
-    "Distributed Work", "Virtual Work", "Mobile Work", "Home-based",
-    "Fully Remote", "Remote First", "Work From Anywhere", "Digital Nomad",
-    "Location Independent", "Off-site", "Cloud-based Work",
-
-    // Hybrid synonyms
-    "Mixed Work", "Flexible Work", "Blended Work",
-    "Part Remote", "Flex Work", "Variable Location", "Split Schedule",
-    "Office Optional", "Location Flexible", "Partially Remote",
-    "Combined Work", "Multi-location", "Alternating Work", "Strategic Flexibility",
-
-    // Onsite synonyms
-    "In-office", "Office-based", "Physical Workplace",
-    "Traditional Work", "Centralized Work", "In-person Work",
-    "Campus Work", "Workplace Present", "Fixed Location", "Office Bound",
-    "Colocated Work", "Premises Work", "Site-based", "Facility Work"
-)
-
-val spokenLanguagesInTech: List<String> = listOf(
-    // Tier 1 - Universal Languages
-    "English",          // Global tech lingua franca
-
-    // Tier 2 - Major Tech Hub Languages
-    "Mandarin Chinese", // China's massive tech sector
-    "Hindi",            // India's IT industry
-    "Spanish",          // Latin America, Spain tech growth
-
-    // Tier 3 - Regional Tech Languages
-    "Russian",          // Eastern Europe, ex-Soviet states
-    "German",           // DACH region tech hubs
-    "Japanese",         // Japan's tech industry
-    "French",           // France, Francophone countries
-    "Portuguese",       // Brazil's growing tech sector
-    "Korean",           // South Korea's tech dominance
-
-    // Tier 4 - Emerging Tech Markets
-    "Arabic",           // Middle East tech expansion
-    "Dutch",            // Netherlands tech hubs
-    "Italian",          // Italian tech companies
-    "Swedish",          // Nordic tech innovation
-    "Polish",           // Poland's IT outsourcing
-    "Turkish",          // Turkey's tech growth
-    "Indonesian",       // Southeast Asia's largest economy
-    "Vietnamese",       // Vietnam's IT services boom
-    "Ukrainian"         // Major IT outsourcing hub
-)
 
 
 

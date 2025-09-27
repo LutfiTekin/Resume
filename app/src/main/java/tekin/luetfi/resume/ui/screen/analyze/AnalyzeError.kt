@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.MatchError
 import tekin.luetfi.resume.ui.component.AnimatedConfirmation
+import tekin.luetfi.resume.util.SynonymsDictionary.failedSynonyms
 
 @Composable
 fun AnalyzeError(
@@ -72,13 +73,3 @@ fun getFailedMessageList(label: String): List<String> {
     return padding + list + padding
 }
 
-
-val failedSynonyms: List<String> = listOf(
-    "Aborted", "Backfired", "Blocked", "Bombed", "Botched", "Broke down",
-    "Collapsed", "Crashed", "Denied", "Derailed", "Died", "Disconnected",
-    "Errored", "Expired", "Faltered", "Faulted", "Fell through", "Fizzled",
-    "Flopped", "Froze", "Halted", "Hung", "Interrupted", "Lapsed",
-    "Malfunctioned", "Misfired", "Rejected", "Refused", "Stalled",
-    "Stopped", "Timed out", "Terminated", "Thwarted", "Tripped",
-    "Unable", "Unavailable", "Unresponsive", "Unsuccessful"
-)
