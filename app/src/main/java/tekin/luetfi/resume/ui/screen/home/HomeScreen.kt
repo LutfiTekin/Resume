@@ -71,7 +71,7 @@ fun HomeScreen(
             }
         }
 
-        uiState.error != null -> {
+        uiState.error != null && uiState.resume == null -> {
             val list by remember { mutableStateOf(
                 errorSynonyms.shuffled().take(loadingSynonyms.size / 2)
             ) }
