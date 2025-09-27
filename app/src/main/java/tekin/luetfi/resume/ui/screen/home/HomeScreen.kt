@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -19,8 +20,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,9 +35,11 @@ import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.Contact
 import tekin.luetfi.resume.domain.model.Cv
 import tekin.luetfi.resume.ui.Mocks
+import tekin.luetfi.resume.ui.component.AnimatedConfirmationIndeterminate
 import tekin.luetfi.resume.ui.component.ContactSection
 import tekin.luetfi.resume.ui.component.ExperienceCard
 import tekin.luetfi.resume.ui.component.TechStackChip
+import tekin.luetfi.resume.ui.screen.analyze.failedSynonyms
 import tekin.luetfi.resume.ui.theme.CvTheme
 import java.util.Locale
 
@@ -52,14 +57,47 @@ fun HomeScreen(
     val pullToRefreshState = rememberPullToRefreshState()
     when {
         uiState.isLoading -> {
+            val list by remember { mutableStateOf(
+                errorSynonyms.shuffled().take(loadingSynonyms.size / 2)
+            ) }
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                Column {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally))
+                    AnimatedConfirmationIndeterminate(
+                        modifier = Modifier.fillMaxWidth(),
+                        items = list)
+                }
             }
         }
 
         uiState.error != null -> {
+            val list by remember { mutableStateOf(
+                errorSynonyms.shuffled().take(loadingSynonyms.size / 2)
+            ) }
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Error: ${uiState.error}")
+                Column {
+                    Text(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        text = "An error occurred",
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.titleMedium)
+                    AnimatedConfirmationIndeterminate(
+                        modifier = Modifier.fillMaxWidth(),
+                        items = list,
+                        delayBetweenItems = 3000
+                    )
+                    AnimatedConfirmationIndeterminate(
+                        modifier = Modifier.fillMaxWidth(),
+                        items = list,
+                        delayBetweenItems = 1000
+                    )
+                    AnimatedConfirmationIndeterminate(
+                        modifier = Modifier.fillMaxWidth(),
+                        items = list,
+                        delayBetweenItems = 4000
+                    )
+                }
             }
         }
     }
@@ -152,6 +190,31 @@ fun Home(
 
     }
 }
+
+val loadingSynonyms: List<String> = listOf(
+    "Buffering", "Processing", "Fetching", "Retrieving", "Importing",
+    "Downloading", "Uploading", "Parsing", "Reading", "Scanning",
+    "Analyzing", "Extracting", "Initializing", "Preparing", "Opening",
+    "Accessing", "Acquiring", "Collecting", "Gathering", "Obtaining",
+    "Pulling", "Receiving", "Transferring", "Transmitting", "Syncing",
+    "Rendering", "Compiling", "Decoding", "Interpreting", "Translating",
+    "Converting", "Transforming", "Building", "Constructing", "Generating",
+    "Creating", "Assembling", "Organizing", "Structuring", "Formatting",
+    "Validating", "Verifying", "Checking", "Reviewing", "Examining",
+    "In progress", "Please wait", "Stand by", "Working", "Busy"
+)
+
+val errorSynonyms: List<String> = listOf(
+    "Failed", "Crashed", "Blocked", "Denied", "Rejected", "Corrupted",
+    "Invalid", "Unsupported", "Broken", "Damaged", "Malformed", "Expired",
+    "Timeout", "Disconnected", "Offline", "Unreachable", "Forbidden",
+    "Unauthorized", "Not found", "Missing", "Empty", "Incomplete",
+    "Interrupted", "Cancelled", "Aborted", "Terminated", "Suspended",
+    "Overloaded", "Busy", "Unavailable", "Down", "Maintenance", "Locked",
+    "Restricted", "Limited", "Exceeded", "Too large", "Too small",
+    "Format error", "Parse error", "Read error", "Write error", "Network error",
+    "Server error", "Client error", "System error", "Fatal error", "Critical error"
+)
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import tekin.luetfi.resume.domain.model.FinalRecommendation
 import tekin.luetfi.resume.ui.screen.analyze.createSynonymsList
 import java.util.Locale
@@ -69,8 +71,11 @@ fun AnimatedConfirmation(
 @Composable
 fun AnimatedConfirmationIndeterminate(
     modifier: Modifier,
-    items: List<String>
+    items: List<String>,
+    delayBetweenItems: Long = 1000
 ) {
+    val scope = rememberCoroutineScope()
+
     var animationTrigger by remember {
         mutableIntStateOf(1)
     }
@@ -87,7 +92,10 @@ fun AnimatedConfirmationIndeterminate(
         items = items,
         displayItem = verdict,
         onAnimationEnd = {
-            animationTrigger++
+            scope.launch {
+                delay(delayBetweenItems)
+                animationTrigger++
+            }
         }
     )
 }
