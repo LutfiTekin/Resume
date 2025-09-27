@@ -7,23 +7,36 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import tekin.luetfi.resume.domain.repository.CvRepository
+import tekin.luetfi.resume.util.NetworkMonitor
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: CvRepository
+    private val repository: CvRepository,
+    networkMonitor: NetworkMonitor
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> =
-        _uiState
+        combine(
+            _uiState
             .onStart {
                 loadCv()
-            }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HomeUiState())
+            }, networkMonitor.isOnline
+        ) { uiState, isOnline ->
+            if (isOnline.not())
+                uiState.copy(error = "No internet connection")
+            else {
+                if (uiState.error != null)
+                    loadCv()
+                uiState
+            }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HomeUiState())
 
 
     private fun loadCv() {
