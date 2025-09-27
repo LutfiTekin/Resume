@@ -136,30 +136,18 @@ fun AnalyzeLoading(
             // Confirmation sequence directly below the message
             val list = remember(verdict) { createSynonymsList(verdict.finalRecommendation) }
             val techKeywords by remember(verdict) { derivedStateOf {
-                (verdict.techKeywords + techStackSectionSynonyms.take(5)).shuffled()
+                createSynonymsList(
+                    subList = verdict.techKeywords,
+                    list = verdict.techKeywords + techStackSectionSynonyms.take(5))
             } }
             val workModes by remember(verdict) { derivedStateOf {
-                (allWorkModeSynonyms + listOf(verdict.workMode)).shuffled()
+                createSynonymsList(subList = listOf(verdict.workMode), list = allWorkModeSynonyms + listOf(verdict.workMode))
             }}
             val languages by remember(verdict) {
                 derivedStateOf {
-                    val verdictLanguages = verdict.languages.toSet()
-                    val otherLanguages = (spokenLanguagesInTech + verdict.languages).toSet() - verdictLanguages
-                    val shuffledOthers = otherLanguages.shuffled()
-
-                    val result = shuffledOthers.toMutableList()
-
-                    // Insert verdict languages in middle positions only
-                    val availablePositions = (2 until result.size - 2).toList()
-                    val insertPositions = availablePositions.shuffled().take(verdictLanguages.size)
-
-                    verdictLanguages.forEachIndexed { index, lang ->
-                        if (index < insertPositions.size) {
-                            result.add(insertPositions[index], lang)
-                        }
-                    }
-
-                    result
+                    createSynonymsList(
+                        subList = verdict.languages,
+                        list = spokenLanguagesInTech)
                 }
             }
             Column(
@@ -347,6 +335,24 @@ fun createSynonymsList(finalRecommendation: FinalRecommendation): List<String> {
     val padding = (lists.flatMap { it.value } - otherList).shuffled().take(10)
 
     return padding + (mainList + otherList + listOf(finalRecommendation.name)).shuffled() + padding
+}
+
+fun createSynonymsList(subList: List<String>, list: List<String>): List<String> {
+    val otherLanguages = (list + subList).toSet() - subList
+    val shuffledOthers = otherLanguages.shuffled()
+
+    val result = shuffledOthers.toMutableList()
+
+    // Insert verdict languages in middle positions only
+    val availablePositions = (2 until result.size - 2).toList()
+    val insertPositions = availablePositions.shuffled().take(subList.size)
+
+    subList.forEachIndexed { index, lang ->
+        if (index < insertPositions.size) {
+            result.add(insertPositions[index], lang)
+        }
+    }
+    return result
 }
 
 @SuppressLint("DiscouragedApi", "LocalContextResourcesRead")
