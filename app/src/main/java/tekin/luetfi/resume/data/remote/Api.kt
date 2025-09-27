@@ -12,7 +12,7 @@ interface Api {
     suspend fun getCv(): Cv
 
     @Headers("Cache-Control: no-cache")
-    @GET("system_prompt.txt")
+    @GET("job_analysis_prompt.txt")
     suspend fun getSystemPrompt(): ResponseBody
 
 }
