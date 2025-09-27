@@ -168,10 +168,12 @@ fun AnalyzeLoading(
                     showButton = true
                 }
                 //Tech Keywords
-                AnimatedConfirmationIndeterminate(
-                    modifier = Modifier.fillMaxWidth(),
-                    items = techKeywords
-                )
+                if (verdict.techKeywords.size > 5){
+                    AnimatedConfirmationIndeterminate(
+                        modifier = Modifier.fillMaxWidth(),
+                        items = techKeywords
+                    )
+                }
 
                 //Work Setting
                 AnimatedConfirmation(
