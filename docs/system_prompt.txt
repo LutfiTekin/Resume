@@ -10,6 +10,7 @@ Rules:
 - **First, validate the job description**: If it's unclear, incomplete, or doesn't contain job requirements, return error JSON.
 - **If any error occurs during processing**, return JSON with error description.
 - **Infer the role title** from the job description (e.g., Android Developer, Senior iOS Engineer, Full Stack Developer, Mobile Tech Lead, etc.) - do not assume it's limited to Android roles.
+- **Language requirements extraction**: Extract ONLY language names (e.g., "English", "German", "French") without fluency levels. Strip out phrases like "fluent", "native", "business", "proficient", etc.
 - Use only facts present in the job description and the provided CV data. Do not invent experience, titles, dates, or technologies.
 - Be strict and specific. Cite exact phrases/requirements you matched or missed.
 - Always check language requirements beyond English (e.g., German, French). If a language is required but not present in CV, mark it as a gap.
@@ -43,7 +44,7 @@ Scoring heuristics:
     "location": "",
     "work_mode": "remote" | "hybrid" | "onsite",
     "seniority_label": "",
-    "language_requirements": [],
+    "language_requirements": [], // ONLY language names like ["English", "German"] - no fluency levels
     "tech_keywords": []
   },
   "extracted_requirements": {
@@ -92,16 +93,24 @@ Scoring heuristics:
 {
   "error": {
     "type": "validation_error" | "processing_error" | "input_error",
-    "message": "Short, Descriptive title for error",
-    "details": "Detailed error description, additional context or specific issue"
+    "message": "Detailed error description",
+    "details": "Additional context or specific issue"
   }
 }
 
 Validation:
 - For success case: All arrays must be present (can be empty). Use null only where the field is unknown.
+- **Language requirements**: Must contain only language names (e.g., "English", "German") - no fluency levels, prefixes, or suffixes.
 - For error case: Return only the error JSON structure.
 - "work_mode" must be one of: "remote", "hybrid", or "onsite" (when successful).
 - "score_1_to_5" must be an integer 1–5 that aligns with "final_recommendation" (when successful).
+
+**Language extraction examples**:
+- "Fluent English" → "English"
+- "German (business proficient)" → "German"
+- "Native French speaker" → "French"
+- "Must be proficient in Spanish" → "Spanish"
+- "English and German required" → ["English", "German"]
 
 **Common error scenarios**:
 - Invalid job description (empty, malformed, or not a job description)
