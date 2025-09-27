@@ -9,19 +9,20 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -33,14 +34,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tekin.luetfi.resume.R
-import tekin.luetfi.resume.domain.model.Contact
 import tekin.luetfi.resume.domain.model.Cv
-import tekin.luetfi.resume.util.Mocks
 import tekin.luetfi.resume.ui.component.AnimatedConfirmationIndeterminate
 import tekin.luetfi.resume.ui.component.ContactSection
 import tekin.luetfi.resume.ui.component.ExperienceCard
 import tekin.luetfi.resume.ui.component.TechStackChip
 import tekin.luetfi.resume.ui.theme.CvTheme
+import tekin.luetfi.resume.util.Mocks
 import tekin.luetfi.resume.util.SynonymsDictionary.errorSynonyms
 import tekin.luetfi.resume.util.SynonymsDictionary.loadingSynonyms
 import java.util.Locale
@@ -174,14 +174,20 @@ fun Home(
                                     Locale.ENGLISH
                                 ) else it.toString()
                             }, style = MaterialTheme.typography.titleMedium)
-                            FlowRow(
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                verticalArrangement = Arrangement.spacedBy(4.dp)
-                            ) {
-                                stack.value.forEach { tech ->
-                                    TechStackChip(tech)
+                            CompositionLocalProvider(
+                                LocalMinimumInteractiveComponentSize provides 32.dp
+                            ){
+                                FlowRow(
+                                    modifier = Modifier.padding(bottom = 8.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    stack.value.forEach { tech ->
+                                        TechStackChip(tech)
+                                    }
                                 }
                             }
+
                         }
                     }
 
