@@ -1,4 +1,4 @@
-package tekin.luetfi.resume
+package tekin.luetfi.resume.util
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
