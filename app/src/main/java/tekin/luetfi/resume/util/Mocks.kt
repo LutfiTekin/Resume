@@ -1,4 +1,4 @@
-package tekin.luetfi.resume.ui
+package tekin.luetfi.resume.util
 
 import tekin.luetfi.resume.domain.model.Contact
 import tekin.luetfi.resume.domain.model.Cv

@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.Contact
 import tekin.luetfi.resume.domain.model.Cv
-import tekin.luetfi.resume.ui.Mocks
+import tekin.luetfi.resume.util.Mocks
 import tekin.luetfi.resume.ui.component.AnimatedConfirmationIndeterminate
 import tekin.luetfi.resume.ui.component.ContactSection
 import tekin.luetfi.resume.ui.component.ExperienceCard
