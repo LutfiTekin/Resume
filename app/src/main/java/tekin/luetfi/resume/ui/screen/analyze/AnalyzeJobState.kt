@@ -4,13 +4,14 @@ import tekin.luetfi.resume.domain.model.AnalyzeModel
 import tekin.luetfi.resume.domain.model.FinalRecommendation
 import tekin.luetfi.resume.domain.model.MatchError
 import tekin.luetfi.resume.domain.model.MatchResponse
+import tekin.luetfi.resume.domain.model.Verdict
 
 sealed class AnalyzeJobState() {
     object Start : AnalyzeJobState()
     //should contain whole report or reports, keep track of models, if multiple models are used failed ones should be shown in loading screen
     data class Loading(
         val message: String,
-        val finalRecommendation: FinalRecommendation? = null,
+        val verdict: Verdict? = null,
         val modelResults: List<ModelResult> = emptyList()) : AnalyzeJobState(){
             val sortedModelResults: List<ModelResult>
                 get() = modelResults.sortedBy { it.model.displayName }

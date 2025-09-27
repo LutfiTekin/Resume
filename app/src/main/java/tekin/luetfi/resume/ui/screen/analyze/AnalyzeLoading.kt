@@ -37,10 +37,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.FinalRecommendation
 import tekin.luetfi.resume.domain.model.MatchResponse
+import tekin.luetfi.resume.domain.model.Verdict
 import tekin.luetfi.resume.ui.component.AnimatedConfirmation
 import tekin.luetfi.resume.ui.component.AnimatedConfirmationIndeterminate
 import tekin.luetfi.resume.ui.component.phoneticMap
@@ -54,7 +54,7 @@ const val FINAL_VERDICT = -1
 @Composable
 fun AnalyzeLoading(
     modifier: Modifier = Modifier,
-    verdict: FinalRecommendation? = null,
+    verdict: Verdict? = null,
     onResume: () -> Unit = {}
 ) {
     var showButton by remember { mutableStateOf(false) }
@@ -134,7 +134,34 @@ fun AnalyzeLoading(
             }
         } else {
             // Confirmation sequence directly below the message
-            val list = remember(verdict) { createSynonymsList(verdict) }
+            val list = remember(verdict) { createSynonymsList(verdict.finalRecommendation) }
+            val techKeywords by remember(verdict) { derivedStateOf {
+                (verdict.techKeywords + techStackSectionSynonyms.take(5)).shuffled()
+            } }
+            val workModes by remember(verdict) { derivedStateOf {
+                (allWorkModeSynonyms + listOf(verdict.workMode)).shuffled()
+            }}
+            val languages by remember(verdict) {
+                derivedStateOf {
+                    val verdictLanguages = verdict.languages.toSet()
+                    val otherLanguages = (spokenLanguagesInTech + verdict.languages).toSet() - verdictLanguages
+                    val shuffledOthers = otherLanguages.shuffled()
+
+                    val result = shuffledOthers.toMutableList()
+
+                    // Insert verdict languages in middle positions only
+                    val availablePositions = (2 until result.size - 2).toList()
+                    val insertPositions = availablePositions.shuffled().take(verdictLanguages.size)
+
+                    verdictLanguages.forEachIndexed { index, lang ->
+                        if (index < insertPositions.size) {
+                            result.add(insertPositions[index], lang)
+                        }
+                    }
+
+                    result
+                }
+            }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.constrainAs(belowGroup) {
@@ -144,12 +171,33 @@ fun AnalyzeLoading(
                     width = androidx.constraintlayout.compose.Dimension.wrapContent
                 }
             ) {
+                //Verdict node
                 AnimatedConfirmation(
-                    modifier = Modifier,
-                    finalText = verdict.name,
+                    modifier = Modifier.fillMaxWidth(),
+                    finalText = verdict.finalRecommendation.name,
                     items = list
                 ) {
                     showButton = true
+                }
+                //Tech Keywords
+                AnimatedConfirmationIndeterminate(
+                    modifier = Modifier.fillMaxWidth(),
+                    items = techKeywords
+                )
+
+                //Work Setting
+                AnimatedConfirmation(
+                    modifier = Modifier.fillMaxWidth(),
+                    finalText = verdict.workMode,
+                    items = workModes
+                )
+
+                if (verdict.languages.isNotEmpty()){
+                    AnimatedConfirmation(
+                        modifier = Modifier.fillMaxWidth(),
+                        finalText = verdict.languages.first(),
+                        items = languages
+                    )
                 }
             }
 
@@ -391,6 +439,56 @@ val techStackSectionSynonyms: List<String> = listOf(
     "Cloud Services", "Backend Services", "Cloud Platform",
     "BaaS", "Cloud Infrastructure", "Server Services"
 )
+
+val allWorkModeSynonyms: List<String> = listOf(
+    // Remote synonyms
+    "Telecommuting", "Work From Home", "WFH", "Telework",
+    "Distributed Work", "Virtual Work", "Mobile Work", "Home-based",
+    "Fully Remote", "Remote First", "Work From Anywhere", "Digital Nomad",
+    "Location Independent", "Off-site", "Cloud-based Work",
+
+    // Hybrid synonyms
+    "Mixed Work", "Flexible Work", "Blended Work",
+    "Part Remote", "Flex Work", "Variable Location", "Split Schedule",
+    "Office Optional", "Location Flexible", "Partially Remote",
+    "Combined Work", "Multi-location", "Alternating Work", "Strategic Flexibility",
+
+    // Onsite synonyms
+    "In-office", "Office-based", "Physical Workplace",
+    "Traditional Work", "Centralized Work", "In-person Work",
+    "Campus Work", "Workplace Present", "Fixed Location", "Office Bound",
+    "Colocated Work", "Premises Work", "Site-based", "Facility Work"
+)
+
+val spokenLanguagesInTech: List<String> = listOf(
+    // Tier 1 - Universal Languages
+    "English",          // Global tech lingua franca
+
+    // Tier 2 - Major Tech Hub Languages
+    "Mandarin Chinese", // China's massive tech sector
+    "Hindi",            // India's IT industry
+    "Spanish",          // Latin America, Spain tech growth
+
+    // Tier 3 - Regional Tech Languages
+    "Russian",          // Eastern Europe, ex-Soviet states
+    "German",           // DACH region tech hubs
+    "Japanese",         // Japan's tech industry
+    "French",           // France, Francophone countries
+    "Portuguese",       // Brazil's growing tech sector
+    "Korean",           // South Korea's tech dominance
+
+    // Tier 4 - Emerging Tech Markets
+    "Arabic",           // Middle East tech expansion
+    "Dutch",            // Netherlands tech hubs
+    "Italian",          // Italian tech companies
+    "Swedish",          // Nordic tech innovation
+    "Polish",           // Poland's IT outsourcing
+    "Turkish",          // Turkey's tech growth
+    "Indonesian",       // Southeast Asia's largest economy
+    "Vietnamese",       // Vietnam's IT services boom
+    "Ukrainian"         // Major IT outsourcing hub
+)
+
 
 
 val lists = mapOf(

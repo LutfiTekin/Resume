@@ -43,7 +43,7 @@ fun AnalyzeScreen(
             }else {
                 AnalyzeLoading(
                     modifier = modifier.fillMaxSize(),
-                    verdict = state.finalRecommendation){
+                    verdict = state.verdict){
                     viewModel.onUserContinue()
                 }
             }

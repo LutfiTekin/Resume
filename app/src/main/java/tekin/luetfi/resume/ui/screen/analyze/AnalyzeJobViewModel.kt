@@ -17,6 +17,7 @@ import tekin.luetfi.resume.domain.model.AnalyzeModel
 import tekin.luetfi.resume.domain.model.ChatCompletionResponse
 import tekin.luetfi.resume.domain.model.Cv
 import tekin.luetfi.resume.domain.model.MatchResponse
+import tekin.luetfi.resume.domain.model.verdict
 import tekin.luetfi.resume.domain.repository.JobAnalyzerRepository
 import javax.inject.Inject
 
@@ -56,7 +57,7 @@ class AnalyzeJobViewModel @Inject constructor(
             runCatching {
                 repository.analyzeJob(jobDescription, json, model)
             }.onSuccess {
-                _state.emit(AnalyzeJobState.Loading("Final Verdict", it.finalRecommendation))
+                _state.emit(AnalyzeJobState.Loading("Final Verdict", it.verdict))
                 userActionChannel.receive()
                 _state.emit(AnalyzeJobState.ReportReady(it, online = true))
             }.onFailure {
