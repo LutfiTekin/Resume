@@ -22,6 +22,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 private const val DEFAULT_TIMEOUT = "dt"
+private const val LLM_TIMEOUT = "llm_dt"
 
 
 @Module
@@ -32,6 +33,11 @@ object NetworkModule {
     @Singleton
     @Named(DEFAULT_TIMEOUT)
     fun provideDefaultTimeOut(): Long = 3000L
+
+    @Provides
+    @Singleton
+    @Named(LLM_TIMEOUT)
+    fun provideLLMTimeOut(): Long = 30000L
 
     @Provides
     @Singleton
@@ -56,7 +62,7 @@ object NetworkModule {
     @Singleton
     @OpenRouterOkHttp
     fun provideORAOkHTTPClient(
-        @Named(DEFAULT_TIMEOUT) defaultTimeOut: Long,
+        @Named(LLM_TIMEOUT) defaultTimeOut: Long,
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: Interceptor
     ): OkHttpClient =
