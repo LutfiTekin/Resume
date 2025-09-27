@@ -59,7 +59,7 @@ fun HomeScreen(
     when {
         uiState.isLoading -> {
             val list by remember { mutableStateOf(
-                errorSynonyms.shuffled().take(loadingSynonyms.size / 2)
+                loadingSynonyms.shuffled().take(loadingSynonyms.size / 2)
             ) }
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column {
@@ -74,7 +74,7 @@ fun HomeScreen(
 
         uiState.error != null && uiState.resume == null -> {
             val list by remember { mutableStateOf(
-                errorSynonyms.shuffled().take(loadingSynonyms.size / 2)
+                errorSynonyms.shuffled().take(errorSynonyms.size / 2)
             ) }
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column {

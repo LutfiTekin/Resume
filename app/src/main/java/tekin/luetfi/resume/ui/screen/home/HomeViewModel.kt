@@ -53,6 +53,8 @@ class HomeViewModel @Inject constructor(
     fun refresh() {
         viewModelScope.launch {
             _uiState.value = HomeUiState(isLoading = true)
+            //Wait for loading UI to be updated
+            delay(2000)
             runCatching { repository.refresh() }
                 .onSuccess { cv -> _uiState.value = HomeUiState(isLoading = false, resume = cv) }
                 .onFailure { e ->
