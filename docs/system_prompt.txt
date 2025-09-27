@@ -93,8 +93,8 @@ Scoring heuristics:
 {
   "error": {
     "type": "validation_error" | "processing_error" | "input_error",
-    "message": "Detailed error description",
-    "details": "Additional context or specific issue"
+    "message": "Short, Descriptive title for error",
+    "details": "Detailed error description, additional context or specific issue"
   }
 }
 
