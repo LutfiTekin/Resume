@@ -23,14 +23,10 @@ import androidx.compose.ui.unit.dp
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
@@ -45,7 +41,7 @@ import androidx.compose.ui.text.input.ImeAction
 import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.AnalyzeModel
 import tekin.luetfi.resume.domain.model.MatchResponse
-import tekin.luetfi.resume.getTextOrNull
+import tekin.luetfi.resume.util.getTextOrNull
 
 @Composable
 fun AnalyzeStart(

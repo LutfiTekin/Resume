@@ -1,10 +1,11 @@
-package tekin.luetfi.resume
+package tekin.luetfi.resume.util
 
 
 import android.content.ClipboardManager
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.Cv
 import tekin.luetfi.resume.domain.model.PeriodInfo
 import java.time.LocalDate

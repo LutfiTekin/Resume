@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import tekin.luetfi.resume.REPORTS_TABLE
+import tekin.luetfi.resume.util.REPORTS_TABLE
 
 @Dao
 interface JobReportDao {

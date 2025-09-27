@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import com.squareup.moshi.Moshi
-import tekin.luetfi.resume.REPORTS_TABLE
+import tekin.luetfi.resume.util.REPORTS_TABLE
 import tekin.luetfi.resume.domain.model.MatchResponse
 
 @Entity(tableName = REPORTS_TABLE)

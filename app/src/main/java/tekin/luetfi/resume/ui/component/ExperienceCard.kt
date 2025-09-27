@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import tekin.luetfi.resume.computePeriod
+import tekin.luetfi.resume.util.computePeriod
 import tekin.luetfi.resume.domain.model.ExperienceItem
 
 @OptIn(ExperimentalMaterial3Api::class)

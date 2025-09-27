@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import tekin.luetfi.resume.REPORTS_TABLE
+import tekin.luetfi.resume.util.REPORTS_TABLE
 
 @Database(entities = [JobReportEntity::class], version = 2, exportSchema = false)
 @TypeConverters(JobReportTypeConverter::class)

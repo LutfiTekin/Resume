@@ -15,8 +15,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import tekin.luetfi.resume.BuildConfig
-import tekin.luetfi.resume.CV_BASE_URL
-import tekin.luetfi.resume.OPEN_ROUTER_AI_BASE_URL
+import tekin.luetfi.resume.util.CV_BASE_URL
+import tekin.luetfi.resume.util.OPEN_ROUTER_AI_BASE_URL
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
