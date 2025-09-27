@@ -92,7 +92,8 @@
     "android": [
       "Jetpack Compose", "CameraX", "Dagger", "Hilt", "Koin",
       "Coroutines", "Flows", "Gradle", "MVVM", "MVP", "Retrofit",
-      "ViewBinding", "DataBinding", "Material 3", "ExoPlayer"
+      "ViewBinding", "DataBinding", "Material 3", "ExoPlayer",
+      "Clean Architecture", "Jetpack Navigation", "Custom Views"
     ],
     "backend": ["Node.js", "Spring Boot", "REST APIs"],
     "devOps": ["Github Actions", "Azure", "Appcenter", "Fastlane"],
