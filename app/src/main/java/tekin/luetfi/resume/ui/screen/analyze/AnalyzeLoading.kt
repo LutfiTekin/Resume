@@ -19,6 +19,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,13 +34,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.FinalRecommendation
 import tekin.luetfi.resume.domain.model.MatchResponse
 import tekin.luetfi.resume.ui.component.AnimatedConfirmation
 import tekin.luetfi.resume.ui.component.AnimatedConfirmationIndeterminate
 import tekin.luetfi.resume.ui.component.phoneticMap
+import tekin.luetfi.resume.ui.screen.home.HomeViewModel
 import kotlin.random.Random
 
 const val FINAL_VERDICT = -1
@@ -54,9 +60,11 @@ fun AnalyzeLoading(
     var showButton by remember { mutableStateOf(false) }
     var decisionNodes by remember { mutableIntStateOf(1) }
     var loadingIndex by remember { mutableIntStateOf(1) }
+    val viewModel: HomeViewModel = hiltViewModel()
+    val cv by viewModel.uiState.map { it.resume }.collectAsState(null)
 
     LaunchedEffect(verdict) {
-        if (verdict != null){
+        if (verdict != null) {
             loadingIndex = FINAL_VERDICT
         }
         while (verdict == null) { // operation is still ongoing
@@ -105,12 +113,22 @@ fun AnalyzeLoading(
             ) {
                 repeat(decisionNodes) { index ->
                     val isEven = index % 2 == 0
+                    val list by remember(index) {
+                        derivedStateOf {
+                            if (Random.nextBoolean()) {
+                                lists.entries
+                                    .flatMap { it.value }
+                            } else {
+                                (cv?.techStack?.values?.flatten()
+                                    ?: emptyList()) + techStackSectionSynonyms.take(10)
+                            }
+                                .shuffled()
+                                .take(if (isEven) 40 else 15)
+                        }
+                    }
                     AnimatedConfirmationIndeterminate(
                         modifier = Modifier.fillMaxWidth(),
-                        items = lists.entries
-                            .flatMap { it.value }
-                            .shuffled()
-                            .take(if (isEven) 40 else 15)
+                        items = list
                     )
                 }
             }
@@ -163,7 +181,9 @@ fun AnalyzeLoading(
 
     Box(modifier = modifier.fillMaxSize()) {
         LazyColumn(
-            modifier = Modifier.fillMaxWidth().align(Alignment.Center),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
             contentPadding = PaddingValues(16.dp)
         ) {
             item {
@@ -190,23 +210,29 @@ fun ModelResultItem(
 ) {
     var showButton by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 8.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween) {
-            when(modelResult.status) {
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            when (modelResult.status) {
                 ModelStatus.Completed -> {
                     Text(
                         text = modelResult.model.displayName + " says:",
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
+
                 ModelStatus.Failed -> {
                     Text(
-                        text = modelResult.model.displayName + ": " + (modelResult.error?.error?.message ?: "An Error Occurred"),
+                        text = modelResult.model.displayName + ": " + (modelResult.error?.error?.message
+                            ?: "An Error Occurred"),
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
+
                 ModelStatus.Loading -> {
                     Text(
                         text = modelResult.model.displayName,
@@ -236,6 +262,7 @@ fun ModelResultItem(
                     items = lists.entries.flatMap { it.value }.shuffled().take(20)
                 )
             }
+
             ModelStatus.Completed -> {
                 modelResult.report?.finalRecommendation?.let {
                     AnimatedConfirmation(modifier = Modifier, finalRecommendation = it) {
@@ -244,6 +271,7 @@ fun ModelResultItem(
 
                 }
             }
+
             ModelStatus.Failed -> {
                 val errorLabel: String = modelResult.error?.type ?: "Failed"
                 val list by remember { mutableStateOf(getFailedMessageList(errorLabel)) }
@@ -333,6 +361,37 @@ val skipSynonyms: List<String> = listOf(
     "Renounce", "Refrain", "Set aside", "Shun", "Sidestep",
     "Skim", "Steer clear of", "Suspend", "Waive"
 )
+
+val techStackSectionSynonyms: List<String> = listOf(
+    // From LANGUAGES
+    "Programming Languages", "Coding Languages", "Development Languages",
+    "Script Languages", "Software Languages", "Code",
+
+    // From DEVOPS
+    "Development Operations", "CI/CD", "Deployment", "Infrastructure",
+    "Automation", "Pipeline Tools", "Operations",
+
+    // From ANDROID
+    "Mobile Development", "Mobile Platform", "Mobile Technologies",
+    "Native Development", "Mobile Framework", "App Development",
+
+    // From BACKEND
+    "Server-side", "Backend Technologies", "Server Technologies",
+    "API Development", "Server Development", "Backend Services",
+
+    // From TOOLS
+    "Development Tools", "Software Tools", "Utilities",
+    "Build Tools", "Development Utilities", "Productivity Tools",
+
+    // From DESIGN
+    "UI/UX", "Design Tools", "Visual Design", "Interface Design",
+    "Creative Tools", "Design Software",
+
+    // From FIREBASE
+    "Cloud Services", "Backend Services", "Cloud Platform",
+    "BaaS", "Cloud Infrastructure", "Server Services"
+)
+
 
 val lists = mapOf(
     FinalRecommendation.APPLY to applySynonyms,
