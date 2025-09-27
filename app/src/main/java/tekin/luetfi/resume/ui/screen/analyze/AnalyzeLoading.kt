@@ -192,28 +192,30 @@ fun AnalyzeLoading(
                     items = list
                 ) { showButton = true }
 
-                // Tech Keywords
-                if (verdict.techKeywords.size > 5) {
-                    AnimatedConfirmationIndeterminate(
-                        modifier = Modifier.fillMaxWidth(),
-                        items = techKeywords
-                    )
-                }
+                if (verdict.finalRecommendation != FinalRecommendation.SKIP) {
+                    // Tech Keywords
+                    if (verdict.techKeywords.size > 5) {
+                        AnimatedConfirmationIndeterminate(
+                            modifier = Modifier.fillMaxWidth(),
+                            items = techKeywords
+                        )
+                    }
 
-                // Work Setting
-                AnimatedConfirmation(
-                    modifier = Modifier.fillMaxWidth(),
-                    finalText = verdict.workMode,
-                    items = workModes
-                )
-
-                // Languages
-                if (verdict.languages.isNotEmpty()) {
+                    // Work Setting
                     AnimatedConfirmation(
                         modifier = Modifier.fillMaxWidth(),
-                        finalText = verdict.languages.first(),
-                        items = languages
+                        finalText = verdict.workMode,
+                        items = workModes
                     )
+
+                    // Languages
+                    if (verdict.languages.isNotEmpty()) {
+                        AnimatedConfirmation(
+                            modifier = Modifier.fillMaxWidth(),
+                            finalText = verdict.languages.first(),
+                            items = languages
+                        )
+                    }
                 }
             }
 
