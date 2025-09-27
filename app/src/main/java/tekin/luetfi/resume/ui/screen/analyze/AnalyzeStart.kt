@@ -179,7 +179,7 @@ fun AnalyzeStart(
                 horizontalArrangement = Arrangement.End
             ) {
                 Button(
-                    enabled = isValid && !isAnalyzing,
+                    enabled = isValid && !isAnalyzing && selectedModels.isNotEmpty(),
                     onClick = { onAnalyze(jobDescription.trim(), selectedModels) }
                 ) {
                     Text(if (isAnalyzing) stringResource(R.string.analyzing) else stringResource(R.string.analyze))
