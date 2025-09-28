@@ -35,8 +35,27 @@
     .tech-category h4 i { margin-right: 8px; font-size: 1.2em; }
     .tech-tooltip { font-family: Georgia, serif; font-size: 1em; max-width: 350px; white-space: pre-line; pointer-events: auto; }
     .tech-tooltip a { text-decoration: underline; color: #1a0dab; word-break: break-all; }
-    /* Hide in real prints or Print to PDF */
-    @media print { #download-pdf, #openness {   display: none !important; } }
+
+    @media print {
+      #download-pdf, #openness { display: none !important; }
+
+      html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+      /* avoid tearing from CSS columns */
+      #tech-stack-categories { column-count: 1 !important; }
+
+      /* keep blocks intact across pages */
+      section, .experience-item, .tech-category {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      /* keep headings with following content */
+      section h2 {
+        break-after: avoid;
+        page-break-after: avoid;
+      }
+    }
   </style>
 </head>
 <body>
@@ -213,8 +232,9 @@
       margin: 0.5,
       filename: 'CV_Lutfi_Tekin.pdf',
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
     };
 
     html2pdf().from(element).set(opt).save().then(() => {
@@ -227,92 +247,93 @@
       if (openness) openness.style.display = prevOpenDisplay ?? '';
     });
   });
-fetch('stacks.json')
-  .then(r => r.json())
-  .then(stacks => {
-    let activeTooltip = null;
-    let activeItem = null;
 
-    function createTooltip(html, position) {
-      const el = document.createElement('div');
-      el.className = 'tech-tooltip';
-      el.innerHTML = html;
-      Object.assign(el.style, {
-        position: 'absolute',
-        left: position.x + 'px',
-        top: position.y + 'px',
-        background: '#fff',
-        border: '1px solid #ddd',
-        padding: '10px',
-        zIndex: 1000,
-        boxShadow: '0 2px 8px rgba(0,0,0,.1)',
-        maxWidth: '350px',
-        whiteSpace: 'pre-line',
-        pointerEvents: 'auto' // allow clicking the link
-      });
-      document.body.appendChild(el);
-      return el;
-    }
+  // Tooltip init
+  fetch('stacks.json')
+    .then(r => r.json())
+    .then(stacks => {
+      let activeTooltip = null;
+      let activeItem = null;
 
-    function findInfo(name) {
-      const n = name.trim();
-      return stacks[n] || stacks[n.toLowerCase()] || stacks[n[0].toUpperCase() + n.slice(1)]
-        || Object.values(stacks).find(e =>
-             e && e.description && e.url && (
-               e.name?.toLowerCase() === n.toLowerCase() ||
-               e.category?.toLowerCase() === n.toLowerCase() ||
-               e.url?.toLowerCase().includes(n.toLowerCase())
-             )
-           );
-    }
-
-    function showTooltipFor(li, info) {
-      if (activeTooltip) activeTooltip.remove();
-      activeItem = li;
-
-      // ensure tight bounds by wrapping text once
-      let label = li.querySelector('span.__label');
-      if (!label) {
-        label = document.createElement('span');
-        label.className = '__label';
-        label.textContent = li.textContent.trim();
-        li.textContent = '';
-        li.appendChild(label);
+      function createTooltip(html, position) {
+        const el = document.createElement('div');
+        el.className = 'tech-tooltip';
+        el.innerHTML = html;
+        Object.assign(el.style, {
+          position: 'absolute',
+          left: position.x + 'px',
+          top: position.y + 'px',
+          background: '#fff',
+          border: '1px solid #ddd',
+          padding: '10px',
+          zIndex: 1000,
+          boxShadow: '0 2px 8px rgba(0,0,0,.1)',
+          maxWidth: '350px',
+          whiteSpace: 'pre-line',
+          pointerEvents: 'auto'
+        });
+        document.body.appendChild(el);
+        return el;
       }
 
-      const html = `
-        <div>${info.description}</div>
-        <div><a href="${info.url.startsWith('http') ? info.url : 'https://' + info.url}"
-                target="_blank" rel="noopener" style="color:#1a0dab;">${info.url}</a></div>
-      `;
+      function findInfo(name) {
+        const n = name.trim();
+        return stacks[n] || stacks[n.toLowerCase()] || stacks[n[0].toUpperCase() + n.slice(1)]
+          || Object.values(stacks).find(e =>
+               e && e.description && e.url && (
+                 e.name?.toLowerCase() === n.toLowerCase() ||
+                 e.category?.toLowerCase() === n.toLowerCase() ||
+                 e.url?.toLowerCase().includes(n.toLowerCase())
+               )
+             );
+      }
 
-      const r = label.getBoundingClientRect();
-      activeTooltip = createTooltip(html, {
-        x: r.right + window.scrollX + 10,
-        y: r.top + window.scrollY
+      function showTooltipFor(li, info) {
+        if (activeTooltip) activeTooltip.remove();
+        activeItem = li;
+
+        // ensure tight bounds by wrapping text once
+        let label = li.querySelector('span.__label');
+        if (!label) {
+          label = document.createElement('span');
+          label.className = '__label';
+          label.textContent = li.textContent.trim();
+          li.textContent = '';
+          li.appendChild(label);
+        }
+
+        const html = `
+          <div>${info.description}</div>
+          <div><a href="${info.url.startsWith('http') ? info.url : 'https://' + info.url}"
+                  target="_blank" rel="noopener" style="color:#1a0dab;">${info.url}</a></div>
+        `;
+
+        const r = label.getBoundingClientRect();
+        activeTooltip = createTooltip(html, {
+          x: r.right + window.scrollX + 10,
+          y: r.top + window.scrollY
+        });
+
+        // keep in viewport
+        const tw = activeTooltip.offsetWidth, th = activeTooltip.offsetHeight;
+        const vw = window.innerWidth + window.scrollX, vh = window.innerHeight + window.scrollY;
+        if (r.right + 10 + tw > vw) activeTooltip.style.left = (r.left + window.scrollX - 10 - tw) + 'px';
+        if (r.top + th > vh) activeTooltip.style.top = (vh - th - 10) + 'px';
+      }
+
+      // Hover to show (sticky) tooltip; replaced on next hover; removed on scroll
+      document.querySelectorAll('.tech-list li').forEach(li => {
+        const info = findInfo(li.textContent);
+        if (!info) return;
+        li.style.cursor = 'pointer';
+        li.addEventListener('mouseenter', () => showTooltipFor(li, info));
       });
 
-      // keep in viewport
-      const tw = activeTooltip.offsetWidth, th = activeTooltip.offsetHeight;
-      const vw = window.innerWidth + window.scrollX, vh = window.innerHeight + window.scrollY;
-      if (r.right + 10 + tw > vw) activeTooltip.style.left = (r.left + window.scrollX - 10 - tw) + 'px';
-      if (r.top + th > vh) activeTooltip.style.top = (vh - th - 10) + 'px';
-    }
-
-    // Attach once: hovering an item replaces the current tooltip (no auto-hide on leave)
-    document.querySelectorAll('.tech-list li').forEach(li => {
-      const info = findInfo(li.textContent);
-      if (!info) return;
-      li.style.cursor = 'pointer';
-      li.addEventListener('mouseenter', () => showTooltipFor(li, info));
-    });
-
-    // Close only on scroll or when another item is hovered (handled above)
-    window.addEventListener('scroll', () => {
-      if (activeTooltip) { activeTooltip.remove(); activeTooltip = null; activeItem = null; }
-    });
-  })
-  .catch(err => console.error('tooltip init failed:', err));
+      window.addEventListener('scroll', () => {
+        if (activeTooltip) { activeTooltip.remove(); activeTooltip = null; activeItem = null; }
+      });
+    })
+    .catch(err => console.error('tooltip init failed:', err));
 </script>
 </body>
 </html>
