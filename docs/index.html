@@ -33,7 +33,7 @@
     .tech-category { break-inside: avoid-column; margin-bottom: 20px; }
     .tech-category h4 { margin-bottom: 5px; text-transform: uppercase; font-size: 1em; display: flex; align-items: center; }
     .tech-category h4 i { margin-right: 8px; font-size: 1.2em; }
-
+    .tech-tooltip { font-family: Georgia, serif; font-size: 1em; max-width: 350px; white-space: pre-line; }
     /* Hide in real prints or Print to PDF */
     @media print {
       #download-pdf,
@@ -229,6 +229,68 @@
       // Ensure restore on error too
       button.style.display = prevButtonDisplay;
       if (openness) openness.style.display = prevOpenDisplay ?? '';
+    });
+  });
+  fetch('stacks.json')
+  .then(response => response.json())
+  .then(stacks => {
+    function createTooltip(text) {
+      let tooltip = document.createElement('div');
+      tooltip.className = 'tech-tooltip';
+      tooltip.textContent = text;
+      document.body.appendChild(tooltip);
+      return tooltip;
+    }
+
+    document.querySelectorAll('.tech-list li').forEach(li => {
+      const techName = li.textContent.trim();
+
+      // Find in stacks.json using case-insensitive matching
+      const stack = Object.values(stacks).find(entry =>
+        entry &&
+        entry.description &&
+        entry.url &&
+        (entry.name?.toLowerCase() === techName.toLowerCase() ||
+         entry.category?.toLowerCase() === techName.toLowerCase() ||
+         entry.url?.toLowerCase().includes(techName.toLowerCase()))
+      );
+
+      // Alternate approach if stacks.json keys are by tech name
+      const stackDirect = stacks[techName] || stacks[techName.toLowerCase()] || stacks[techName.charAt(0).toUpperCase() + techName.slice(1)];
+
+      const info = stackDirect || stack;
+      if (info && info.description && info.url) {
+        li.addEventListener('mouseover', function(event) {
+          const tooltip = createTooltip(
+            `${info.description}\n\n${info.url}`
+          );
+          // Position tooltip near mouse
+          tooltip.style.position = 'absolute';
+          tooltip.style.left = event.pageX + 15 + 'px';
+          tooltip.style.top = event.pageY + 10 + 'px';
+          tooltip.style.background = '#fff';
+          tooltip.style.border = '1px solid #ddd';
+          tooltip.style.padding = '10px';
+          tooltip.style.zIndex = 1000;
+          tooltip.style.boxShadow = '0px 2px 8px rgba(0,0,0,0.1)';
+
+          li._tooltip = tooltip;
+        });
+
+        li.addEventListener('mousemove', function(event) {
+          if (li._tooltip) {
+            li._tooltip.style.left = event.pageX + 15 + 'px';
+            li._tooltip.style.top = event.pageY + 10 + 'px';
+          }
+        });
+
+        li.addEventListener('mouseout', function() {
+          if (li._tooltip) {
+            li._tooltip.remove();
+            li._tooltip = null;
+          }
+        });
+      }
     });
   });
 </script>

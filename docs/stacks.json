@@ -1,231 +1,226 @@
 {
   "Kotlin": {
-    "description": "Modern programming language officially supported for Android development, designed to be concise and safe.",
+    "description": "Modern, concise, statically typed programming language preferred for Android and multiplatform development.",
     "category": "languages",
     "url": "https://kotlinlang.org/"
   },
   "Java": {
-    "description": "General-purpose, object-oriented programming language widely used in Android and enterprise applications.",
+    "description": "High-level, object-oriented programming language designed for platform independence; widely used for enterprise and Android apps.",
     "category": "languages",
     "url": "https://www.oracle.com/java/"
   },
   "JavaScript": {
-    "description": "High-level scripting language primarily used for web development and dynamic client-side interactions.",
+    "description": "High-level, dynamic scripting language essential for web development, supporting event-driven, object-oriented, and functional programming styles.",
     "category": "languages",
-    "url": "https://developer.mozilla.org/docs/Web/JavaScript"
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
   },
   "Jetpack Compose": {
-    "description": "Modern declarative UI toolkit for building native Android user interfaces with Kotlin.",
+    "description": "Android's modern UI toolkit for building native user interfaces quickly and declaratively using Kotlin.",
     "category": "android",
     "url": "https://developer.android.com/jetpack/compose"
   },
   "CameraX": {
-    "description": "Jetpack support library for camera development that simplifies camera features on Android.",
+    "description": "Jetpack library simplifying camera functionality across Android devices, supporting image, video capture and analysis.",
     "category": "android",
-    "url": "https://developer.android.com/training/camerax"
+    "url": "https://developer.android.com/media/camera/camerax"
   },
   "Dagger": {
-    "description": "Compile-time dependency injection framework for Java and Android applications.",
+    "description": "Compile-time dependency injection framework for Java and Android; helps manage object dependencies efficiently.",
     "category": "android",
     "url": "https://dagger.dev/"
   },
   "Hilt": {
-    "description": "Dependency injection library built on top of Dagger, designed to simplify DI in Android apps.",
+    "description": "Official Android DI framework built on Dagger, making dependency injection easier and more standardized for Android.",
     "category": "android",
-    "url": "https://developer.android.com/training/dependency-injection/hilt-android"
+    "url": "https://dagger.dev/hilt/"
   },
   "Koin": {
-    "description": "Lightweight dependency injection framework for Kotlin developers.",
+    "description": "Pragmatic, lightweight Kotlin dependency injection framework, focused on simplicity and testability.",
     "category": "android",
     "url": "https://insert-koin.io/"
   },
   "Coroutines": {
-    "description": "Kotlin concurrency framework for asynchronous programming and structured concurrency.",
+    "description": "Concurrency design pattern in Kotlin for asynchronous and non-blocking code that simplifies background operations.",
     "category": "android",
     "url": "https://kotlinlang.org/docs/coroutines-overview.html"
   },
   "Flows": {
-    "description": "Kotlin Flow provides cold asynchronous data streams built on coroutines.",
+    "description": "Reactive streams API in Kotlin for handling asynchronous data flows, supporting cold and hot stream types like StateFlow and SharedFlow.",
     "category": "android",
     "url": "https://kotlinlang.org/docs/flow.html"
   },
   "Gradle": {
-    "description": "Build automation tool commonly used in Android projects to manage dependencies and build logic.",
-    "category": "tools",
+    "description": "Flexible build automation tool for multi-language software including Android apps, supporting dependency management and build scripting.",
+    "category": "android",
     "url": "https://gradle.org/"
   },
   "MVVM": {
-    "description": "Software architectural pattern that separates concerns into Model, View, and ViewModel for maintainable apps.",
-    "category": "architecture",
-    "url": "https://developer.android.com/jetpack/guide"
+    "description": "Design pattern for organizing code into Model, View, ViewModel in modern apps; improves separation and testability.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/guide#recommended-app-arch"
   },
   "MVP": {
-    "description": "Software architectural pattern separating Model, View, and Presenter, often used in older Android projects.",
-    "category": "architecture",
-    "url": "https://en.wikipedia.org/wiki/Model–view–presenter"
+    "description": "Model-View-Presenter architecture pattern for separating presentation and business logic, improving maintainability.",
+    "category": "android",
+    "url": "https://developer.android.com/guide/topics/ui/mvp"
   },
   "Retrofit": {
-    "description": "Type-safe HTTP client for Android and Java for interacting with REST APIs.",
+    "description": "Type-safe HTTP client for Android and Java, simplifying API communication and data retrieval.",
     "category": "android",
     "url": "https://square.github.io/retrofit/"
   },
   "ViewBinding": {
-    "description": "Feature in Android to more easily write code that interacts with views.",
+    "description": "Android library providing type-safe access to views in XML layouts for improved code safety.",
     "category": "android",
     "url": "https://developer.android.com/topic/libraries/view-binding"
   },
   "DataBinding": {
-    "description": "Android library that binds UI components in layouts to data sources using declarative format.",
+    "description": "Android library enabling declarative binding of UI components to data sources within XML layouts.",
     "category": "android",
     "url": "https://developer.android.com/topic/libraries/data-binding"
   },
   "Material 3": {
-    "description": "Latest iteration of Google's Material Design system for building modern Android UI.",
-    "category": "design",
-    "url": "https://m3.material.io/"
+    "description": "Google's latest Material Design system, providing modern UI components and theming in Jetpack Compose.",
+    "category": "android",
+    "url": "https://m3.material.io/develop/android/jetpack-compose"
   },
   "ExoPlayer": {
-    "description": "Media playback library for Android supporting audio, video, and adaptive streaming.",
+    "description": "Powerful, customizable media player for Android supporting audio and video playback.",
     "category": "android",
-    "url": "https://developer.android.com/guide/topics/media/exoplayer"
+    "url": "https://exoplayer.dev/"
   },
   "Clean Architecture": {
-    "description": "Architectural approach emphasizing separation of concerns and independence of frameworks, UI, and databases.",
-    "category": "architecture",
-    "url": "https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html"
+    "description": "Software architecture principle separating concerns with layers; promotes testability and maintainability.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/guide#recommended-app-arch"
   },
   "Jetpack Navigation": {
-    "description": "Android Jetpack component that manages app navigation and back stack handling.",
+    "description": "Android Jetpack component simplifying navigation between app screens and managing back stack.",
     "category": "android",
-    "url": "https://developer.android.com/guide/navigation"
+    "url": "https://developer.android.com/jetpack/navigation"
   },
   "Custom Views": {
-    "description": "User-defined Android views built to implement specialized UI elements beyond standard widgets.",
+    "description": "Android concept for creating specialized UI elements by subclassing View for unique interaction or display.",
     "category": "android",
     "url": "https://developer.android.com/guide/topics/ui/custom-components"
   },
-  "Backend": {
-    "description": "General term for server-side systems that support client applications with APIs and business logic.",
-    "category": "backend",
-    "url": "https://en.wikipedia.org/wiki/Front_and_back_ends"
-  },
   "Node.js": {
-    "description": "JavaScript runtime built on Chrome's V8 engine, commonly used for backend development.",
+    "description": "JavaScript runtime environment enabling server-side scripting and scalable backend solutions.",
     "category": "backend",
     "url": "https://nodejs.org/"
   },
   "Spring Boot": {
-    "description": "Java framework for building stand-alone, production-grade backend applications.",
+    "description": "Java-based framework for building stand-alone, production-grade backend applications easily.",
     "category": "backend",
     "url": "https://spring.io/projects/spring-boot"
   },
   "REST APIs": {
-    "description": "Architectural style for building networked applications using stateless operations over HTTP.",
+    "description": "Web API design standard using HTTP methods for resource-oriented data access and manipulation.",
     "category": "backend",
     "url": "https://restfulapi.net/"
   },
   "Github Actions": {
-    "description": "CI/CD automation platform integrated with GitHub for building, testing, and deploying code.",
-    "category": "devops",
+    "description": "Workflow automation tool in GitHub for CI/CD processes, testing, building, and deployment.",
+    "category": "devOps",
     "url": "https://github.com/features/actions"
   },
   "Azure": {
-    "description": "Microsoft cloud platform offering compute, storage, and application services.",
-    "category": "cloud",
+    "description": "Microsoft's cloud computing platform offering hosting, databases, analytics, storage, and more.",
+    "category": "devOps",
     "url": "https://azure.microsoft.com/"
   },
   "Appcenter": {
-    "description": "Microsoft App Center provides build, test, distribute, and analytics services for apps.",
-    "category": "devops",
+    "description": "Microsoft platform for mobile app distribution, testing, analytics, crash reporting, and CI/CD.",
+    "category": "devOps",
     "url": "https://appcenter.ms/"
   },
   "Fastlane": {
-    "description": "Open source platform for automating Android and iOS deployment pipelines.",
-    "category": "devops",
+    "description": "Automation tool for mobile app release workflows: build, test, and deploy, with integrations for major platforms.",
+    "category": "devOps",
     "url": "https://fastlane.tools/"
   },
   "Git": {
-    "description": "Distributed version control system for tracking changes in source code.",
-    "category": "version-control",
+    "description": "Distributed version control system for source code management, essential for collaboration and tracking changes.",
+    "category": "tools",
     "url": "https://git-scm.com/"
   },
   "GitHub": {
-    "description": "Code hosting platform for version control and collaboration using Git.",
-    "category": "version-control",
+    "description": "Web-based hosting for Git repositories supporting collaboration, issue tracking, and code management.",
+    "category": "tools",
     "url": "https://github.com/"
   },
   "GitLab": {
-    "description": "Web-based DevOps lifecycle tool providing Git repository management and CI/CD.",
-    "category": "version-control",
-    "url": "https://about.gitlab.com/"
+    "description": "Comprehensive DevOps platform for Git repository hosting and CI/CD pipeline management.",
+    "category": "tools",
+    "url": "https://gitlab.com/"
   },
   "Bitbucket": {
-    "description": "Git-based code hosting and collaboration platform by Atlassian.",
-    "category": "version-control",
+    "description": "Git-based source code hosting platform integrating with Jira and CI/CD pipelines.",
+    "category": "tools",
     "url": "https://bitbucket.org/"
   },
   "JIRA": {
-    "description": "Project management and issue-tracking tool developed by Atlassian.",
-    "category": "management",
-    "url": "https://www.atlassian.com/software/jira"
+    "description": "Enterprise tool for project management, issue tracking, and agile development workflows.",
+    "category": "tools",
+    "url": "https://jira.atlassian.com/"
   },
   "Figma": {
-    "description": "Collaborative interface design tool for creating and prototyping user experiences.",
+    "description": "Cloud-based design and prototyping tool for UI/UX collaboration, offering vector editing and interactive mockups.",
     "category": "design",
-    "url": "https://www.figma.com/"
+    "url": "https://figma.com/"
   },
   "Zeplin": {
-    "description": "Design collaboration tool for sharing finalized UI designs with developers.",
+    "description": "Design handoff tool bridging designers and developers, generating specs, assets, and guidelines from mockups.",
     "category": "design",
     "url": "https://zeplin.io/"
   },
   "Analytics": {
-    "description": "Tools and practices for collecting and analyzing app usage data.",
+    "description": "Collects, processes, and visualizes app usage data to optimize engagement and inform product decisions.",
     "category": "firebase",
     "url": "https://firebase.google.com/products/analytics"
   },
   "Crashlytics": {
-    "description": "Firebase crash reporting tool for real-time crash analytics.",
+    "description": "Real-time crash-reporting tool providing insights into app stability and user-impacting errors.",
     "category": "firebase",
     "url": "https://firebase.google.com/products/crashlytics"
   },
   "Hosting": {
-    "description": "Firebase service for deploying web apps and static content with fast global delivery.",
+    "description": "Services enabling deployment and serving of web and mobile app resources at scale.",
     "category": "firebase",
     "url": "https://firebase.google.com/products/hosting"
   },
   "Push Notifications": {
-    "description": "Firebase Cloud Messaging enables sending targeted notifications to users across platforms.",
+    "description": "System for sending timely and relevant messages to user devices, facilitating re-engagement and updates.",
     "category": "firebase",
     "url": "https://firebase.google.com/products/cloud-messaging"
   },
   "App Distribution": {
-    "description": "Firebase service for distributing pre-release app builds to testers.",
+    "description": "Platform for distributing pre-release and production app builds to testers, stakeholders, and users.",
     "category": "firebase",
     "url": "https://firebase.google.com/products/app-distribution"
   },
   "Cloud Functions": {
-    "description": "Serverless backend logic triggered by Firebase features and HTTPS requests.",
+    "description": "Serverless backend logic triggered by events from Firebase or external services, enabling dynamic processing.",
     "category": "firebase",
     "url": "https://firebase.google.com/products/functions"
   },
   "Realtime DB": {
-    "description": "Firebase's original NoSQL cloud-hosted database for syncing data in real-time.",
+    "description": "Cloud-hosted, NoSQL database delivering real-time synchronization across devices and clients.",
     "category": "firebase",
     "url": "https://firebase.google.com/products/realtime-database"
   },
   "Firestore": {
-    "description": "Firebase's scalable NoSQL cloud database for mobile, web, and server apps.",
+    "description": "Flexible, scalable NoSQL cloud database for mobile and web apps, with real-time synchronization and offline support.",
     "category": "firebase",
     "url": "https://firebase.google.com/products/firestore"
   },
   "Authentication": {
-    "description": "Firebase Authentication provides backend services for easy user authentication.",
+    "description": "Infrastructure for user sign-in and management, supporting email, social, and federated login providers.",
     "category": "firebase",
     "url": "https://firebase.google.com/products/auth"
   },
   "Remote Config": {
-    "description": "Firebase service that lets you change app behavior and appearance without app updates.",
+    "description": "Cloud service for dynamically changing app behavior and appearance without requiring app updates.",
     "category": "firebase",
     "url": "https://firebase.google.com/products/remote-config"
   }
