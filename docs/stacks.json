@@ -62,7 +62,7 @@
   "MVP": {
     "description": "Model-View-Presenter architecture pattern for separating presentation and business logic, improving maintainability.",
     "category": "android",
-    "url": "https://developer.android.com/guide/topics/ui/mvp"
+    "url": "https://learn.microsoft.com/en-us/archive/msdn-magazine/2006/august/design-patterns-model-view-presenter"
   },
   "Retrofit": {
     "description": "Type-safe HTTP client for Android and Java, simplifying API communication and data retrieval.",
