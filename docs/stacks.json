@@ -223,5 +223,10 @@
     "description": "Cloud service for dynamically changing app behavior and appearance without requiring app updates.",
     "category": "firebase",
     "url": "https://firebase.google.com/products/remote-config"
+  },
+  "Room": {
+    "description": "A persistence library in Android Jetpack that provides an abstraction layer over SQLite, enabling robust database access while harnessing the full power of SQLite. It simplifies database tasks by reducing boilerplate code and verifying SQL queries at compile-time.",
+    "category": "android",
+    "url": "https://developer.android.com/training/data-storage/room"
   }
 }

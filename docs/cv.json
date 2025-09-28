@@ -38,7 +38,7 @@
       "company": "Appsfactory GmbH",
       "location": "Leipzig, Germany (On-Site)",
       "period": "2023-01 to 2024-08",
-      "stack": ["Kotlin", "Java", "Azure","Figma"],
+      "stack": ["Kotlin", "Java", "Azure","Figma","Room"],
       "notes": [
         "Owned the Android stack for a major news app",
         "Contributed to several high-visibility apps"
@@ -93,7 +93,7 @@
       "Jetpack Compose", "CameraX", "Dagger", "Hilt", "Koin",
       "Coroutines", "Flows", "Gradle", "MVVM", "MVP", "Retrofit",
       "ViewBinding", "DataBinding", "Material 3", "ExoPlayer",
-      "Clean Architecture", "Jetpack Navigation", "Custom Views"
+      "Clean Architecture", "Jetpack Navigation", "Custom Views", "Room"
     ],
     "backend": ["Node.js", "Spring Boot", "REST APIs"],
     "devOps": ["Github Actions", "Azure", "Appcenter", "Fastlane"],
