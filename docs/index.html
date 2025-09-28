@@ -281,12 +281,23 @@ fetch('stacks.json')
           });
         });
 
-        li.addEventListener('mousemove', function(event) {
-          if (activeTooltip) {
-            activeTooltip.style.left = (event.pageX + 15) + 'px';
-            activeTooltip.style.top = (event.pageY + 10) + 'px';
-          }
-        });
+        // Position beside the hovered element, regardless of whitespace
+        li.addEventListener('mouseover', function(event) {
+            if (activeTooltip) activeTooltip.remove();
+            activeItem = li;
+
+            const htmlContent = `
+              <div>${info.description.replace(/-/g,"<br>")}</div>
+              <div><a href="${info.url.startsWith('http') ? info.url : 'https://' + info.url}" target="_blank" rel="noopener" style="color:#1a0dab;">${info.url}</a></div>
+            `;
+            // Use element position rather than mouse
+            const rect = li.getBoundingClientRect();
+            // Adjust placement: to the right, or below
+            const x = rect.right + window.scrollX + 10;    // 10px offset right
+            const y = rect.top + window.scrollY;           // aligns with top of list item
+
+            activeTooltip = createTooltip(htmlContent, { x, y });
+            });
       }
     });
 
