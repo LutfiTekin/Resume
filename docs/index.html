@@ -33,14 +33,10 @@
     .tech-category { break-inside: avoid-column; margin-bottom: 20px; }
     .tech-category h4 { margin-bottom: 5px; text-transform: uppercase; font-size: 1em; display: flex; align-items: center; }
     .tech-category h4 i { margin-right: 8px; font-size: 1.2em; }
-    .tech-tooltip { font-family: Georgia, serif; font-size: 1em; max-width: 350px; white-space: pre-line; }
+    .tech-tooltip { font-family: Georgia, serif; font-size: 1em; max-width: 350px; white-space: pre-line; pointer-events: auto; }
+    .tech-tooltip a { text-decoration: underline; color: #1a0dab; word-break: break-all; }
     /* Hide in real prints or Print to PDF */
-    @media print {
-      #download-pdf,
-      #openness {
-        display: none !important;
-      }
-    }
+    @media print { #download-pdf, #openness {   display: none !important; } }
   </style>
 </head>
 <body>
@@ -231,21 +227,33 @@
       if (openness) openness.style.display = prevOpenDisplay ?? '';
     });
   });
-  fetch('stacks.json')
+fetch('stacks.json')
   .then(response => response.json())
   .then(stacks => {
-    function createTooltip(text) {
+    let activeTooltip = null;
+    let activeItem = null;
+
+    function createTooltip(html, position) {
       let tooltip = document.createElement('div');
       tooltip.className = 'tech-tooltip';
-      tooltip.textContent = text;
+      tooltip.innerHTML = html;
       document.body.appendChild(tooltip);
+      tooltip.style.position = 'absolute';
+      tooltip.style.left = position.x + 'px';
+      tooltip.style.top = position.y + 'px';
+      tooltip.style.background = '#fff';
+      tooltip.style.border = '1px solid #ddd';
+      tooltip.style.padding = '10px';
+      tooltip.style.zIndex = 1000;
+      tooltip.style.boxShadow = '0px 2px 8px rgba(0,0,0,0.1)';
+      tooltip.style.maxWidth = '350px';
+      tooltip.style.whiteSpace = 'pre-line';
       return tooltip;
     }
 
     document.querySelectorAll('.tech-list li').forEach(li => {
       const techName = li.textContent.trim();
-
-      // Find in stacks.json using case-insensitive matching
+      // Find stack info
       const stack = Object.values(stacks).find(entry =>
         entry &&
         entry.description &&
@@ -254,42 +262,47 @@
          entry.category?.toLowerCase() === techName.toLowerCase() ||
          entry.url?.toLowerCase().includes(techName.toLowerCase()))
       );
-
-      // Alternate approach if stacks.json keys are by tech name
       const stackDirect = stacks[techName] || stacks[techName.toLowerCase()] || stacks[techName.charAt(0).toUpperCase() + techName.slice(1)];
-
       const info = stackDirect || stack;
-      if (info && info.description && info.url) {
-        li.addEventListener('mouseover', function(event) {
-          const tooltip = createTooltip(
-            `${info.description}\n\n${info.url}`
-          );
-          // Position tooltip near mouse
-          tooltip.style.position = 'absolute';
-          tooltip.style.left = event.pageX + 15 + 'px';
-          tooltip.style.top = event.pageY + 10 + 'px';
-          tooltip.style.background = '#fff';
-          tooltip.style.border = '1px solid #ddd';
-          tooltip.style.padding = '10px';
-          tooltip.style.zIndex = 1000;
-          tooltip.style.boxShadow = '0px 2px 8px rgba(0,0,0,0.1)';
 
-          li._tooltip = tooltip;
+      if (info && info.description && info.url) {
+        li.style.cursor = "pointer";
+        li.addEventListener('mouseover', function(event) {
+          if (activeTooltip) activeTooltip.remove();
+          activeItem = li;
+
+          const htmlContent = `
+            <div>${info.description.replace(/-/g,"<br>")}</div>
+            <div><a href="${info.url.startsWith('http') ? info.url : 'https://' + info.url}" target="_blank" rel="noopener" style="color:#1a0dab;">${info.url}</a></div>
+          `;
+          activeTooltip = createTooltip(htmlContent, {
+            x: event.pageX + 15,
+            y: event.pageY + 10
+          });
         });
 
         li.addEventListener('mousemove', function(event) {
-          if (li._tooltip) {
-            li._tooltip.style.left = event.pageX + 15 + 'px';
-            li._tooltip.style.top = event.pageY + 10 + 'px';
+          if (activeTooltip) {
+            activeTooltip.style.left = (event.pageX + 15) + 'px';
+            activeTooltip.style.top = (event.pageY + 10) + 'px';
           }
         });
+      }
+    });
 
-        li.addEventListener('mouseout', function() {
-          if (li._tooltip) {
-            li._tooltip.remove();
-            li._tooltip = null;
-          }
-        });
+    // Remove tooltip on click outside or scroll
+    document.addEventListener('mousedown', function(e) {
+      if (activeTooltip && (!activeItem || (!activeItem.contains(e.target) && !activeTooltip.contains(e.target)))) {
+        activeTooltip.remove();
+        activeTooltip = null;
+        activeItem = null;
+      }
+    });
+    window.addEventListener('scroll', function() {
+      if (activeTooltip) {
+        activeTooltip.remove();
+        activeTooltip = null;
+        activeItem = null;
       }
     });
   });
