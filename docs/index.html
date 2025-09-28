@@ -281,7 +281,7 @@ fetch('stacks.json')
       }
 
       const html = `
-        <div>${info.description.replace(/-/g,'<br>')}</div>
+        <div>${info.description}</div>
         <div><a href="${info.url.startsWith('http') ? info.url : 'https://' + info.url}"
                 target="_blank" rel="noopener" style="color:#1a0dab;">${info.url}</a></div>
       `;
