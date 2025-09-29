@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CV - Lütfi Tekin</title>
+
   <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pVftV0ZPHKyw+zYhYqH2Y0+3bXjxL1R38sBc7Z7PZKg9xIX7j/Yn7PW3+hp3V8edhgUJ5QLO1o3rcM6C6xwTLg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pVftV0ZPHKyw+zYhYqH2Y0+3bXjxL1R38sBc7Z7PZKg9xIX7j/Yn7PW3+hp3V8edhgUJ5QLO1o3rcM6C6xwTLg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
   <style>
     body { font-family: Georgia, serif; padding: 20px; max-width: 800px; margin: auto; color: #333; }
     header { text-align: center; margin-bottom: 40px; }
@@ -38,18 +40,14 @@
 
     @media print {
       #download-pdf, #openness { display: none !important; }
-
       html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
       /* avoid tearing from CSS columns */
       #tech-stack-categories { column-count: 1 !important; }
-
       /* keep blocks intact across pages */
       section, .experience-item, .tech-category {
         break-inside: avoid;
         page-break-inside: avoid;
       }
-
       /* keep headings with following content */
       section h2 {
         break-after: avoid;
@@ -70,10 +68,12 @@
     <div id="openness"></div>
     <button id="download-pdf">Download PDF</button>
   </header>
+
   <section id="summary">
     <h2>Summary</h2>
     <p id="summary-text"></p>
   </section>
+
   <section id="experience">
     <h2>Experience</h2>
     <div id="experience-content">
@@ -83,10 +83,12 @@
       <div class="experience-list" id="experience-list"></div>
     </div>
   </section>
+
   <section id="languages">
     <h2>Languages</h2>
     <ul id="languages-list"></ul>
   </section>
+
   <section id="tech-stack">
     <h2>Tech Stack</h2>
     <div id="tech-stack-categories"></div>
@@ -144,6 +146,87 @@
     databases: 'fas fa-database', tools: 'fas fa-tools'
   };
 
+  // Small helper for query param check
+  function hasPdfQuery() {
+    const sp = new URLSearchParams(window.location.search);
+    return sp.has('pdf') || sp.get('mode') === 'pdf';
+  }
+</script>
+
+<!-- html2pdf library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script type="text/javascript">
+  // Generate PDF and hand it to WebView or browser
+  async function generatePdf({ auto = false } = {}) {
+    const button = document.getElementById('download-pdf');
+    const openness = document.getElementById('openness');
+
+    // hide non-CV elements during render
+    const prevButtonDisplay = button.style.display;
+    const prevOpenDisplay = openness ? openness.style.display : null;
+    button.style.display = 'none';
+    if (openness) openness.style.display = 'none';
+
+    const element = document.getElementById('cv-container');
+    const opt = {
+      margin: 0.5,
+      filename: 'CV_Lutfi_Tekin.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    try {
+      // Use worker chain to obtain both Blob and data URL
+      const worker = html2pdf().from(element).set(opt).toPdf();
+
+      // First get Blob
+      const blob = await worker.output('blob');
+      const blobUrl = URL.createObjectURL(blob);
+
+      // Then get base64 data URL (WebView friendly)
+      const dataUrl = await worker.output('datauristring');
+
+      // expose for debugging or native bridge
+      window.__lastPdfBlobUrl = blobUrl;
+      window.__lastPdfDataUrl = dataUrl;
+
+      // If Android bridge provided: send data URL directly
+      if (auto && window.Android && typeof window.Android.onPdfReady === 'function') {
+        try { window.Android.onPdfReady(dataUrl); } catch (_) {}
+      }
+
+      if (auto) {
+        // Try to navigate so WebView can pick it up visually
+        try { window.location.replace(dataUrl); } catch (_) {}
+        // Also trigger a click download for normal browsers
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = opt.filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      } else {
+        // Manual click path: save normally
+        html2pdf().from(element).set(opt).save();
+      }
+    } catch (e) {
+      console.error('PDF generation failed:', e);
+    } finally {
+      // restore UI
+      button.style.display = prevButtonDisplay;
+      if (openness) openness.style.display = prevOpenDisplay ?? '';
+    }
+  }
+
+  // Button path
+  document.getElementById('download-pdf').addEventListener('click', () => {
+    generatePdf({ auto: false });
+  });
+
+  // Render CV, then possibly auto-PDF
   fetch('./cv.json')
     .then(r => r.json())
     .then(data => {
@@ -210,43 +293,14 @@
         items.forEach(item => { const li = document.createElement('li'); li.textContent = item; ul.appendChild(li); });
         div.appendChild(hd); div.appendChild(ul); techCont.appendChild(div);
       });
+
+      // If URL has ?pdf: auto generate after layout settles
+      if (hasPdfQuery()) {
+        // small delay allows layout to fully measure for html2canvas
+        setTimeout(() => generatePdf({ auto: true }), 350);
+      }
     })
     .catch(e => console.error('Error loading CV:', e));
-</script>
-
-<!-- html2pdf library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script>
-  document.getElementById('download-pdf').addEventListener('click', () => {
-    const button = document.getElementById('download-pdf');
-    const openness = document.getElementById('openness');
-
-    // Temporarily hide elements for html2pdf rendering
-    const prevButtonDisplay = button.style.display;
-    const prevOpenDisplay = openness ? openness.style.display : null;
-    button.style.display = 'none';
-    if (openness) openness.style.display = 'none';
-
-    const element = document.getElementById('cv-container');
-    const opt = {
-      margin: 0.5,
-      filename: 'CV_Lutfi_Tekin.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-    };
-
-    html2pdf().from(element).set(opt).save().then(() => {
-      // Restore visibility after save
-      button.style.display = prevButtonDisplay;
-      if (openness) openness.style.display = prevOpenDisplay ?? '';
-    }).catch(() => {
-      // Ensure restore on error too
-      button.style.display = prevButtonDisplay;
-      if (openness) openness.style.display = prevOpenDisplay ?? '';
-    });
-  });
 
   // Tooltip init
   fetch('stacks.json')
@@ -292,7 +346,6 @@
         if (activeTooltip) activeTooltip.remove();
         activeItem = li;
 
-        // ensure tight bounds by wrapping text once
         let label = li.querySelector('span.__label');
         if (!label) {
           label = document.createElement('span');
@@ -314,14 +367,12 @@
           y: r.top + window.scrollY
         });
 
-        // keep in viewport
         const tw = activeTooltip.offsetWidth, th = activeTooltip.offsetHeight;
         const vw = window.innerWidth + window.scrollX, vh = window.innerHeight + window.scrollY;
         if (r.right + 10 + tw > vw) activeTooltip.style.left = (r.left + window.scrollX - 10 - tw) + 'px';
         if (r.top + th > vh) activeTooltip.style.top = (vh - th - 10) + 'px';
       }
 
-      // Hover to show (sticky) tooltip; replaced on next hover; removed on scroll
       document.querySelectorAll('.tech-list li').forEach(li => {
         const info = findInfo(li.textContent);
         if (!info) return;
