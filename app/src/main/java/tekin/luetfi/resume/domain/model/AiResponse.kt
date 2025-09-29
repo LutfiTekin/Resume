@@ -24,6 +24,7 @@ data class JobInfo(
     val title: String,
     val company: String,
     val location: String,
+    @param:Json(name = "extracted_email") val extractedEmail: String?,
     @param:Json(name = "work_mode") val workMode: WorkMode,
     @param:Json(name = "seniority_label") val seniorityLabel: String,
     @param:Json(name = "language_requirements") val languageRequirements: List<String>,

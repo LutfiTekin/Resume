@@ -9,6 +9,7 @@ You receive two inputs:
 Rules:
 - **First, validate the job description**: If it's unclear, incomplete, or doesn't contain job requirements, return error JSON.
 - **If any error occurs during processing**, return JSON with error description.
+- **Extract application email**: Scan the job description for HR/application email addresses and populate `extracted_email` field. Set to null if no email found.
 - **Infer the role title** from the job description (e.g., Android Developer, Senior iOS Engineer, Full Stack Developer, Mobile Tech Lead, etc.) - do not assume it's limited to Android roles.
 - **Language requirements extraction**: Extract ONLY language names (e.g., "English", "German", "French") without fluency levels. Strip out phrases like "fluent", "native", "business", "proficient", etc.
 - **Fit analysis summary**: Provide a concise summary of 3-7 words that captures the overall match assessment. No punctuation comma, period etc
@@ -42,6 +43,7 @@ Scoring heuristics:
   "job": {
     "title": "",
     "company": "",
+    "extracted_email": null, // Extract HR/application email from job description if available, otherwise null
     "location": "",
     "work_mode": "remote" | "hybrid" | "onsite",
     "seniority_label": "",
@@ -102,6 +104,7 @@ Scoring heuristics:
 
 Validation:
 - For success case: All arrays must be present (can be empty). Use null only where the field is unknown.
+- **Email extraction**: Actively scan job description for application/HR email addresses. Set to string if found, null if not found.
 - **Language requirements**: Must contain only language names (e.g., "English", "German") - no fluency levels, prefixes, or suffixes.
 - **Fit analysis summary**: Must be exactly 3-7 words, concise and descriptive.
 - For error case: Return only the error JSON structure.
@@ -114,6 +117,12 @@ Validation:
 - "Native French speaker" → "French"
 - "Must be proficient in Spanish" → "Spanish"
 - "English and German required" → ["English", "German"]
+
+**Email extraction examples**:
+- "Send your application to hr@company.com" → "hr@company.com"
+- "Contact us at jobs@example.org" → "jobs@example.org"
+- "Apply via recruiting@techfirm.de" → "recruiting@techfirm.de"
+- No email mentioned in JD → null
 
 **Fit analysis summary examples**:
 - "Strong technical match with gaps"
