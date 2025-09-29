@@ -166,6 +166,28 @@ object SynonymsDictionary {
         "Unable", "Unavailable", "Unresponsive", "Unsuccessful"
     )
 
+    val generatingSynonyms: List<String> = listOf(
+        "Producing", "Creating", "Forming", "Assembling", "Constructing",
+        "Building", "Fabricating", "Synthesizing", "Inventing", "Developing",
+        "Composing", "Evolving", "Initiating", "Spawning", "Rendering",
+        "Outputting", "Deriving", "Issuing", "Breeding", "Forging"
+    )
+
+    val pdfFileSynonyms: List<String> = listOf(
+        "Document", "Report", "Digital File", "E-file", "Portable Document",
+        "Paperless Document", "Electronic Report", "Digital Document",
+        "Formatted File", "Printable File", "Publication", "Record",
+        "Attachment", "Doc", "Booklet", "PDF File"
+    )
+
+    val generatedSynonyms: List<String> = listOf(
+        "Created", "Produced", "Formed", "Constructed", "Built",
+        "Assembled", "Developed", "Issued", "Compiled", "Authored",
+        "Realized", "Initiated", "Spawned", "Synthesized",
+        "Completed", "Drafted", "Finalized", "Output", "Rendered"
+    )
+
+
     val phoneticMap = linkedMapOf(
         "A" to "Alfa", "B" to "Bravo", "C" to "Charlie", "D" to "Delta",
         "E" to "Echo", "F" to "Foxtrot", "G" to "Golf", "H" to "Hotel",
