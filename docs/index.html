@@ -36,6 +36,15 @@
     .tech-category h4 { margin-bottom: 5px; text-transform: uppercase; font-size: 1em; display: flex; align-items: center; }
     .tech-category h4 i { margin-right: 8px; font-size: 1.2em; }
     .tech-tooltip { font-family: Georgia, serif; font-size: 1em; max-width: 350px; white-space: pre-line; pointer-events: auto; }
+
+    /* Hide non-PDF elements while generating the PDF snapshot */
+    body.pdf-mode #download-pdf,
+    body.pdf-mode #openness,
+    body.pdf-mode .tech-tooltip {
+      display: none !important;
+    }
+
+    /* Tooltips */
     .tech-tooltip a { text-decoration: underline; color: #1a0dab; word-break: break-all; }
 
     @media print {
@@ -95,7 +104,7 @@
   </section>
 </div>
 
-<!-- CV rendering logic -->
+<!-- CV helpers -->
 <script type="text/javascript">
   function formatDate(ym) {
     const [year, month] = ym.split('-');
@@ -153,20 +162,13 @@
   }
 </script>
 
-<!-- html2pdf library -->
+<!-- html2pdf -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script type="text/javascript">
-  // Generate PDF and hand it to WebView or browser
+  // Generate PDF with a body-level toggle to avoid race conditions
   async function generatePdf({ auto = false } = {}) {
-    const button = document.getElementById('download-pdf');
-    const openness = document.getElementById('openness');
-
-    // hide non-CV elements during render
-    const prevButtonDisplay = button.style.display;
-    const prevOpenDisplay = openness ? openness.style.display : null;
-    button.style.display = 'none';
-    if (openness) openness.style.display = 'none';
+    document.body.classList.add('pdf-mode');
 
     const element = document.getElementById('cv-container');
     const opt = {
@@ -179,29 +181,23 @@
     };
 
     try {
-      // Use worker chain to obtain both Blob and data URL
+      // Use worker chain once to produce blob and data URL
       const worker = html2pdf().from(element).set(opt).toPdf();
 
-      // First get Blob
       const blob = await worker.output('blob');
       const blobUrl = URL.createObjectURL(blob);
-
-      // Then get base64 data URL (WebView friendly)
       const dataUrl = await worker.output('datauristring');
 
-      // expose for debugging or native bridge
       window.__lastPdfBlobUrl = blobUrl;
       window.__lastPdfDataUrl = dataUrl;
 
-      // If Android bridge provided: send data URL directly
       if (auto && window.Android && typeof window.Android.onPdfReady === 'function') {
         try { window.Android.onPdfReady(dataUrl); } catch (_) {}
       }
 
       if (auto) {
-        // Try to navigate so WebView can pick it up visually
+        // Navigate for WebView pickup and also trigger a standard download
         try { window.location.replace(dataUrl); } catch (_) {}
-        // Also trigger a click download for normal browsers
         const a = document.createElement('a');
         a.href = blobUrl;
         a.download = opt.filename;
@@ -209,15 +205,14 @@
         a.click();
         a.remove();
       } else {
-        // Manual click path: save normally
-        html2pdf().from(element).set(opt).save();
+        // Manual button flow: save directly
+        await html2pdf().from(element).set(opt).save();
       }
     } catch (e) {
       console.error('PDF generation failed:', e);
     } finally {
-      // restore UI
-      button.style.display = prevButtonDisplay;
-      if (openness) openness.style.display = prevOpenDisplay ?? '';
+      // Slight delay helps ensure html2canvas has finished reading styles
+      setTimeout(() => document.body.classList.remove('pdf-mode'), 100);
     }
   }
 
@@ -294,9 +289,8 @@
         div.appendChild(hd); div.appendChild(ul); techCont.appendChild(div);
       });
 
-      // If URL has ?pdf: auto generate after layout settles
+      // Auto-generate PDF if requested via query
       if (hasPdfQuery()) {
-        // small delay allows layout to fully measure for html2canvas
         setTimeout(() => generatePdf({ auto: true }), 350);
       }
     })
@@ -307,7 +301,6 @@
     .then(r => r.json())
     .then(stacks => {
       let activeTooltip = null;
-      let activeItem = null;
 
       function createTooltip(html, position) {
         const el = document.createElement('div');
@@ -344,7 +337,6 @@
 
       function showTooltipFor(li, info) {
         if (activeTooltip) activeTooltip.remove();
-        activeItem = li;
 
         let label = li.querySelector('span.__label');
         if (!label) {
@@ -381,7 +373,7 @@
       });
 
       window.addEventListener('scroll', () => {
-        if (activeTooltip) { activeTooltip.remove(); activeTooltip = null; activeItem = null; }
+        if (activeTooltip) { activeTooltip.remove(); activeTooltip = null; }
       });
     })
     .catch(err => console.error('tooltip init failed:', err));
