@@ -171,9 +171,24 @@
     document.body.classList.add('pdf-mode');
 
     const element = document.getElementById('cv-container');
+
+    // Build dynamic filename: CV_{name}_{MM}_{YYYY}.pdf with diacritic-safe name
+    const rawName = document.getElementById('name').textContent || 'CV';
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+
+    // Normalize name: remove diacritics, replace spaces, allow only [A-Za-z0-9_-]
+    const safeName = rawName
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // strip accents, e.g., ü -> u
+      .replace(/\s+/g, '_')                              // spaces -> underscore
+      .replace(/[^a-zA-Z0-9_-]/g, '');                    // remove unsafe chars
+
+    const filename = `CV_${safeName}_${month}_${year}.pdf`;
+
     const opt = {
       margin: 0.5,
-      filename: 'CV_Lutfi_Tekin.pdf',
+      filename: filename,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
@@ -200,7 +215,7 @@
         try { window.location.replace(dataUrl); } catch (_) {}
         const a = document.createElement('a');
         a.href = blobUrl;
-        a.download = opt.filename;
+        a.download = filename;
         document.body.appendChild(a);
         a.click();
         a.remove();
