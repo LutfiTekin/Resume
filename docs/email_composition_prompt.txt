@@ -15,6 +15,7 @@ Rules:
   }
 - Always return JSON valid to be parsed into `JobApplicationMail`.
 - `email`: Use `job.extracted_email` if available, otherwise null.
+- `subject`: "Job Application - {job.title} at {job.company}"
 - `content`: A short, polite, professional job application email body:
   - Address the hiring manager or recruiter generically if no name available.
   - Mention the role title and company.
@@ -33,5 +34,6 @@ Tone:
 Output JSON format:
 {
   "email": "hr@company.com" | null,
+  "subject": "Job Application - {job.title} at {job.company}",
   "content": "Dear Hiring Manager, ... Best regards, {cv.name}"
 }
