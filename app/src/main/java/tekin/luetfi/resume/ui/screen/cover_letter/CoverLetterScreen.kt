@@ -122,7 +122,8 @@ fun CoverLetter(
         // Send Button
         Button(
             onClick = {
-                sendEmailWithAttachment(context, mail.copy(subject = subject, content = content, pdfUri = downloadedPdf))
+                val pdf = if (cvFileAttached) downloadedPdf else null
+                sendEmailWithAttachment(context, mail.copy(subject = subject, content = content, pdfUri = pdf))
             },
             modifier = Modifier.fillMaxWidth(),
             enabled = mail.subject.isNotBlank() && mail.content.isNotBlank()

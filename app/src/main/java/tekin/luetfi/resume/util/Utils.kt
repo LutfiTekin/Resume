@@ -28,6 +28,7 @@ const val REPORTS_DATABASE = "rdb"
 const val REPORTS_TABLE = "rt"
 
 const val PDF_MIME_TYPE = "application/pdf"
+const val MESSAGE_MIME_TYPE = "message/rfc822"
 
 private val ymFmtIn = DateTimeFormatter.ofPattern("yyyy-MM")
 private val ymOut = DateTimeFormatter.ofPattern("MMM yyyy", Locale.ENGLISH)
