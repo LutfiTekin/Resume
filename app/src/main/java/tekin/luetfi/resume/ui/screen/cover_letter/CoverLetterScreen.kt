@@ -2,7 +2,6 @@ package tekin.luetfi.resume.ui.screen.cover_letter
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,14 +35,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.map
 import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.Cv
 import tekin.luetfi.resume.domain.model.JobApplicationMail
 import tekin.luetfi.resume.domain.model.MatchResponse
 import tekin.luetfi.resume.ui.component.AnimatedConfirmationIndeterminate
-import tekin.luetfi.resume.ui.screen.analyze.AnalyzeJobState
-import tekin.luetfi.resume.ui.screen.analyze.AnalyzeJobViewModel
 import tekin.luetfi.resume.util.SynonymsDictionary.applySynonyms
 import tekin.luetfi.resume.util.SynonymsDictionary.considerSynonyms
 import tekin.luetfi.resume.util.SynonymsDictionary.createSynonymsList
@@ -53,22 +49,13 @@ import tekin.luetfi.resume.util.sendEmailWithAttachment
 import kotlin.random.Random
 
 @Composable
-fun CoverLetterScreen(modifier: Modifier, cv: Cv, analyzeJobViewModel: AnalyzeJobViewModel){
+fun CoverLetterScreen(modifier: Modifier, cv: Cv, report: MatchResponse){
 
-    val report: MatchResponse? by analyzeJobViewModel.state
-        .map {
-            if (it is AnalyzeJobState.ReportReady){
-                it.report
-            }else null
-
-        }.collectAsStateWithLifecycle(null)
     val coverLetterViewModel: CoverLetterViewModel = hiltViewModel()
     val state by coverLetterViewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(report){
-        report?.let {
-            coverLetterViewModel.generateCoverLetter(it, cv)
-        }
+        coverLetterViewModel.generateCoverLetter(report, cv)
     }
 
     when (state) {

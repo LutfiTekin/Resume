@@ -1,5 +1,8 @@
 package tekin.luetfi.resume.domain.model
 
+import android.net.Uri
+import android.os.Bundle
+import androidx.navigation.NavType
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.serialization.Serializable
@@ -138,3 +141,24 @@ data class WordAssociationResponse(
     @param:Json(name = "word_associations") val wordAssociations: Map<String, List<String>>,
     @param:Json(name = "alternative_phrases") val alternativePhrases: List<String>
 )
+
+
+val MatchResponseNavType = object : NavType<MatchResponse>(isNullableAllowed = false) {
+    override fun get(bundle: Bundle, key: String): MatchResponse? {
+        return bundle.getString(key)?.let {
+            kotlinx.serialization.json.Json.decodeFromString<MatchResponse>(it)
+        }
+    }
+
+    override fun put(bundle: Bundle, key: String, value: MatchResponse) {
+        bundle.putString(key, kotlinx.serialization.json.Json.encodeToString(value))
+    }
+
+    override fun parseValue(value: String): MatchResponse {
+        return kotlinx.serialization.json.Json.decodeFromString(Uri.decode(value))
+    }
+
+    override fun serializeAsValue(value: MatchResponse): String {
+        return Uri.encode(kotlinx.serialization.json.Json.encodeToString(value))
+    }
+}

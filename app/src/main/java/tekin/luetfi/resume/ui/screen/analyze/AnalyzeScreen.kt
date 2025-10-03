@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import tekin.luetfi.resume.domain.model.Cv
+import tekin.luetfi.resume.domain.model.MatchResponse
 import tekin.luetfi.resume.ui.theme.CvTheme
 
 
@@ -18,8 +19,8 @@ import tekin.luetfi.resume.ui.theme.CvTheme
 fun AnalyzeScreen(
     modifier: Modifier,
     cv: Cv,
-    viewModel: AnalyzeJobViewModel,
-    onGenerateCoverLetter: () -> Unit = {}
+    viewModel: AnalyzeJobViewModel = hiltViewModel(),
+    onGenerateCoverLetter: (MatchResponse) -> Unit = {}
 ) {
 
     val analyzeJobState by viewModel.state.collectAsStateWithLifecycle(AnalyzeJobState.Start)
@@ -57,7 +58,7 @@ fun AnalyzeScreen(
             report = state.report,
             onSaveReport = viewModel::saveReport,
             onDeleteReport = viewModel::deleteReport,
-            onGenerateCoverLetter = onGenerateCoverLetter
+            onGenerateCoverLetter = { onGenerateCoverLetter(state.report) }
         )
 
         AnalyzeJobState.Start -> {

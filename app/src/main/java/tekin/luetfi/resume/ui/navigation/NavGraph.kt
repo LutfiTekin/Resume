@@ -12,11 +12,15 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
+import tekin.luetfi.resume.domain.model.MatchResponse
+import tekin.luetfi.resume.domain.model.MatchResponseNavType
 import tekin.luetfi.resume.ui.screen.analyze.AnalyzeJobViewModel
 import tekin.luetfi.resume.ui.screen.analyze.AnalyzeScreen
 import tekin.luetfi.resume.ui.screen.cover_letter.CoverLetterScreen
 import tekin.luetfi.resume.ui.screen.home.HomeScreen
 import tekin.luetfi.resume.ui.screen.home.CvViewModel
+import kotlin.reflect.typeOf
 
 @Composable
 fun AppNavHost(
@@ -26,7 +30,6 @@ fun AppNavHost(
 ) {
     val vm: CvViewModel = hiltViewModel()
     val uiState by vm.uiState.collectAsState()
-    val analyzeJobViewModel: AnalyzeJobViewModel = hiltViewModel()
 
 
     NavHost(
@@ -49,20 +52,24 @@ fun AppNavHost(
             uiState.resume?.let { cv ->
                 AnalyzeScreen(
                     modifier = modifier,
-                    cv = cv,
-                    viewModel = analyzeJobViewModel
+                    cv = cv
                 ){
-                    navController.navigate(CoverLetterRoute)
+                    navController.navigate(CoverLetterRoute(it))
                 }
             }
         }
 
-        composable<CoverLetterRoute> {
+        composable<CoverLetterRoute>(
+            typeMap = mapOf(typeOf<MatchResponse>() to MatchResponseNavType)
+        ) {
+
+            val data = it.toRoute<CoverLetterRoute>()
+
             uiState.resume?.let { cv ->
                 CoverLetterScreen(
                     modifier = modifier,
                     cv = cv,
-                    analyzeJobViewModel = analyzeJobViewModel
+                    report = data.report
                 )
             }
         }
@@ -94,7 +101,7 @@ object HomeRoute
 object JobAnalyzerRoute
 
 @Serializable
-object CoverLetterRoute
+data class CoverLetterRoute(val report: MatchResponse)
 
 
 @Serializable
