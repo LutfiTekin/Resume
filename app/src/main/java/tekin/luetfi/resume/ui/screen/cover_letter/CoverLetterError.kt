@@ -1,4 +1,4 @@
-package tekin.luetfi.resume.ui.screen.analyze
+package tekin.luetfi.resume.ui.screen.cover_letter
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,11 +22,10 @@ import androidx.compose.ui.unit.dp
 import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.MatchError
 import tekin.luetfi.resume.ui.component.AnimatedConfirmation
-import tekin.luetfi.resume.util.SynonymsDictionary.failedSynonyms
 import tekin.luetfi.resume.util.getFailedMessageList
 
 @Composable
-fun AnalyzeError(
+fun CoverLetterError(
     modifier: Modifier = Modifier,
     error: MatchError?,
     onRetry: () -> Unit
@@ -41,7 +40,7 @@ fun AnalyzeError(
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = error?.error?.message ?: stringResource(R.string.analyze_error_title),
+                text = error?.error?.message ?: stringResource(R.string.cover_letter_error_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Center,
@@ -66,5 +65,3 @@ fun AnalyzeError(
         }
     }
 }
-
-

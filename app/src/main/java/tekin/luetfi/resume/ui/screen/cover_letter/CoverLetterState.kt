@@ -5,7 +5,7 @@ import tekin.luetfi.resume.domain.model.MatchError
 
 sealed class CoverLetterState {
     object Loading: CoverLetterState()
-    class Error(val matchError: MatchError?): CoverLetterState()
+    class Error(val error: MatchError?): CoverLetterState()
     class Success(val mail: JobApplicationMail): CoverLetterState()
 
 }

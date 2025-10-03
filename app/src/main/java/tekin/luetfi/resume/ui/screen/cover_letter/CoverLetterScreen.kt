@@ -44,7 +44,9 @@ fun CoverLetterScreen(modifier: Modifier, cv: Cv, report: MatchResponse){
     }
 
     when (state) {
-        is CoverLetterState.Error -> CoverLetterLoading()
+        is CoverLetterState.Error -> CoverLetterError(modifier = Modifier.fillMaxSize(), error = (state as CoverLetterState.Error).error) {
+            coverLetterViewModel.generateCoverLetter(report, cv)
+        }
         CoverLetterState.Loading -> CoverLetterLoading(modifier = modifier.fillMaxSize())
         is CoverLetterState.Success -> CoverLetter(modifier = modifier.fillMaxSize(), mail = (state as CoverLetterState.Success).mail)
     }

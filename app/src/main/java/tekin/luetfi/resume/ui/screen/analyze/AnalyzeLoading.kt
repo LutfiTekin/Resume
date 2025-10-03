@@ -52,6 +52,7 @@ import tekin.luetfi.resume.util.SynonymsDictionary.createSynonymsList
 import tekin.luetfi.resume.util.SynonymsDictionary.skipSynonyms
 import tekin.luetfi.resume.util.SynonymsDictionary.spokenLanguagesInTech
 import tekin.luetfi.resume.util.SynonymsDictionary.techStackSectionSynonyms
+import tekin.luetfi.resume.util.getFailedMessageList
 import kotlin.random.Random
 
 const val FINAL_VERDICT = -1

@@ -8,10 +8,13 @@ import androidx.compose.ui.res.stringResource
 import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.Cv
 import tekin.luetfi.resume.domain.model.PeriodInfo
+import tekin.luetfi.resume.util.SynonymsDictionary.failedSynonyms
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.collections.plus
+import kotlin.collections.shuffled
 import kotlin.math.floor
 
 
@@ -70,6 +73,13 @@ fun Cv.openToOpportunities(): String {
         "not_interested" -> stringResource(R.string.op_not_interested)
         else -> "Loading Content"
     }
+}
+
+fun getFailedMessageList(label: String): List<String> {
+    val list = (failedSynonyms.take(failedSynonyms.size / 2) + listOf(label)).shuffled()
+    val padding = (failedSynonyms - list).take(failedSynonyms.size / 3)
+    //Ensure that "Failed" message won't end up as first or last item
+    return padding + list + padding
 }
 
 

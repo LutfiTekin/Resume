@@ -59,7 +59,8 @@
     <string name="generating_cover_letter_19">Finalizing cover letter…</string>
     <string name="generating_cover_letter_20">Polishing your application…</string>
     <string name="analyzing_multi_model">Analyzing the job description with selected models</string>
-    <string name="error_title">Could not analyze</string>
+    <string name="analyze_error_title">Could not analyze</string>
     <string name="error_description">An unknown error occurred</string>
     <string name="retry_button">Try again</string>
+    <string name="cover_letter_error_title">Could not generate a cover letter</string>
 </resources>
