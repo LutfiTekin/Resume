@@ -17,9 +17,11 @@ import tekin.luetfi.resume.ui.theme.CvTheme
 @Composable
 fun AnalyzeScreen(
     modifier: Modifier,
-    cv: Cv
+    cv: Cv,
+    viewModel: AnalyzeJobViewModel,
+    onGenerateCoverLetter: () -> Unit = {}
 ) {
-    val viewModel: AnalyzeJobViewModel = hiltViewModel()
+
     val analyzeJobState by viewModel.state.collectAsStateWithLifecycle(AnalyzeJobState.Start)
 
     val previousReports by viewModel.previousReports.collectAsStateWithLifecycle(emptyList())
@@ -54,13 +56,15 @@ fun AnalyzeScreen(
             online = state.online,
             report = state.report,
             onSaveReport = viewModel::saveReport,
-            onDeleteReport = viewModel::deleteReport
+            onDeleteReport = viewModel::deleteReport,
+            onGenerateCoverLetter = onGenerateCoverLetter
         )
 
         AnalyzeJobState.Start -> {
             AnalyzeStart(
                 modifier = modifier,
                 previousReports = previousReports,
+                viewModel = viewModel
             ) { jobDesc, models ->
                 viewModel.analyze(
                     jobDescription = jobDesc,

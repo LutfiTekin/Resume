@@ -2,7 +2,9 @@ package tekin.luetfi.resume.domain.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.serialization.Serializable
 
+@Serializable
 @JsonClass(generateAdapter = true)
 data class MatchResponse(
     val job: JobInfo,
@@ -18,7 +20,7 @@ data class MatchResponse(
     @param:Json(name = "score_1_to_5") val score1to5: Int
 )
 
-
+@Serializable
 @JsonClass(generateAdapter = true)
 data class JobInfo(
     val title: String,
@@ -31,6 +33,7 @@ data class JobInfo(
     @param:Json(name = "tech_keywords") val techKeywords: List<String>
 )
 
+@Serializable
 @JsonClass(generateAdapter = true)
 data class ExtractedRequirements(
     @param:Json(name = "must_haves") val mustHaves: List<String>,
@@ -39,6 +42,7 @@ data class ExtractedRequirements(
     @param:Json(name = "years_experience_max") val yearsExperienceMax: Int?
 )
 
+@Serializable
 @JsonClass(generateAdapter = true)
 data class CvAtAGlance(
     val name: String,
@@ -48,6 +52,7 @@ data class CvAtAGlance(
     @param:Json(name = "key_tech") val keyTech: List<String>
 )
 
+@Serializable
 @JsonClass(generateAdapter = true)
 data class FitAnalysis(
     val matched: List<String>,
@@ -56,6 +61,7 @@ data class FitAnalysis(
     val summary: String? = null
 )
 
+@Serializable
 @JsonClass(generateAdapter = true)
 data class LocationFit(
     @param:Json(name = "cv_location") val cvLocation: String,
@@ -63,6 +69,7 @@ data class LocationFit(
     val notes: String
 )
 
+@Serializable
 @JsonClass(generateAdapter = true)
 data class LanguageFit(
     @param:Json(name = "required_languages") val requiredLanguages: List<String>,
@@ -70,6 +77,7 @@ data class LanguageFit(
     @param:Json(name = "missing_or_insufficient") val missingOrInsufficient: List<String>
 )
 
+@Serializable
 @JsonClass(generateAdapter = true)
 data class ResumeActions(
     val add: List<String>,
@@ -80,6 +88,7 @@ data class ResumeActions(
 )
 
 
+@Serializable
 @JsonClass(generateAdapter = false)
 enum class WorkMode {
     @Json(name = "remote") REMOTE,
@@ -87,6 +96,7 @@ enum class WorkMode {
     @Json(name = "onsite") ONSITE
 }
 
+@Serializable
 @JsonClass(generateAdapter = false)
 enum class FinalRecommendation {
     @Json(name = "APPLY") APPLY,
@@ -94,6 +104,7 @@ enum class FinalRecommendation {
     @Json(name = "SKIP") SKIP
 }
 
+@Serializable
 @JsonClass(generateAdapter = true)
 data class MatchError(
     val error: ErrorInfo
@@ -104,6 +115,7 @@ data class MatchError(
         }
 }
 
+@Serializable
 @JsonClass(generateAdapter = true)
 data class ErrorInfo(
     val type: ErrorType,
@@ -111,6 +123,7 @@ data class ErrorInfo(
     val details: String
 )
 
+@Serializable
 @JsonClass(generateAdapter = false)
 enum class ErrorType {
     @Json(name = "validation_error") VALIDATION_ERROR,
@@ -118,6 +131,7 @@ enum class ErrorType {
     @Json(name = "input_error") INPUT_ERROR
 }
 
+@Serializable
 @JsonClass(generateAdapter = true)
 data class WordAssociationResponse(
     @param:Json(name = "original_phrase") val originalPhrase: String,

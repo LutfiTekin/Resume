@@ -19,4 +19,8 @@ interface Api {
     @GET("fit_summary_prompt.txt")
     suspend fun getSummaryPrompt(): ResponseBody
 
+    @Headers("Cache-Control: no-cache")
+    @GET("job_application_email_prompt.txt")
+    suspend fun getCoverLetterPrompt(): ResponseBody
+
 }

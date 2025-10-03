@@ -1,5 +1,7 @@
 package tekin.luetfi.resume.ui.screen.analyze
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,6 +36,7 @@ fun AnalyzeReport(
     report: MatchResponse,
     onSaveReport: (MatchResponse) -> Unit = {},
     onDeleteReport: (MatchResponse) -> Unit = {},
+    onGenerateCoverLetter: () -> Unit = {},
     online: Boolean
 ) {
     val scroll = rememberScrollState()
@@ -83,6 +86,8 @@ fun AnalyzeReport(
 
         // Optional: supporting sections. Keep them compact.
         SupportingFacts(report = report)
+
+        CoverLetter(report = report, onGenerateCoverLetter = onGenerateCoverLetter)
     }
 }
 
@@ -212,6 +217,26 @@ private fun ResumeTweaks(report: MatchResponse) {
             if (act.rewriteOrQuantify.isNotEmpty()) KeyValueRow("Rewrite", act.rewriteOrQuantify.joinToString())
             if (act.remove.isNotEmpty()) KeyValueRow("Remove", act.remove.joinToString())
             if (act.keywordsToInclude.isNotEmpty()) KeyValueRow("Keywords", act.keywordsToInclude.joinToString())
+        }
+    }
+}
+
+@Composable
+private fun CoverLetter(report: MatchResponse, onGenerateCoverLetter: () -> Unit = {}) {
+    if (report.finalRecommendation == FinalRecommendation.SKIP)
+        return
+    Card(modifier = Modifier
+        .fillMaxWidth()
+        .clickable{
+            onGenerateCoverLetter()
+        }) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Generate a cover letter", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.tertiary)
+            Text("Generate a cover letter using the summary and your cv data.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.tertiary)
+            report.job.extractedEmail?.let { email ->
+                Text("Email extracted from job description:", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.tertiary)
+                Text(email, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.tertiary)
+            }
         }
     }
 }

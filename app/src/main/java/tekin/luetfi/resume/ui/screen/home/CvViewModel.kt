@@ -16,7 +16,7 @@ import tekin.luetfi.resume.util.NetworkMonitor
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class CvViewModel @Inject constructor(
     private val repository: CvRepository,
     networkMonitor: NetworkMonitor
 ) : ViewModel() {

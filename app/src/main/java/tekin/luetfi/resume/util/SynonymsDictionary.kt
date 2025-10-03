@@ -218,12 +218,12 @@ object SynonymsDictionary {
     }
 
     fun createSynonymsList(subList: List<String>, list: List<String>): List<String> {
-        val otherLanguages = (list + subList).toSet() - subList
-        val shuffledOthers = otherLanguages.shuffled()
+        val otherWords = (list + subList).toSet() - subList
+        val shuffledOthers = otherWords.shuffled()
 
         val result = shuffledOthers.toMutableList()
 
-        // Insert verdict languages in middle positions only
+        // Insert target words in middle positions only
         val availablePositions = (2 until result.size - 2).toList()
         val insertPositions = availablePositions.shuffled().take(subList.size)
 

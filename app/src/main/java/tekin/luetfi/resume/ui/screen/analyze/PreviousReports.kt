@@ -31,9 +31,9 @@ import tekin.luetfi.resume.domain.model.MatchResponse
 @Composable
 fun PreviousReports(
     modifier: Modifier,
-    previousReports: List<MatchResponse>
+    previousReports: List<MatchResponse>,
+    viewModel: AnalyzeJobViewModel = hiltViewModel()
 ) {
-    val viewModel: AnalyzeJobViewModel = hiltViewModel()
 
     Column(modifier = modifier.fillMaxWidth()) {
         Text(

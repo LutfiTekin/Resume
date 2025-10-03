@@ -44,7 +44,7 @@ import tekin.luetfi.resume.domain.model.Verdict
 import tekin.luetfi.resume.domain.model.WordAssociationResponse
 import tekin.luetfi.resume.ui.component.AnimatedConfirmation
 import tekin.luetfi.resume.ui.component.AnimatedConfirmationIndeterminate
-import tekin.luetfi.resume.ui.screen.home.HomeViewModel
+import tekin.luetfi.resume.ui.screen.home.CvViewModel
 import tekin.luetfi.resume.util.SynonymsDictionary.allWorkModeSynonyms
 import tekin.luetfi.resume.util.SynonymsDictionary.applySynonyms
 import tekin.luetfi.resume.util.SynonymsDictionary.considerSynonyms
@@ -67,7 +67,7 @@ fun AnalyzeLoading(
     var showButton by remember { mutableStateOf(false) }
     var decisionNodes by remember { mutableIntStateOf(1) }
     var loadingIndex by remember { mutableIntStateOf(1) }
-    val viewModel: HomeViewModel = hiltViewModel()
+    val viewModel: CvViewModel = hiltViewModel()
     val cv by viewModel.uiState.map { it.resume }.collectAsState(null)
 
     LaunchedEffect(verdict) {
@@ -380,7 +380,7 @@ fun ModelResultItem(
 
 @SuppressLint("DiscouragedApi", "LocalContextResourcesRead")
 @Composable
-fun loadingText(index: Int): String {
+private fun loadingText(index: Int): String {
     if (index == -1) return stringResource(R.string.analyzing_text_21)
     val context = LocalContext.current
     val resourceId = remember(index) {

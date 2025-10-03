@@ -32,7 +32,7 @@ import tekin.luetfi.resume.util.openToOpportunities
 import tekin.luetfi.resume.ui.navigation.AppNavHost
 import tekin.luetfi.resume.ui.navigation.HomeRoute
 import tekin.luetfi.resume.ui.navigation.JobAnalyzerRoute
-import tekin.luetfi.resume.ui.screen.home.HomeViewModel
+import tekin.luetfi.resume.ui.screen.home.CvViewModel
 import tekin.luetfi.resume.ui.theme.AnalyzeIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,7 +42,7 @@ fun AppScaffold(
 ) {
     val snackbarHost = remember { SnackbarHostState() }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val vm: HomeViewModel = hiltViewModel()
+    val vm: CvViewModel = hiltViewModel()
     val uiState by vm.uiState.collectAsStateWithLifecycle()
     val cv by vm.uiState.mapNotNull { it.resume }.collectAsStateWithLifecycle(Cv())
 

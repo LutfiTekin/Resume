@@ -12,9 +12,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import tekin.luetfi.resume.ui.screen.analyze.AnalyzeJobViewModel
 import tekin.luetfi.resume.ui.screen.analyze.AnalyzeScreen
+import tekin.luetfi.resume.ui.screen.cover_letter.CoverLetterScreen
 import tekin.luetfi.resume.ui.screen.home.HomeScreen
-import tekin.luetfi.resume.ui.screen.home.HomeViewModel
+import tekin.luetfi.resume.ui.screen.home.CvViewModel
 
 @Composable
 fun AppNavHost(
@@ -22,8 +24,10 @@ fun AppNavHost(
     navController: NavHostController,
     startDestination: Any = HomeRoute // typed start
 ) {
-    val vm: HomeViewModel = hiltViewModel()
+    val vm: CvViewModel = hiltViewModel()
     val uiState by vm.uiState.collectAsState()
+    val analyzeJobViewModel: AnalyzeJobViewModel = hiltViewModel()
+
 
     NavHost(
         navController = navController,
@@ -33,8 +37,6 @@ fun AppNavHost(
 
         // Home
         composable<HomeRoute> {
-
-
             HomeScreen(
                 modifier = modifier,
                 uiState = uiState
@@ -47,7 +49,20 @@ fun AppNavHost(
             uiState.resume?.let { cv ->
                 AnalyzeScreen(
                     modifier = modifier,
-                    cv = cv
+                    cv = cv,
+                    viewModel = analyzeJobViewModel
+                ){
+                    navController.navigate(CoverLetterRoute)
+                }
+            }
+        }
+
+        composable<CoverLetterRoute> {
+            uiState.resume?.let { cv ->
+                CoverLetterScreen(
+                    modifier = modifier,
+                    cv = cv,
+                    analyzeJobViewModel = analyzeJobViewModel
                 )
             }
         }
@@ -77,6 +92,10 @@ object HomeRoute
 
 @Serializable
 object JobAnalyzerRoute
+
+@Serializable
+object CoverLetterRoute
+
 
 @Serializable
 data class ExperienceDetailRoute(val company: String)

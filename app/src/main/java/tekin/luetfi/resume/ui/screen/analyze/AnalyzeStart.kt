@@ -49,6 +49,7 @@ fun AnalyzeStart(
     isAnalyzing: Boolean = false,
     initialText: String = "",
     previousReports: List<MatchResponse>,
+    viewModel: AnalyzeJobViewModel,
     onAnalyze: (String, List<AnalyzeModel>) -> Unit = { _, _ -> }
 ) {
     val focus = LocalFocusManager.current
@@ -190,7 +191,8 @@ fun AnalyzeStart(
         item {
             PreviousReports(
                 modifier = Modifier.fillMaxWidth(),
-                previousReports = previousReports)
+                previousReports = previousReports,
+                viewModel = viewModel)
         }
     }
 }
