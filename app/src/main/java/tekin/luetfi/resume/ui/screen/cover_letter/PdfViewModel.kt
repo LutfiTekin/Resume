@@ -1,4 +1,4 @@
-package tekin.luetfi.resume.ui.screen.home
+package tekin.luetfi.resume.ui.screen.cover_letter
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
@@ -14,7 +14,7 @@ class PdfViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _lastPdfUri = MutableStateFlow<Uri?>(null)
-    val lastPdfUri: StateFlow<Uri?> = _lastPdfUri
+    val downloadedPdf: StateFlow<Uri?> = _lastPdfUri
 
     fun onPdfSaved(uri: Uri) {
         _lastPdfUri.value = uri

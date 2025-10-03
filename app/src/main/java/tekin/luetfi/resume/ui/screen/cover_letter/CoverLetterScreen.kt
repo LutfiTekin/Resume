@@ -1,17 +1,22 @@
 package tekin.luetfi.resume.ui.screen.cover_letter
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -44,6 +49,7 @@ import tekin.luetfi.resume.util.SynonymsDictionary.considerSynonyms
 import tekin.luetfi.resume.util.SynonymsDictionary.createSynonymsList
 import tekin.luetfi.resume.util.SynonymsDictionary.generatingSynonyms
 import tekin.luetfi.resume.util.SynonymsDictionary.loadingSynonyms
+import tekin.luetfi.resume.util.sendEmailWithAttachment
 import kotlin.random.Random
 
 @Composable
@@ -117,7 +123,7 @@ fun CoverLetterLoading(modifier: Modifier = Modifier){
             Text(modifier = Modifier, text = loadingText(loadingIndex))
             CircularProgressIndicator(modifier = Modifier)
             AnimatedConfirmationIndeterminate(modifier = Modifier.fillMaxWidth(), items = apply)
-            AnimatedConfirmationIndeterminate(modifier = Modifier.fillMaxWidth(), items = loading)
+            AnimatedConfirmationIndeterminate(modifier = Modifier.fillMaxWidth(), items = loading, delayBetweenItems = 2200)
             AnimatedConfirmationIndeterminate(modifier = Modifier.fillMaxWidth(), items = generating)
         }
     }
@@ -127,11 +133,22 @@ fun CoverLetterLoading(modifier: Modifier = Modifier){
 @Composable
 fun CoverLetter(
     modifier: Modifier = Modifier,
-    mail: JobApplicationMail,
-    onSendClick: () -> Unit = {}
+    mail: JobApplicationMail
 ) {
+    val context = LocalContext.current
+    val pdfViewModel: PdfViewModel = hiltViewModel()
     var subject by remember { mutableStateOf(mail.subject) }
     var content by remember { mutableStateOf(mail.content) }
+    val downloadedPdf: Uri? by pdfViewModel.downloadedPdf.collectAsStateWithLifecycle(null)
+    var cvFileAttached by remember { mutableStateOf(downloadedPdf != null) }
+
+    if (cvFileAttached && downloadedPdf == null){
+        //Download pdf file if user requested
+        CvWebViewScreen(
+            modifier = Modifier.fillMaxSize(),
+            viewModel = pdfViewModel)
+        return
+    }
 
 
     Column(
@@ -160,19 +177,30 @@ fun CoverLetter(
             placeholder = {  },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp),
-            maxLines = 15,
-            minLines = 10,
+                .weight(1f),
             colors = OutlinedTextFieldDefaults.colors()
         )
 
+        Row(
+            modifier = Modifier.clickable { cvFileAttached = !cvFileAttached },
+            horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(checked = cvFileAttached, onCheckedChange = { cvFileAttached = it })
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = "Attach CV File",
+                style = MaterialTheme.typography.bodyMedium)
+        }
+
         // Send Button
         Button(
-            onClick = onSendClick,
+            onClick = {
+                sendEmailWithAttachment(context, mail.copy(subject = subject, content = content, pdfUri = downloadedPdf))
+            },
             modifier = Modifier.fillMaxWidth(),
             enabled = mail.subject.isNotBlank() && mail.content.isNotBlank()
         ) {
-            Text("Send")
+            Text("Send via Default Email App")
         }
     }
 }

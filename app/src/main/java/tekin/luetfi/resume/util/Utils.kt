@@ -24,6 +24,8 @@ const val OPEN_ROUTER_AI_BASE_URL = "https://openrouter.ai/api/v1/"
 const val REPORTS_DATABASE = "rdb"
 const val REPORTS_TABLE = "rt"
 
+const val PDF_MIME_TYPE = "application/pdf"
+
 private val ymFmtIn = DateTimeFormatter.ofPattern("yyyy-MM")
 private val ymOut = DateTimeFormatter.ofPattern("MMM yyyy", Locale.ENGLISH)
 

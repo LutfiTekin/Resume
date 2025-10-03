@@ -1,4 +1,4 @@
-package tekin.luetfi.resume.ui.screen.home
+package tekin.luetfi.resume.ui.screen.cover_letter
 
 import android.net.Uri
 import android.webkit.WebView
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,15 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.delay
-import tekin.luetfi.resume.domain.model.WordAssociationResponse
 import tekin.luetfi.resume.ui.component.AnimatedConfirmation
-import tekin.luetfi.resume.ui.component.AnimatedConfirmationIndeterminate
 import tekin.luetfi.resume.ui.component.setupForPdf
 import tekin.luetfi.resume.util.CV_BASE_URL
 import tekin.luetfi.resume.util.SynonymsDictionary
 import tekin.luetfi.resume.util.SynonymsDictionary.createSynonymsList
 import tekin.luetfi.resume.util.SynonymsDictionary.loadingSynonyms
-import tekin.luetfi.resume.util.openPdf
 import kotlin.collections.component1
 import kotlin.collections.component2
 
@@ -72,7 +68,7 @@ fun CvWebViewScreen(
             )
         }else {
             mapOf(
-                SynonymsDictionary.loadingSynonyms.random() to SynonymsDictionary.loadingSynonyms.shuffled(),
+                loadingSynonyms.random() to loadingSynonyms.shuffled(),
                 SynonymsDictionary.generatingSynonyms.random() to SynonymsDictionary.generatedSynonyms.shuffled(),
                 SynonymsDictionary.pdfFileSynonyms.random() to SynonymsDictionary.pdfFileSynonyms.shuffled()
             )
