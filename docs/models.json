@@ -20,8 +20,8 @@
     "category": "FAST"
   },
   {
-    "id": "moonshotai/kimi-k2:free",
-    "displayName": "MoonshotAI",
+    "id": "qwen/qwen3-4b:free",
+    "displayName": "Qwen",
     "category": "FAST"
   }
 ]
