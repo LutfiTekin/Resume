@@ -1,0 +1,27 @@
+[
+  {
+    "id": "nvidia/nemotron-nano-9b-v2:free",
+    "displayName": "NVIDIA",
+    "category": "RELIABLE"
+  },
+  {
+    "id": "deepseek/deepseek-r1-0528:free",
+    "displayName": "DeepSeek",
+    "category": "RELIABLE"
+  },
+  {
+    "id": "meta-llama/llama-3.3-8b-instruct:free",
+    "displayName": "Meta",
+    "category": "FASTEST"
+  },
+  {
+    "id": "google/gemini-2.0-flash-exp:free",
+    "displayName": "Gemini",
+    "category": "FAST"
+  },
+  {
+    "id": "openai/gpt-oss-120b:free",
+    "displayName": "OpenAI",
+    "category": "FASTEST"
+  }
+]
