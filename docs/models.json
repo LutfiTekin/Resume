@@ -20,11 +20,6 @@
     "category": "FAST"
   },
   {
-    "id": "openai/gpt-oss-120b:free",
-    "displayName": "OpenAI",
-    "category": "FASTEST"
-  },
-  {
     "id": "moonshotai/kimi-k2:free",
     "displayName": "MoonshotAI",
     "category": "FAST"
