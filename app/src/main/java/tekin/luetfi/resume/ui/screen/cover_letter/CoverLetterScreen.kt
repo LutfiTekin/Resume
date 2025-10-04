@@ -28,9 +28,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import tekin.luetfi.resume.domain.model.AnalyzeModel
 import tekin.luetfi.resume.domain.model.Cv
 import tekin.luetfi.resume.domain.model.JobApplicationMail
 import tekin.luetfi.resume.domain.model.MatchResponse
+import tekin.luetfi.resume.ui.screen.analyze.AvailableModelsViewModel
 import tekin.luetfi.resume.util.sendEmailWithAttachment
 
 @Composable
@@ -38,14 +40,20 @@ fun CoverLetterScreen(modifier: Modifier, cv: Cv, report: MatchResponse){
 
     val coverLetterViewModel: CoverLetterViewModel = hiltViewModel()
     val state by coverLetterViewModel.state.collectAsStateWithLifecycle()
+    val availableModelsViewModel: AvailableModelsViewModel = hiltViewModel()
+    val availableModels by availableModelsViewModel.models.collectAsStateWithLifecycle(listOf(AnalyzeModel.default))
+
 
     LaunchedEffect(report){
-        coverLetterViewModel.generateCoverLetter(report, cv)
+        //Make sure that used model is still available
+        val model = availableModels.firstOrNull { it == report.usedModel } ?: availableModels.first()
+        coverLetterViewModel.generateCoverLetter(report, cv, model)
     }
 
     when (state) {
         is CoverLetterState.Error -> CoverLetterError(modifier = Modifier.fillMaxSize(), error = (state as CoverLetterState.Error).error) {
-            coverLetterViewModel.generateCoverLetter(report, cv)
+            //retry with a random model from available models list
+            coverLetterViewModel.generateCoverLetter(report, cv, availableModels.random())
         }
         CoverLetterState.Loading -> CoverLetterLoading(modifier = modifier.fillMaxSize())
         is CoverLetterState.Success -> CoverLetter(modifier = modifier.fillMaxSize(), mail = (state as CoverLetterState.Success).mail)

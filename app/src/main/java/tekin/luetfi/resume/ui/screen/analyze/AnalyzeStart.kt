@@ -38,6 +38,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.AnalyzeModel
 import tekin.luetfi.resume.domain.model.MatchResponse
@@ -56,7 +58,11 @@ fun AnalyzeStart(
     val clipboard = LocalClipboard.current
     val context = LocalContext.current
 
-    var selectedModel by remember { mutableStateOf(AnalyzeModel.entries.first()) }
+    val availableModelsViewModel: AvailableModelsViewModel = hiltViewModel()
+
+    val availableModels by availableModelsViewModel.models.collectAsStateWithLifecycle(listOf(AnalyzeModel.default))
+
+    var selectedModel by remember { mutableStateOf(availableModels.first()) }
 
     var selectedModels: List<AnalyzeModel> by remember(selectedModel) { mutableStateOf(listOf(selectedModel)) }
 
@@ -109,6 +115,7 @@ fun AnalyzeStart(
                 onSelect = {
                     selectedModel = it
                 },
+                availableModels = availableModels,
                 onMultipleModelsSelected = {
                     selectedModels = it
                 })
@@ -201,6 +208,7 @@ fun AnalyzeStart(
 fun ModelPicker(
     selected: AnalyzeModel,
     onSelect: (AnalyzeModel) -> Unit,
+    availableModels: List<AnalyzeModel>,
     onMultipleModelsSelected: (List<AnalyzeModel>) -> Unit = {}
 ) {
     var selectMultipleModels by remember { mutableStateOf(false) }
@@ -225,7 +233,7 @@ fun ModelPicker(
                         .fillMaxWidth()
                 )
                 ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    AnalyzeModel.entries.forEach { model ->
+                    availableModels.forEach { model ->
                         DropdownMenuItem(
                             text = {
                                 Text(
@@ -291,7 +299,7 @@ fun ModelPicker(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                AnalyzeModel.entries.forEach { model ->
+                availableModels.forEach { model ->
                     ModelSelectionChip(
                         model = model,
                         isSelected = selectedModels.contains(model),

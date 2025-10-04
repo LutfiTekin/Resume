@@ -1,35 +1,22 @@
 package tekin.luetfi.resume.domain.model
 
-enum class AnalyzeModel(
+import kotlinx.serialization.Serializable
+
+
+@Serializable
+data class AnalyzeModel(
     val id: String,
     val displayName: String,
     val category: Category
 ) {
-    NEMOTRON_NANO(
-        id = "nvidia/nemotron-nano-9b-v2:free",
-        displayName = "NVIDIA",
-        category = Category.RELIABLE
-    ),
-    DEEPSEEK_R1(
-        id = "deepseek/deepseek-r1-0528:free",
-        displayName = "DeepSeek",
-        category = Category.RELIABLE
-    ),
-    META_LLAMA_3_3_8B(
-        id = "meta-llama/llama-3.3-8b-instruct:free",
-        displayName = "Meta",
-        category = Category.FASTEST
-    ),
-    GEMINI_2_0_FLASH(
-        id = "google/gemini-2.0-flash-exp:free",
-        displayName = "Gemini",
-        category = Category.FAST
-    ),
-    GPT_OSS_120B(
-        id = "openai/gpt-oss-120b:free",
-        displayName = "OpenAI",
-        category = Category.FASTEST
-    );
+    @Serializable
+    enum class Category {
+        FAST, RELIABLE, FASTEST
+    }
 
-    enum class Category { FAST, RELIABLE, FASTEST }
+    companion object{
+        val default = AnalyzeModel("nvidia/nemotron-nano-9b-v2:free","NVIDIA", Category.FASTEST)
+
+    }
+
 }

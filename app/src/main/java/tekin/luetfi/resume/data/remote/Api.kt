@@ -3,6 +3,7 @@ package tekin.luetfi.resume.data.remote
 import okhttp3.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import tekin.luetfi.resume.domain.model.AnalyzeModel
 import tekin.luetfi.resume.domain.model.Cv
 
 interface Api {
@@ -22,5 +23,9 @@ interface Api {
     @Headers("Cache-Control: no-cache")
     @GET("job_application_email_prompt.txt")
     suspend fun getCoverLetterPrompt(): ResponseBody
+
+    @Headers("Cache-Control: public, max-age=3600, immutable")
+    @GET("models.json")
+    suspend fun getAvailableModels(): List<AnalyzeModel>
 
 }

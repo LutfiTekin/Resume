@@ -121,6 +121,7 @@ class DefaultJobAnalyzerRepository(
         return@withContext completionResponse.matchResponseOrNull(moshi) ?: throw Exception("Failed to generate cover letter")
     }
 
+
     override suspend fun saveJobReport(report: MatchResponse) = withContext(dispatcher) {
         db.saveReport(report.toEntity())
     }

@@ -20,8 +20,18 @@ data class MatchResponse(
     @param:Json(name = "questions_for_recruiter") val questionsForRecruiter: List<String>,
     @param:Json(name = "risk_flags") val riskFlags: List<String>,
     @param:Json(name = "final_recommendation") val finalRecommendation: FinalRecommendation,
-    @param:Json(name = "score_1_to_5") val score1to5: Int
-)
+    @param:Json(name = "score_1_to_5") val score1to5: Int,
+    @Transient val model: AnalyzeModel? = null
+){
+    //Keep track of used model
+    fun attachModel(model: AnalyzeModel): MatchResponse {
+        return copy(model = model)
+    }
+
+    //fallback to default model
+    val usedModel: AnalyzeModel
+        get() = model ?: AnalyzeModel.default
+}
 
 @Serializable
 @JsonClass(generateAdapter = true)

@@ -14,6 +14,8 @@ interface JobAnalyzerRepository {
     suspend fun generateCoverLetter(reportJson: String, cvJson: String, model: AnalyzeModel): JobApplicationMail
 
 
+
+
     //Local operations
     suspend fun saveJobReport(report: MatchResponse)
     suspend fun getJobReports(): List<MatchResponse>

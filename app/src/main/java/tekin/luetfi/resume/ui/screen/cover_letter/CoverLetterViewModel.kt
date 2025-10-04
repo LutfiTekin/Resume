@@ -30,7 +30,7 @@ class CoverLetterViewModel @Inject constructor(
             initialValue = CoverLetterState.Loading
         )
 
-    fun generateCoverLetter(report: MatchResponse, cv: Cv) {
+    fun generateCoverLetter(report: MatchResponse, cv: Cv, model: AnalyzeModel) {
         val cvJson = Json.encodeToString(Cv.serializer(), cv)
         val reportJson = Json.encodeToString(MatchResponse.serializer(), report)
         viewModelScope.launch {
@@ -39,7 +39,7 @@ class CoverLetterViewModel @Inject constructor(
                 repository.generateCoverLetter(
                     reportJson = reportJson,
                     cvJson = cvJson,
-                    model = AnalyzeModel.entries.first()
+                    model = model
                 )
             }.onSuccess {
                 _state.emit(CoverLetterState.Success(it))

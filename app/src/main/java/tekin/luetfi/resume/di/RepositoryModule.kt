@@ -11,8 +11,10 @@ import tekin.luetfi.resume.data.remote.Api
 import tekin.luetfi.resume.data.remote.OpenRouterAiApi
 import tekin.luetfi.resume.data.repository.DefaultCvRepository
 import tekin.luetfi.resume.data.repository.DefaultJobAnalyzerRepository
+import tekin.luetfi.resume.data.repository.DefaultModelsRepository
 import tekin.luetfi.resume.domain.repository.CvRepository
 import tekin.luetfi.resume.domain.repository.JobAnalyzerRepository
+import tekin.luetfi.resume.domain.repository.ModelsRepository
 import javax.inject.Singleton
 
 @Module
@@ -47,6 +49,12 @@ object RepositoryModule {
             moshi = moshi,
             db = db
         )
+
+    @Provides
+    @Singleton
+    fun provideDefaultModelsRepository(api: Api): ModelsRepository = DefaultModelsRepository(api)
+
+
 
 
 }

@@ -60,7 +60,7 @@ class AnalyzeJobViewModel @Inject constructor(
                 val summary = repository.summarizeJob(it.fitAnalysis.summary, model)
                 _state.emit(AnalyzeJobState.Loading("Final Verdict", it.verdict.copy(summary = summary)))
                 userActionChannel.receive()
-                _state.emit(AnalyzeJobState.ReportReady(it, online = true))
+                _state.emit(AnalyzeJobState.ReportReady(it.attachModel(model), online = true))
             }.onFailure {
                 if (it is ChatCompletionResponse.JobAnalyzeException) {
                     _state.emit(AnalyzeJobState.Error(it.error))
@@ -98,7 +98,7 @@ class AnalyzeJobViewModel @Inject constructor(
                         repository.analyzeJob(jobDescription, json, model)
                     }.fold(
                         onSuccess = { response ->
-                            ModelResult(model, ModelStatus.Completed, response)
+                            ModelResult(model, ModelStatus.Completed, response.attachModel(model))
                         },
                         onFailure = { error ->
                             val matchError = if (error is ChatCompletionResponse.JobAnalyzeException) {
