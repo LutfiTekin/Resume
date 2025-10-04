@@ -71,9 +71,7 @@ class AnalyzeJobViewModel @Inject constructor(
         }
     }
 
-    /**
-     * TODO Analyze multiple models concurrently
-     */
+
     fun analyze(jobDescription: String, cv: Cv, models: List<AnalyzeModel>) {
         if (models.size == 1) {
             // Use existing single model flow

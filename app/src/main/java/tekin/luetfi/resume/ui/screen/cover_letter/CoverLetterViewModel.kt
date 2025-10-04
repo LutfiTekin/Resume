@@ -39,7 +39,7 @@ class CoverLetterViewModel @Inject constructor(
                 repository.generateCoverLetter(
                     reportJson = reportJson,
                     cvJson = cvJson,
-                    model = AnalyzeModel.GROK_4_FAST
+                    model = AnalyzeModel.entries.first()
                 )
             }.onSuccess {
                 _state.emit(CoverLetterState.Success(it))

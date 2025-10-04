@@ -56,7 +56,7 @@ fun AnalyzeStart(
     val clipboard = LocalClipboard.current
     val context = LocalContext.current
 
-    var selectedModel by remember { mutableStateOf(AnalyzeModel.GROK_4_FAST) }
+    var selectedModel by remember { mutableStateOf(AnalyzeModel.entries.first()) }
 
     var selectedModels: List<AnalyzeModel> by remember(selectedModel) { mutableStateOf(listOf(selectedModel)) }
 

@@ -5,11 +5,6 @@ enum class AnalyzeModel(
     val displayName: String,
     val category: Category
 ) {
-    GROK_4_FAST(
-        id = "x-ai/grok-4-fast:free",
-        displayName = "Grok",
-        category = Category.FAST
-    ),
     NEMOTRON_NANO(
         id = "nvidia/nemotron-nano-9b-v2:free",
         displayName = "NVIDIA",
