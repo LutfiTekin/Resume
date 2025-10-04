@@ -23,5 +23,10 @@
     "id": "qwen/qwen3-4b:free",
     "displayName": "Qwen",
     "category": "FAST"
+  },
+  {
+    "id": "x-ai/grok-4-fast",
+    "displayName": "Grok",
+    "category": "FAST"
   }
 ]
