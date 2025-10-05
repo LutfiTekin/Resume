@@ -7,11 +7,20 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
@@ -43,6 +52,7 @@ import tekin.luetfi.resume.ui.theme.CvTheme
 import tekin.luetfi.resume.util.Mocks
 import tekin.luetfi.resume.util.SynonymsDictionary.errorSynonyms
 import tekin.luetfi.resume.util.SynonymsDictionary.loadingSynonyms
+import tekin.luetfi.resume.util.isLargeScreen
 import java.util.Locale
 
 
@@ -123,6 +133,66 @@ fun Home(
     modifier: Modifier = Modifier,
     cv: Cv
 ) {
+    if (isLargeScreen()) {
+        TabletLayout(
+            modifier = modifier,
+            cv = cv
+        )
+    } else {
+        PhoneLayout(
+            modifier = modifier,
+            cv = cv
+        )
+    }
+}
+
+@Composable
+fun TabletLayout(modifier: Modifier, cv: Cv) {
+    Row(modifier = modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize().weight(1f),
+            contentPadding = PaddingValues(16.dp),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                ContactSection(cv)
+            }
+            item {
+                Text(text = "Tech Stack", style = MaterialTheme.typography.titleLarge)
+            }
+            item {
+                cv.techStack.forEach { stack ->
+                    TechStackColumn(stack)
+                }
+            }
+        }
+
+        LazyVerticalStaggeredGrid(
+            modifier = Modifier.weight(1.5f).padding(horizontal = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalItemSpacing = 16.dp,
+            columns = StaggeredGridCells.Fixed(2),) {
+            item(span = StaggeredGridItemSpan.FullLine){
+                Text(
+                    modifier = Modifier.padding(top = 16.dp),
+                    text = "Experience", style = MaterialTheme.typography.titleLarge)
+            }
+
+            items(cv.experience) { experience ->
+                //List of experience
+                ExperienceCard(experience) {
+
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun PhoneLayout(modifier: Modifier, cv: Cv) {
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf(
         stringResource(R.string.tab_experience),
@@ -166,31 +236,8 @@ fun Home(
             TAB_TECH -> {
                 item {
                     cv.techStack.forEach { stack ->
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(text = stack.key.replaceFirstChar {
-                                if (it.isLowerCase()) it.titlecase(
-                                    Locale.ENGLISH
-                                ) else it.toString()
-                            }, style = MaterialTheme.typography.titleMedium)
-                            CompositionLocalProvider(
-                                LocalMinimumInteractiveComponentSize provides 32.dp
-                            ){
-                                FlowRow(
-                                    modifier = Modifier.padding(bottom = 8.dp),
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                                ) {
-                                    stack.value.forEach { tech ->
-                                        TechStackChip(tech)
-                                    }
-                                }
-                            }
-
-                        }
+                        TechStackColumn(stack)
                     }
-
                 }
             }
         }
@@ -199,6 +246,32 @@ fun Home(
     }
 }
 
+@Composable
+private fun TechStackColumn(stack: Map.Entry<String, List<String>>) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(text = stack.key.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.ENGLISH
+            ) else it.toString()
+        }, style = MaterialTheme.typography.titleMedium)
+        CompositionLocalProvider(
+            LocalMinimumInteractiveComponentSize provides 32.dp
+        ) {
+            FlowRow(
+                modifier = Modifier.padding(bottom = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                stack.value.forEach { tech ->
+                    TechStackChip(tech)
+                }
+            }
+        }
+
+    }
+}
 
 
 @Preview(showBackground = true, showSystemUi = true)

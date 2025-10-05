@@ -189,7 +189,7 @@ fun HorizontalWheelReadOnly(
                     0 -> 1f
                     1 -> 0.75f
                     2 -> 0.25f
-                    else -> 0f
+                    else -> 0.05f
                 }
 
                 Text(

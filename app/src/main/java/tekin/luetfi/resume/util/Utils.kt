@@ -3,7 +3,10 @@ package tekin.luetfi.resume.util
 
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.res.Configuration
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.Cv
@@ -75,6 +78,10 @@ fun Cv.openToOpportunities(): String {
         else -> "Loading Content"
     }
 }
+
+@Composable
+fun isLargeScreen() = currentWindowAdaptiveInfo().windowSizeClass.isWidthAtLeastBreakpoint(720) &&
+        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
 fun getFailedMessageList(label: String): List<String> {
     val list = (failedSynonyms.take(failedSynonyms.size / 2) + listOf(label)).shuffled()

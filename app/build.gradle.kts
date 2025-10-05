@@ -99,6 +99,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material3.adaptive)
+    implementation(libs.androidx.material3.adaptive.navigation.suite)
     implementation(libs.androidx.material3.icons.extended)
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
