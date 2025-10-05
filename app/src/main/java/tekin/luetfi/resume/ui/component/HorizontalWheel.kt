@@ -34,6 +34,7 @@ import tekin.luetfi.resume.domain.model.FinalRecommendation
 import tekin.luetfi.resume.util.SynonymsDictionary.createSynonymsList
 import java.util.Locale
 import kotlin.math.abs
+import kotlin.math.pow
 
 
 @Composable
@@ -185,19 +186,14 @@ fun HorizontalWheelReadOnly(
                 }
 
                 val distanceFromCenter = abs(index - centerIndex)
-                val alpha = when (distanceFromCenter) {
-                    0 -> 1f
-                    1 -> 0.75f
-                    2 -> 0.25f
-                    else -> 0.05f
-                }
+
 
                 Text(
                     text = text.uppercase(Locale.ENGLISH),
                     modifier = Modifier
                         // DO NOT use .fillMaxWidth() here. It forces all items to the same width
                         // breaking the variable-width requirement.
-                        .alpha(alpha)
+                        .alpha(wheelAlpha(distanceFromCenter))
                         .padding(horizontal = 12.dp),
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -205,6 +201,16 @@ fun HorizontalWheelReadOnly(
                 )
             }
         }
+    }
+}
+
+
+fun wheelAlpha(distanceFromCenter: Int): Float {
+    return when {
+        distanceFromCenter <= 0 -> 1f
+        distanceFromCenter == 1 -> 0.75f
+        distanceFromCenter == 2 -> 0.25f
+        else -> 0.25f / (2.0.pow(distanceFromCenter - 2)).toFloat()
     }
 }
 
