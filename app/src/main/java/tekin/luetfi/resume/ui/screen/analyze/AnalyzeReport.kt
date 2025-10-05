@@ -3,9 +3,13 @@ package tekin.luetfi.resume.ui.screen.analyze
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -30,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.FinalRecommendation
 import tekin.luetfi.resume.domain.model.MatchResponse
+import tekin.luetfi.resume.util.isLargeScreen
 
 @Composable
 fun AnalyzeReport(
@@ -78,28 +83,62 @@ fun AnalyzeReport(
             }
         }
 
-        VerdictHeader(
-            recommendation = report.finalRecommendation,
-            score = report.score1to5
-        )
+        if (isLargeScreen()){
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Max),
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                VerdictHeader(
+                    modifier = Modifier.weight(1f).fillMaxHeight(),
+                    recommendation = report.finalRecommendation,
+                    score = report.score1to5
+                )
 
-        ConciseSummary(
-            modifier = Modifier.fillMaxWidth(),
-            report = report)
+                if (report.finalRecommendation != FinalRecommendation.SKIP) {
+                    CoverLetter(
+                        modifier = Modifier.weight(1f).fillMaxHeight(),
+                        report = report,
+                        onGenerateCoverLetter = onGenerateCoverLetter)
+                }
+            }
 
-        SupportingFacts(
-            modifier = Modifier.fillMaxWidth(),
-            report = report)
 
-        CoverLetter(
-            modifier = Modifier.fillMaxWidth(),
-            report = report,
-            onGenerateCoverLetter = onGenerateCoverLetter)
+            ConciseSummary(
+                modifier = Modifier.fillMaxWidth(),
+                report = report)
+
+            SupportingFacts(
+                modifier = Modifier.fillMaxWidth(),
+                report = report)
+        }else {
+            VerdictHeader(
+                recommendation = report.finalRecommendation,
+                score = report.score1to5
+            )
+
+            if (report.finalRecommendation != FinalRecommendation.SKIP) {
+                CoverLetter(
+                    modifier = Modifier.fillMaxWidth(),
+                    report = report,
+                    onGenerateCoverLetter = onGenerateCoverLetter)
+            }
+
+            ConciseSummary(
+                modifier = Modifier.fillMaxWidth(),
+                report = report)
+
+            SupportingFacts(
+                modifier = Modifier.fillMaxWidth(),
+                report = report)
+        }
     }
 }
 
 @Composable
 private fun VerdictHeader(
+    modifier: Modifier = Modifier,
     recommendation: FinalRecommendation,
     score: Int
 ) {
@@ -115,13 +154,13 @@ private fun VerdictHeader(
     }
 
     Surface(
+        modifier = modifier,
         color = bg,
         contentColor = fg,
         shape = MaterialTheme.shapes.large
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -188,9 +227,21 @@ private fun ConciseSummary(
 @Composable
 private fun SupportingFacts(modifier: Modifier, report: MatchResponse) {
     // Three compact cards: Job, Fit, Actions
-    JobAtAGlance(modifier, report)
-    FitBreakdown(modifier, report)
-    ResumeTweaks(modifier, report)
+    if (isLargeScreen()){
+        Row(
+            modifier = modifier.fillMaxWidth()
+                .height(IntrinsicSize.Max),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            JobAtAGlance(modifier.weight(1f).fillMaxHeight(), report)
+            FitBreakdown(modifier.weight(1f).fillMaxHeight(), report)
+            ResumeTweaks(modifier.weight(1f).fillMaxHeight(), report)
+        }
+    }else {
+        JobAtAGlance(modifier, report)
+        FitBreakdown(modifier, report)
+        ResumeTweaks(modifier, report)
+    }
 }
 
 @Composable
@@ -235,8 +286,6 @@ private fun ResumeTweaks(modifier: Modifier, report: MatchResponse) {
 
 @Composable
 private fun CoverLetter(modifier: Modifier, report: MatchResponse, onGenerateCoverLetter: () -> Unit = {}) {
-    if (report.finalRecommendation == FinalRecommendation.SKIP)
-        return
     Card(modifier = modifier
         .clickable{
             onGenerateCoverLetter()

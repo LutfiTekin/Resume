@@ -25,14 +25,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.AnalyzeModel
 import tekin.luetfi.resume.domain.model.Cv
 import tekin.luetfi.resume.domain.model.JobApplicationMail
 import tekin.luetfi.resume.domain.model.MatchResponse
 import tekin.luetfi.resume.ui.screen.analyze.AvailableModelsViewModel
+import tekin.luetfi.resume.util.isLargeScreen
 import tekin.luetfi.resume.util.sendEmailWithAttachment
 
 @Composable
@@ -45,6 +48,9 @@ fun CoverLetterScreen(modifier: Modifier, cv: Cv, report: MatchResponse){
 
 
     LaunchedEffect(report){
+        if (state is CoverLetterState.Success) {
+            return@LaunchedEffect
+        }
         //Make sure that used model is still available
         val model = availableModels.firstOrNull { it == report.usedModel } ?: availableModels.first()
         coverLetterViewModel.generateCoverLetter(report, cv, model)
@@ -116,28 +122,56 @@ fun CoverLetter(
             colors = OutlinedTextFieldDefaults.colors()
         )
 
-        Row(
-            modifier = Modifier.clickable { cvFileAttached = !cvFileAttached },
-            horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(checked = cvFileAttached, onCheckedChange = { cvFileAttached = it })
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                text = "Attach CV File",
-                style = MaterialTheme.typography.bodyMedium)
+        if (isLargeScreen()){
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.weight(1f).clickable { cvFileAttached = !cvFileAttached },
+                    horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(checked = cvFileAttached, onCheckedChange = { cvFileAttached = it })
+                    Text(
+                        modifier = Modifier,
+                        text = stringResource(R.string.attach_cv_file),
+                        style = MaterialTheme.typography.bodyMedium)
+                }
+
+                // Send Button
+                Button(
+                    onClick = {
+                        val pdf = if (cvFileAttached) downloadedPdf else null
+                        sendEmailWithAttachment(context, mail.copy(subject = subject, content = content, pdfUri = pdf))
+                    },
+                    modifier = Modifier,
+                    enabled = mail.subject.isNotBlank() && mail.content.isNotBlank()
+                ) {
+                    Text(stringResource(R.string.send_via_default_email_app))
+                }
+            }
+        }else {
+            Row(
+                modifier = Modifier.clickable { cvFileAttached = !cvFileAttached },
+                horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(checked = cvFileAttached, onCheckedChange = { cvFileAttached = it })
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = stringResource(R.string.attach_cv_file),
+                    style = MaterialTheme.typography.bodyMedium)
+            }
+
+            // Send Button
+            Button(
+                onClick = {
+                    val pdf = if (cvFileAttached) downloadedPdf else null
+                    sendEmailWithAttachment(context, mail.copy(subject = subject, content = content, pdfUri = pdf))
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = mail.subject.isNotBlank() && mail.content.isNotBlank()
+            ) {
+                Text(stringResource(R.string.send_via_default_email_app))
+            }
         }
 
-        // Send Button
-        Button(
-            onClick = {
-                val pdf = if (cvFileAttached) downloadedPdf else null
-                sendEmailWithAttachment(context, mail.copy(subject = subject, content = content, pdfUri = pdf))
-            },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = mail.subject.isNotBlank() && mail.content.isNotBlank()
-        ) {
-            Text("Send via Default Email App")
-        }
+
     }
 }
 
