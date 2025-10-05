@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -81,7 +82,7 @@ fun CoverLetter(
     var subject by remember { mutableStateOf(mail.subject) }
     var content by remember { mutableStateOf(mail.content) }
     val downloadedPdf: Uri? by pdfViewModel.downloadedPdf.collectAsStateWithLifecycle(null)
-    var cvFileAttached by remember { mutableStateOf(downloadedPdf != null) }
+    var cvFileAttached by rememberSaveable { mutableStateOf(downloadedPdf != null) }
 
     if (cvFileAttached && downloadedPdf == null){
         //Download pdf file if user requested
