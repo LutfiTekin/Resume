@@ -2,8 +2,6 @@
 package tekin.luetfi.resume.ui.screen.analyze
 
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -62,11 +60,17 @@ fun PreviousReports(
             )
             return@Column
         }
+        val lazyColumnModifier = if (isLargeScreen()){
+            Modifier
+                .fillMaxSize()
+        }else {
+            Modifier
+                .fillMaxWidth()
+                .heightIn(min = 0.dp, max = 600.dp)
+        }
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 0.dp, max = 400.dp),
+            modifier = lazyColumnModifier,
             contentPadding = PaddingValues(vertical = 4.dp)
         ) {
             items(
