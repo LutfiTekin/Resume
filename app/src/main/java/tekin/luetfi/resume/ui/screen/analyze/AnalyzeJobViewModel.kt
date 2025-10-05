@@ -130,22 +130,9 @@ class AnalyzeJobViewModel @Inject constructor(
         }
     }
 
-    fun loadReport(report: MatchResponse){
+    fun loadReport(report: MatchResponse, online: Boolean = true){
         viewModelScope.launch {
-            _state.emit(AnalyzeJobState.ReportReady(report, online = true))
-        }
-    }
-
-    fun loadReport(id: String){
-        viewModelScope.launch {
-            _state.emit(AnalyzeJobState.Loading("Loading report from list"))
-            runCatching {
-                repository.getJobReport(id) ?: throw Exception("Report not found")
-            }.onSuccess {
-                _state.emit(AnalyzeJobState.ReportReady(it, online = false))
-            }.onFailure {
-                _state.emit(AnalyzeJobState.Error(null))
-            }
+            _state.emit(AnalyzeJobState.ReportReady(report, online = online))
         }
     }
 

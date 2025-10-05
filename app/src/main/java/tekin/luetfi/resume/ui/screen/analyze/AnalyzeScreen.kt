@@ -25,8 +25,6 @@ fun AnalyzeScreen(
 
     val analyzeJobState by viewModel.state.collectAsStateWithLifecycle(AnalyzeJobState.Start)
 
-    val previousReports by viewModel.previousReports.collectAsStateWithLifecycle(emptyList())
-
     when (val state = analyzeJobState) {
         is AnalyzeJobState.Error -> AnalyzeError(
             modifier = modifier.fillMaxSize(),
@@ -37,18 +35,18 @@ fun AnalyzeScreen(
         )
 
         is AnalyzeJobState.Loading -> {
-            if (state.modelResults.isNotEmpty()){
+            if (state.modelResults.isNotEmpty()) {
                 AnalyzeLoading(
                     modifier = modifier.fillMaxSize(),
-                    modelResults = state.sortedModelResults){
-                    viewModel.loadReport(it)
-                }
-            }else {
+                    modelResults = state.sortedModelResults,
+                    onShowReport = viewModel::loadReport
+                )
+            } else {
                 AnalyzeLoading(
                     modifier = modifier.fillMaxSize(),
-                    verdict = state.verdict){
-                    viewModel.onUserContinue()
-                }
+                    verdict = state.verdict,
+                    onResume = viewModel::onUserContinue
+                )
             }
         }
 
@@ -64,20 +62,19 @@ fun AnalyzeScreen(
         AnalyzeJobState.Start -> {
             AnalyzeStart(
                 modifier = modifier,
-                previousReports = previousReports,
-                viewModel = viewModel
+                onReportSelected = {
+                    viewModel.loadReport(it, false)
+                },
             ) { jobDesc, models ->
                 viewModel.analyze(
                     jobDescription = jobDesc,
                     cv = cv,
-                    models = models)
+                    models = models
+                )
             }
         }
     }
 }
-
-
-
 
 
 @Preview(showBackground = true)

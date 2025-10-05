@@ -64,4 +64,7 @@
     <string name="retry_button">Try again</string>
     <string name="cover_letter_error_title">Could not generate a cover letter</string>
     <string name="send_email">Send email...</string>
+    <string name="match_highlights_gaps">"Match highlights %1$d, gaps %2$d. "</string>
+    <string name="language_risks">"Language risks: %1$s. "</string>
+    <string name="location_note">Location: %1$s</string>
 </resources>

@@ -24,8 +24,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.FinalRecommendation
 import tekin.luetfi.resume.domain.model.MatchResponse
 
@@ -159,12 +161,16 @@ private fun ConciseSummary(
             Text(
                 text = buildString {
                     append("${report.job.title} at ${report.job.company}: ")
-                    append("match highlights $matched, gaps $gaps. ")
+                    append(stringResource(R.string.match_highlights_gaps, matched, gaps))
                     if (languageIssues.isNotEmpty()) {
-                        append("Language risks: ${languageIssues.joinToString()}. ")
+                        append(
+                            stringResource(
+                                R.string.language_risks,
+                                languageIssues.joinToString()
+                            ))
                     }
                     if (locNote.isNotBlank()) {
-                        append("Location: $locNote")
+                        append(stringResource(R.string.location_note, locNote))
                     }
                 }
             )

@@ -2,6 +2,8 @@
 
 package tekin.luetfi.resume.ui.screen.analyze
 
+import android.content.ClipboardManager
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,8 +32,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.platform.Clipboard
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -44,35 +50,163 @@ import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.AnalyzeModel
 import tekin.luetfi.resume.domain.model.MatchResponse
 import tekin.luetfi.resume.util.getTextOrNull
+import tekin.luetfi.resume.util.isLargeScreen
 
 @Composable
 fun AnalyzeStart(
     modifier: Modifier = Modifier,
-    isAnalyzing: Boolean = false,
-    initialText: String = "",
-    previousReports: List<MatchResponse>,
-    viewModel: AnalyzeJobViewModel,
+    onReportSelected: (MatchResponse) -> Unit = {},
     onAnalyze: (String, List<AnalyzeModel>) -> Unit = { _, _ -> }
 ) {
-    val focus = LocalFocusManager.current
-    val clipboard = LocalClipboard.current
-    val context = LocalContext.current
 
-    val availableModelsViewModel: AvailableModelsViewModel = hiltViewModel()
+    val analyzeState = rememberAnalyzeState()
+    CompositionLocalProvider(LocalAnalyzeState provides analyzeState) {
+        if (isLargeScreen()){
+            TabletLayout(modifier, onAnalyze = onAnalyze, onReportSelected = onReportSelected)
+        }else {
+            PhoneLayout(modifier, onAnalyze = onAnalyze, onReportSelected = onReportSelected)
+        }
+    }
 
-    val availableModels by availableModelsViewModel.models.collectAsStateWithLifecycle(listOf(AnalyzeModel.default))
+}
 
-    var selectedModel by remember { mutableStateOf(availableModels.first()) }
+@Composable
+private fun TabletLayout(
+    modifier: Modifier,
+    onAnalyze: (String, List<AnalyzeModel>) -> Unit,
+    onReportSelected: (MatchResponse) -> Unit = {}){
 
-    var selectedModels: List<AnalyzeModel> by remember(selectedModel) { mutableStateOf(listOf(selectedModel)) }
+    val state = LocalAnalyzeState.current
 
-    var jobDescription by rememberSaveable(initialText) { mutableStateOf(initialText) }
+    Row(modifier = modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp).weight(1f),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Text(
+                stringResource(R.string.analyze_a_job_description),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold
+            )
 
-    val minChars = 50
-    val maxChars = 10000
-    val tooShort = jobDescription.trim().length in 1 until minChars
-    val tooLong = jobDescription.length > maxChars
-    val isValid = jobDescription.trim().length >= minChars && !tooLong
+            // Quick actions row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                AssistChip(
+                    onClick = {
+                        state.clipboard.nativeClipboard.getTextOrNull(state.context)
+                            ?.let { state.onJobDescriptionChange(it) }
+                    },
+                    label = { Text(stringResource(R.string.paste_from_clipboard)) }
+                )
+                AssistChip(
+                    enabled = state.jobDescription.isNotBlank(),
+                    onClick = { state.onJobDescriptionChange("") },
+                    label = { Text(stringResource(R.string.clear)) }
+                )
+            }
+
+            ModelPicker(
+                selected = state.selectedModel,
+                onSelect = {
+                    state.onSelectedModelChange(it)
+                },
+                onMultipleModelsSelected = {
+                    state.onSelectedModelsChange(it)
+                })
+
+
+            OutlinedTextField(
+                value = state.jobDescription,
+                onValueChange = { new ->
+                    state.onJobDescriptionChange(if (new.length <= state.maxChars) new else new.take(state.maxChars))
+
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                label = { Text(stringResource(R.string.label_job_description)) },
+                placeholder = { Text(stringResource(R.string.hint_job_description)) },
+                minLines = 6,
+                maxLines = 12,
+                isError = state.tooShort || state.tooLong,
+                supportingText = {
+                    val len = state.jobDescription.length
+                    val helper = when {
+                        state.tooShort -> stringResource(
+                            R.string.error_job_description_too_short,
+                            state.minChars
+                        )
+
+                        state.tooLong -> stringResource(R.string.error_job_description_too_long, state.maxChars)
+                        else -> stringResource(R.string.hint_job_description_tip)
+                    }
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(modifier = Modifier.align(Alignment.End), text = "$len/${state.maxChars}")
+                        Text(modifier = Modifier.fillMaxWidth(), text = helper)
+                    }
+                },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        if (state.isValid) {
+                            state.focus.clearFocus()
+                            onAnalyze(state.jobDescription.trim(), state.selectedModels)
+                        }
+                    }
+                ),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
+            )
+
+            AnimatedVisibility(visible = state.jobDescription.isBlank()) {
+                Text(
+                    stringResource(R.string.privacy_note),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Button(
+                    enabled = state.isValid && state.selectedModels.isNotEmpty(),
+                    onClick = { onAnalyze(state.jobDescription.trim(), state.selectedModels) }
+                ) {
+                    Text(stringResource(R.string.analyze))
+                }
+            }
+        }
+
+        PreviousReports(
+            modifier = Modifier.fillMaxSize().padding(24.dp).weight(1.5f),
+            onReportSelected = onReportSelected)
+
+    }
+
+
+}
+
+
+@Composable
+private fun PhoneLayout(
+    modifier: Modifier,
+    onAnalyze: (String, List<AnalyzeModel>) -> Unit,
+    onReportSelected: (MatchResponse) -> Unit = {}
+) {
+    val state = LocalAnalyzeState.current
+
 
     LazyColumn(
         modifier = modifier
@@ -95,15 +229,15 @@ fun AnalyzeStart(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 AssistChip(
-                    enabled = !isAnalyzing,
                     onClick = {
-                        clipboard.nativeClipboard.getTextOrNull(context)?.let { jobDescription = it }
+                        state.clipboard.nativeClipboard.getTextOrNull(state.context)
+                            ?.let { state.onJobDescriptionChange(it) }
                     },
                     label = { Text(stringResource(R.string.paste_from_clipboard)) }
                 )
                 AssistChip(
-                    enabled = jobDescription.isNotBlank() && !isAnalyzing,
-                    onClick = { jobDescription = "" },
+                    enabled = state.jobDescription.isNotBlank(),
+                    onClick = { state.onJobDescriptionChange("") },
                     label = { Text(stringResource(R.string.clear)) }
                 )
             }
@@ -111,22 +245,22 @@ fun AnalyzeStart(
 
         item {
             ModelPicker(
-                selected = selectedModel,
+                selected = state.selectedModel,
                 onSelect = {
-                    selectedModel = it
+                    state.onSelectedModelChange(it)
                 },
-                availableModels = availableModels,
                 onMultipleModelsSelected = {
-                    selectedModels = it
+                    state.onSelectedModelsChange(it)
                 })
         }
 
 
         item {
             OutlinedTextField(
-                value = jobDescription,
+                value = state.jobDescription,
                 onValueChange = { new ->
-                    jobDescription = if (new.length <= maxChars) new else new.take(maxChars)
+                    state.onJobDescriptionChange(if (new.length <= state.maxChars) new else new.take(state.maxChars))
+
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -135,32 +269,32 @@ fun AnalyzeStart(
                 placeholder = { Text(stringResource(R.string.hint_job_description)) },
                 minLines = 6,
                 maxLines = 12,
-                enabled = !isAnalyzing,
-                isError = tooShort || tooLong,
+                isError = state.tooShort || state.tooLong,
                 supportingText = {
-                    val len = jobDescription.length
+                    val len = state.jobDescription.length
                     val helper = when {
-                        tooShort -> stringResource(
+                        state.tooShort -> stringResource(
                             R.string.error_job_description_too_short,
-                            minChars
+                            state.minChars
                         )
-                        tooLong -> stringResource(R.string.error_job_description_too_long, maxChars)
+
+                        state.tooLong -> stringResource(R.string.error_job_description_too_long, state.maxChars)
                         else -> stringResource(R.string.hint_job_description_tip)
                     }
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(modifier = Modifier.align(Alignment.End), text = "$len/$maxChars")
+                        Text(modifier = Modifier.align(Alignment.End), text = "$len/${state.maxChars}")
                         Text(modifier = Modifier.fillMaxWidth(), text = helper)
                     }
                 },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        if (isValid && !isAnalyzing) {
-                            focus.clearFocus()
-                            onAnalyze(jobDescription.trim(), selectedModels)
+                        if (state.isValid) {
+                            state.focus.clearFocus()
+                            onAnalyze(state.jobDescription.trim(), state.selectedModels)
                         }
                     }
                 ),
@@ -172,7 +306,7 @@ fun AnalyzeStart(
         }
 
         item {
-            AnimatedVisibility(visible = jobDescription.isBlank()) {
+            AnimatedVisibility(visible = state.jobDescription.isBlank()) {
                 Text(
                     stringResource(R.string.privacy_note),
                     style = MaterialTheme.typography.bodySmall,
@@ -187,10 +321,10 @@ fun AnalyzeStart(
                 horizontalArrangement = Arrangement.End
             ) {
                 Button(
-                    enabled = isValid && !isAnalyzing && selectedModels.isNotEmpty(),
-                    onClick = { onAnalyze(jobDescription.trim(), selectedModels) }
+                    enabled = state.isValid && state.selectedModels.isNotEmpty(),
+                    onClick = { onAnalyze(state.jobDescription.trim(), state.selectedModels) }
                 ) {
-                    Text(if (isAnalyzing) stringResource(R.string.analyzing) else stringResource(R.string.analyze))
+                    Text(stringResource(R.string.analyze))
                 }
             }
         }
@@ -198,8 +332,8 @@ fun AnalyzeStart(
         item {
             PreviousReports(
                 modifier = Modifier.fillMaxWidth(),
-                previousReports = previousReports,
-                viewModel = viewModel)
+                onReportSelected = onReportSelected
+            )
         }
     }
 }
@@ -208,9 +342,16 @@ fun AnalyzeStart(
 fun ModelPicker(
     selected: AnalyzeModel,
     onSelect: (AnalyzeModel) -> Unit,
-    availableModels: List<AnalyzeModel>,
     onMultipleModelsSelected: (List<AnalyzeModel>) -> Unit = {}
 ) {
+    val availableModelsViewModel: AvailableModelsViewModel = hiltViewModel()
+
+    val availableModels by availableModelsViewModel.models.collectAsStateWithLifecycle(
+        listOf(
+            AnalyzeModel.default
+        )
+    )
+
     var selectMultipleModels by remember { mutableStateOf(false) }
     var selectedModels by remember { mutableStateOf(setOf<AnalyzeModel>()) }
     var expanded by remember { mutableStateOf(false) }
@@ -369,5 +510,65 @@ fun ModelSelectionChip(
         } else null
     )
 }
+
+private val LocalAnalyzeState = staticCompositionLocalOf<AnalyzeState> {
+    error("No AnalyzeState provided")
+}
+
+@Composable
+private fun rememberAnalyzeState(): AnalyzeState {
+    val focus = LocalFocusManager.current
+    val clipboard = LocalClipboard.current
+    val context = LocalContext.current
+
+
+    var selectedModel by remember { mutableStateOf(AnalyzeModel.default) }
+
+    var selectedModels: List<AnalyzeModel> by remember(selectedModel) {
+        mutableStateOf(listOf(selectedModel))
+    }
+
+    var jobDescription by rememberSaveable { mutableStateOf("") }
+
+    val minChars = 50
+    val maxChars = 10000
+    val tooShort = jobDescription.trim().length in 1 until minChars
+    val tooLong = jobDescription.length > maxChars
+    val isValid = jobDescription.trim().length >= minChars && !tooLong
+
+    return AnalyzeState(
+        focus = focus,
+        clipboard = clipboard,
+        context = context,
+        selectedModel = selectedModel,
+        onSelectedModelChange = { selectedModel = it },
+        selectedModels = selectedModels,
+        onSelectedModelsChange = { selectedModels = it },
+        jobDescription = jobDescription,
+        onJobDescriptionChange = { jobDescription = it },
+        tooShort = tooShort,
+        tooLong = tooLong,
+        isValid = isValid,
+        minChars = minChars,
+        maxChars = maxChars
+    )
+}
+
+private data class AnalyzeState(
+    val focus: FocusManager,
+    val clipboard: Clipboard,
+    val context: Context,
+    val selectedModel: AnalyzeModel,
+    val onSelectedModelChange: (AnalyzeModel) -> Unit,
+    val selectedModels: List<AnalyzeModel>,
+    val onSelectedModelsChange: (List<AnalyzeModel>) -> Unit,
+    val jobDescription: String,
+    val onJobDescriptionChange: (String) -> Unit,
+    val tooShort: Boolean,
+    val tooLong: Boolean,
+    val isValid: Boolean,
+    val minChars: Int,
+    val maxChars: Int
+)
 
 

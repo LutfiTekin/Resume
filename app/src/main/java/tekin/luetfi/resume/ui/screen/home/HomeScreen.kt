@@ -147,7 +147,7 @@ fun Home(
 }
 
 @Composable
-fun TabletLayout(modifier: Modifier, cv: Cv) {
+private fun TabletLayout(modifier: Modifier, cv: Cv) {
     Row(modifier = modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         LazyColumn(
