@@ -1,6 +1,5 @@
 package tekin.luetfi.resume.ui.screen.analyze
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -82,12 +81,18 @@ fun AnalyzeReport(
             score = report.score1to5
         )
 
-        ConciseSummary(report = report)
+        ConciseSummary(
+            modifier = Modifier.fillMaxWidth(),
+            report = report)
 
-        // Optional: supporting sections. Keep them compact.
-        SupportingFacts(report = report)
+        SupportingFacts(
+            modifier = Modifier.fillMaxWidth(),
+            report = report)
 
-        CoverLetter(report = report, onGenerateCoverLetter = onGenerateCoverLetter)
+        CoverLetter(
+            modifier = Modifier.fillMaxWidth(),
+            report = report,
+            onGenerateCoverLetter = onGenerateCoverLetter)
     }
 }
 
@@ -135,6 +140,7 @@ private fun VerdictHeader(
 
 @Composable
 private fun ConciseSummary(
+    modifier: Modifier,
     report: MatchResponse
 ) {
     // A crisp one-paragraph summary. Keep it skimmable.
@@ -143,7 +149,7 @@ private fun ConciseSummary(
     val locNote = report.locationFit.notes
     val languageIssues = report.languageFit.missingOrInsufficient
 
-    Card {
+    Card(modifier = modifier) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
                 "Summary",
@@ -174,16 +180,16 @@ private fun ConciseSummary(
 }
 
 @Composable
-private fun SupportingFacts(report: MatchResponse) {
+private fun SupportingFacts(modifier: Modifier, report: MatchResponse) {
     // Three compact cards: Job, Fit, Actions
-    JobAtAGlance(report)
-    FitBreakdown(report)
-    ResumeTweaks(report)
+    JobAtAGlance(modifier, report)
+    FitBreakdown(modifier, report)
+    ResumeTweaks(modifier, report)
 }
 
 @Composable
-private fun JobAtAGlance(report: MatchResponse) {
-    Card {
+private fun JobAtAGlance(modifier: Modifier, report: MatchResponse) {
+    Card(modifier = modifier) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text("Job", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
             Text("${report.job.title} • ${report.job.company}")
@@ -196,8 +202,8 @@ private fun JobAtAGlance(report: MatchResponse) {
 }
 
 @Composable
-private fun FitBreakdown(report: MatchResponse) {
-    Card {
+private fun FitBreakdown(modifier: Modifier, report: MatchResponse) {
+    Card(modifier = modifier) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("Fit analysis", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
             KeyValueRow("Matched", report.fitAnalysis.matched.joinToString().ifBlank { "—" })
@@ -208,9 +214,9 @@ private fun FitBreakdown(report: MatchResponse) {
 }
 
 @Composable
-private fun ResumeTweaks(report: MatchResponse) {
+private fun ResumeTweaks(modifier: Modifier, report: MatchResponse) {
     val act = report.resumeActions
-    Card {
+    Card(modifier = modifier) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("Resume actions", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
             if (act.add.isNotEmpty()) KeyValueRow("Add", act.add.joinToString())
@@ -222,11 +228,10 @@ private fun ResumeTweaks(report: MatchResponse) {
 }
 
 @Composable
-private fun CoverLetter(report: MatchResponse, onGenerateCoverLetter: () -> Unit = {}) {
+private fun CoverLetter(modifier: Modifier, report: MatchResponse, onGenerateCoverLetter: () -> Unit = {}) {
     if (report.finalRecommendation == FinalRecommendation.SKIP)
         return
-    Card(modifier = Modifier
-        .fillMaxWidth()
+    Card(modifier = modifier
         .clickable{
             onGenerateCoverLetter()
         }) {
