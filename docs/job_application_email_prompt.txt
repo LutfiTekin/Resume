@@ -5,7 +5,7 @@ Inputs:
 2. Candidate's `Cv` json (contains name, contact, summary, experience, languages, tech stack).
 
 Rules:
-- Validate inputs: if either MatchReport or Cv is missing or malformed, return error JSON:
+- Validate inputs: if either MatchReport json or Cv json is missing or malformed, return error JSON:
   {
     "error": {
       "type": "input_error",
@@ -23,7 +23,7 @@ Rules:
   - Use the tailored resume summary from `resume_actions.tailored_summary` if provided.
   - Acknowledge any relocation/remote/commute notes from `location_fit`.
   - Optionally ask 1-2 questions from `questions_for_recruiter`.
-  - End with a polite closing that uses the candidate’s name from the CV (`cv.name`).
+  - End with a polite closing that uses the candidate’s name from the CV json `name` field.
   - Include candidate’s contact email and optionally LinkedIn or GitHub if present.
 
 Tone:
@@ -35,5 +35,5 @@ Output JSON format:
 {
   "email": "hr@company.com" | null,
   "subject": "Job Application - {job.title} at {job.company}",
-  "content": "Dear Hiring Manager, ... Best regards, {cv.name}"
+  "content": "Dear Hiring Manager, ... Best regards, {name}"
 }
