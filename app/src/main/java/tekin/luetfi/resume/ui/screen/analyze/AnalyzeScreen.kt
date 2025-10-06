@@ -56,6 +56,7 @@ fun AnalyzeScreen(
             report = state.report,
             onSaveReport = viewModel::saveReport,
             onDeleteReport = viewModel::deleteReport,
+            onExit = { viewModel.reset() },
             onGenerateCoverLetter = { onGenerateCoverLetter(state.report) }
         )
 

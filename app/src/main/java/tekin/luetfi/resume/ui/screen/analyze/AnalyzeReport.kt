@@ -1,5 +1,6 @@
 package tekin.luetfi.resume.ui.screen.analyze
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,8 +44,14 @@ fun AnalyzeReport(
     onSaveReport: (MatchResponse) -> Unit = {},
     onDeleteReport: (MatchResponse) -> Unit = {},
     onGenerateCoverLetter: () -> Unit = {},
+    onExit: () -> Unit = {},
     online: Boolean
 ) {
+
+    BackHandler {
+        onExit()
+    }
+
     val scroll = rememberScrollState()
     Column(
         modifier = modifier
