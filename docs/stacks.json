@@ -228,5 +228,15 @@
     "description": "A persistence library in Android Jetpack that provides an abstraction layer over SQLite, enabling robust database access while harnessing the full power of SQLite. It simplifies database tasks by reducing boilerplate code and verifying SQL queries at compile-time.",
     "category": "android",
     "url": "https://developer.android.com/training/data-storage/room"
+  },
+  "Play Store": {
+    "description": "Google's official app distribution platform for Android, reaching 2.5+ billion active devices with integrated monetization, security, and publishing tools.",
+    "category": "android",
+    "url": "https://developer.android.com/distribute"
+  },
+  "AndroidX": {
+    "description": "Open-source project comprising Android Jetpack libraries under the androidx namespace; successor to the deprecated Support Library with backward compatibility and independent versioning.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/androidx"
   }
 }
