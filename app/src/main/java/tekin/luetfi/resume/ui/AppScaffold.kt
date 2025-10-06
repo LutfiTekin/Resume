@@ -16,8 +16,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -85,12 +87,18 @@ fun AppScaffold(
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHost) }
     ) { inner ->
-        AppNavHost(
-            navController = navController,
-            startDestination = HomeRoute,
-            modifier = Modifier
-                .padding(inner)
-                .consumeWindowInsets(inner) // avoid double padding with IME/system bars
-        )
+        CompositionLocalProvider(LocalSnackbarHostState provides snackbarHost) {
+            AppNavHost(
+                modifier = Modifier
+                    .padding(inner)
+                    .consumeWindowInsets(inner), // avoid double padding with IME/system bars
+                navController = navController,
+                startDestination = HomeRoute
+            )
+        }
     }
+}
+
+val LocalSnackbarHostState = staticCompositionLocalOf<SnackbarHostState> {
+    error("No Snackbar Host State")
 }

@@ -5,6 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import tekin.luetfi.resume.domain.model.AnalyzeModel
 import tekin.luetfi.resume.domain.model.Cv
+import tekin.luetfi.resume.domain.model.TechStackInfo
 
 interface Api {
 
@@ -27,5 +28,9 @@ interface Api {
     @Headers("Cache-Control: public, max-age=3600, immutable")
     @GET("models.json")
     suspend fun getAvailableModels(): List<AnalyzeModel>
+
+    @Headers("Cache-Control: public, max-age=604800, immutable")
+    @GET("stacks.json")
+    suspend fun getTechStackInfo(): Map<String, TechStackInfo>
 
 }

@@ -1,5 +1,6 @@
 package tekin.luetfi.resume.ui.navigation
 
+import androidx.compose.material3.SnackbarHostState
 import kotlinx.serialization.Serializable
 
 
@@ -15,7 +16,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import tekin.luetfi.resume.domain.model.MatchResponse
 import tekin.luetfi.resume.domain.model.MatchResponseNavType
-import tekin.luetfi.resume.ui.screen.analyze.AnalyzeJobViewModel
 import tekin.luetfi.resume.ui.screen.analyze.AnalyzeScreen
 import tekin.luetfi.resume.ui.screen.cover_letter.CoverLetterScreen
 import tekin.luetfi.resume.ui.screen.home.HomeScreen
@@ -26,7 +26,7 @@ import kotlin.reflect.typeOf
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    startDestination: Any = HomeRoute // typed start
+    startDestination: Any = HomeRoute, // typed start
 ) {
     val vm: CvViewModel = hiltViewModel()
     val uiState by vm.uiState.collectAsState()

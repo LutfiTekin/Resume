@@ -24,6 +24,7 @@ fun ExperienceCard(
     onClick: () -> Unit
 ) {
     val period = computePeriod(item.period)
+    val techStackClickHandler = rememberTechStackClickHandler()
 
     ElevatedCard(
         onClick = onClick,
@@ -67,7 +68,9 @@ fun ExperienceCard(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     item.stack.forEach { tech ->
-                        TechStackChip(tech)
+                        TechStackChip(tech){
+                            techStackClickHandler(tech)
+                        }
                     }
                 }
             }
