@@ -49,12 +49,11 @@ fun CoverLetterScreen(modifier: Modifier, cv: Cv, report: MatchResponse){
 
 
     LaunchedEffect(report){
-        if (state is CoverLetterState.Success) {
-            return@LaunchedEffect
+        if (state is CoverLetterState.Loading) {
+            //Make sure that used model is still available
+            val model = availableModels.firstOrNull { it.id == report.usedModel.id } ?: availableModels.first()
+            coverLetterViewModel.generateCoverLetter(report, cv, model)
         }
-        //Make sure that used model is still available
-        val model = availableModels.firstOrNull { it == report.usedModel } ?: availableModels.first()
-        coverLetterViewModel.generateCoverLetter(report, cv, model)
     }
 
     when (state) {
