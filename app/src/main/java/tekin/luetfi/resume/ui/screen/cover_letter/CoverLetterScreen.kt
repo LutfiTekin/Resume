@@ -45,11 +45,11 @@ fun CoverLetterScreen(modifier: Modifier, cv: Cv, report: MatchResponse){
     val coverLetterViewModel: CoverLetterViewModel = hiltViewModel()
     val state by coverLetterViewModel.state.collectAsStateWithLifecycle()
     val availableModelsViewModel: AvailableModelsViewModel = hiltViewModel()
-    val availableModels by availableModelsViewModel.models.collectAsStateWithLifecycle(listOf(AnalyzeModel.default))
+    val availableModels by availableModelsViewModel.models.collectAsStateWithLifecycle(emptyList())
 
 
-    LaunchedEffect(report){
-        if (state is CoverLetterState.Loading) {
+    LaunchedEffect(report, availableModels){
+        if (state is CoverLetterState.Loading && availableModels.isNotEmpty()) {
             //Make sure that used model is still available
             val model = availableModels.firstOrNull { it.id == report.usedModel.id } ?: availableModels.first()
             coverLetterViewModel.generateCoverLetter(report, cv, model)

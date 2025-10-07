@@ -38,7 +38,7 @@ data class ChatCompletionResponse(
             .extractFirstJsonObject()
             ?: throw IllegalStateException("No JSON object found in message content.")
 
-        val adapter = moshi.adapter(MatchResponse::class.java)
+        val adapter = moshi.adapter(MatchResponse::class.java).lenient()
 
         val response: MatchResponse = try {
             adapter.fromJson(json) ?: throw Exception()

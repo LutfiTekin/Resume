@@ -21,7 +21,7 @@ class DefaultModelsRepository(
         emit(getAvailableModels())
     }.stateIn(
         scope = repositoryScope,
-        started = SharingStarted.WhileSubscribed(5000L),
+        started = SharingStarted.Eagerly,
         initialValue = listOf(AnalyzeModel.default)
     )
 

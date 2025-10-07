@@ -21,7 +21,7 @@ data class MatchResponse(
     @param:Json(name = "risk_flags") val riskFlags: List<String>,
     @param:Json(name = "final_recommendation") val finalRecommendation: FinalRecommendation,
     @param:Json(name = "score_1_to_5") val score1to5: Int,
-    @Transient val model: AnalyzeModel? = null
+    val model: AnalyzeModel? = null
 ){
     //Keep track of used model
     fun attachModel(model: AnalyzeModel): MatchResponse {
