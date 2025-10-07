@@ -67,11 +67,7 @@ fun HomeScreen(
     onRefresh: () -> Unit = {}
 ) {
 
-    val scope = rememberCoroutineScope()
-    val snackbarHost = LocalSnackbarHostState.current
-    val uriHandler = LocalUriHandler.current
     val pullToRefreshState = rememberPullToRefreshState()
-    val techStackInfoViewModel: TechStackInfoViewModel = hiltViewModel()
     when {
         uiState.isLoading -> {
             val list by remember { mutableStateOf(

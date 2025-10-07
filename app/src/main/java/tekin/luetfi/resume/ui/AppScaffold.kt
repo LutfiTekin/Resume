@@ -22,6 +22,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -65,6 +66,11 @@ fun AppScaffold(
     //keep a reference to last downloaded pdf file
     //so future requests in the same session won't start unnecessary requests
     var downloadedPdf by remember { mutableStateOf<Uri?>(null) }
+
+    //invalidate pdf file when uiState changes
+    LaunchedEffect(uiState) {
+        downloadedPdf = null
+    }
 
     if (shareRequested) {
         CvWebViewScreen(
