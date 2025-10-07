@@ -34,8 +34,7 @@
       "stack": ["Kotlin", "Play Store", "Architecture", "Performance"],
       "notes": [
         "Refactored the app’s architecture, introducing modular design, dependency injection, and clean separation of concerns to increase maintainability, testability, and developer onboarding speed.",
-        "Managed the complete Google Play release process: prepared release builds, configured Play Console assets, managed release tracks, and coordinated production and staged rollouts, ensuring compliance with Play Store policies and a smooth user update experience.",
-        "Optimized app scalability and aligned codebase with modern best practices: improved network/data handling, standardized code conventions, and documented technical decisions to support future growth and easier feature expansion."
+        "Managed the complete Google Play release process: prepared release builds, configured Play Console assets, managed release tracks, and coordinated production and staged rollouts, ensuring compliance with Play Store policies and a smooth user update experience."
       ]
     },
     {
