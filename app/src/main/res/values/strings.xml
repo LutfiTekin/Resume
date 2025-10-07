@@ -69,4 +69,5 @@
     <string name="location_note">Location: %1$s</string>
     <string name="attach_cv_file">Attach CV File</string>
     <string name="send_via_default_email_app">Send via Default Email App</string>
+    <string name="share">Share</string>
 </resources>
