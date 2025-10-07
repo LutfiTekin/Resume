@@ -4,6 +4,11 @@
     "category": "languages",
     "url": "https://kotlinlang.org/"
   },
+  "Swift": {
+    "description": "Modern, safe, and fast general-purpose programming language developed by Apple for iOS, macOS, watchOS, tvOS, and cross-platform development.",
+    "category": "languages",
+    "url": "https://swift.org/"
+  },
   "Java": {
     "description": "High-level, object-oriented programming language designed for platform independence; widely used for enterprise and Android apps.",
     "category": "languages",
