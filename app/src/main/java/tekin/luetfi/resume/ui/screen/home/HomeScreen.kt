@@ -22,9 +22,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -44,7 +41,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import kotlinx.coroutines.launch
 import tekin.luetfi.resume.R
 import tekin.luetfi.resume.domain.model.Cv
 import tekin.luetfi.resume.ui.LocalSnackbarHostState
@@ -192,9 +188,7 @@ private fun TabletLayout(modifier: Modifier, cv: Cv) {
 
             items(cv.experience) { experience ->
                 //List of experience
-                ExperienceCard(experience) {
-
-                }
+                ExperienceCard(experience)
             }
         }
     }
@@ -236,9 +230,7 @@ fun PhoneLayout(modifier: Modifier, cv: Cv) {
             TAB_EXPERIENCE -> {
                 items(cv.experience) { experience ->
                     //List of experience
-                    ExperienceCard(experience) {
-
-                    }
+                    ExperienceCard(experience)
                 }
             }
 

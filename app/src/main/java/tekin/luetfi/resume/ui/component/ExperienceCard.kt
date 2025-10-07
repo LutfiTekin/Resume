@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -20,14 +21,18 @@ import tekin.luetfi.resume.domain.model.ExperienceItem
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExperienceCard(
-    item: ExperienceItem,
-    onClick: () -> Unit
+    item: ExperienceItem
 ) {
     val period = computePeriod(item.period)
     val techStackClickHandler = rememberTechStackClickHandler()
 
+    val uriHandler = LocalUriHandler.current
+
     ElevatedCard(
-        onClick = onClick,
+        onClick = {
+            val url = item.companyWebsite ?: return@ElevatedCard
+            uriHandler.openUri(url)
+        },
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
