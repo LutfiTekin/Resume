@@ -27,6 +27,7 @@ data class ExperienceItem(
     val title: String,
     val type: String,
     val company: String,
+    val companyWebsite: String? = null,
     val location: String,
     val period: String,
     val project: String? = null,
