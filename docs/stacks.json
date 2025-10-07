@@ -179,6 +179,11 @@
     "category": "design",
     "url": "https://zeplin.io/"
   },
+  "Firebase": {
+    "description": "Google's comprehensive Backend-as-a-Service platform providing cloud-based tools for building, running, and scaling mobile and web applications without managing infrastructure.",
+    "category": "backend",
+    "url": "https://firebase.google.com/"
+  },
   "Analytics": {
     "description": "Collects, processes, and visualizes app usage data to optimize engagement and inform product decisions.",
     "category": "firebase",
