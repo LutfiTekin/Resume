@@ -60,7 +60,7 @@
       "location": "Remote",
       "period": "2021-03 to 2022-10",
       "project": "tuttur.com",
-      "stack": ["Kotlin", "Java", "Retrofit", "Firebase"],
+      "stack": ["Kotlin", "Java", "Retrofit", "Firebase", "DataBinding", "ViewBinding", "Fastlane"],
       "notes": [
         "Owned the full development lifecycle for the tuttur.com Android app, leading planning, implementation, and release activities independently in a remote workflow.",
         "Modernized and refactored the legacy codebase, migrating outdated components to contemporary Android standards and increasing code maintainability, performance, and security."
