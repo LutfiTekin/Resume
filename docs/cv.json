@@ -8,7 +8,7 @@
     "linkedin": "https://linkedin.com/in/lutfitekin",
     "github": "https://github.com/LutfiTekin"
   },
-  "summary": "Seasoned Android Developer with over seven years of experience. Proficient in Kotlin and Java, with additional familiarity in Swift and JavaScript. Versatile professional experienced in on-site, remote, and hybrid work environments. Relocated to Germany in early 2023. Fluent in English and possess intermediate level proficiency in German. ",
+  "summary": "Seasoned Android Developer with over seven years of experience. Proficient in Kotlin and Java, with additional familiarity in Swift and JavaScript. Versatile professional experienced in on-site, remote, and hybrid work environments. Relocated to Germany in early 2023. Fluent in English and possess intermediate level proficiency in German. Open to remote or hybrid positions within a 2-hour radius of Leipzig (e.g Dresden, Berlin, Magdeburg), or Hamburg or fully remote roles across Germany.",
   "experience": [
     {
       "title": "Android Developer",
@@ -17,8 +17,12 @@
       "companyWebsite": "https://aqms.de",
       "location": "Radebeul, Germany (Hybrid)",
       "period": "2025-05 to 2025-09",
-      "stack": ["Kotlin", "Java", "Jetpack Compose","Figma", "Material 3"],
-      "notes": []
+      "project": "tv.de",
+      "stack": ["Kotlin", "Java", "Jetpack Compose","Figma", "Material 3", "Exoplayer"],
+      "notes": [
+        "Led a complete UI overhaul of the Android app, including a major redesign of video player controls and content navigation, resulting in a more intuitive and engaging viewing experience.",
+        "Migrated legacy XML-based layouts to Jetpack Compose, modernizing the codebase, reducing UI complexity, and improving maintainability and development speed."
+      ]
     },
     {
       "title": "Android Developer",
@@ -43,8 +47,9 @@
       "period": "2023-01 to 2024-08",
       "stack": ["Kotlin", "Java", "Azure","Figma","Room"],
       "notes": [
-        "Owned the Android stack for a major news app",
-        "Contributed to several high-visibility apps"
+        "Maintained and extended a flagship news application, delivering new features and UI improvements while ensuring high stability under heavy daily traffic.",
+        "Owned the Android codebase, managing releases, bug fixes, and performance tuning in close collaboration with backend and QA teams.",
+        "Contributed to several high-visibility apps and multiple parallel projects in the Media Unit and Health Unit, adapting app architectures to diverse client requirements."
       ]
     },
     {
@@ -57,8 +62,7 @@
       "project": "tuttur.com",
       "stack": ["Kotlin", "Java", "Retrofit", "Firebase"],
       "notes": [
-        "Modernized legacy codebase",
-        "Implemented full feature sets solo"
+        "Modernized legacy codebase; implemented full feature sets independently"
       ]
     },
     {
@@ -70,8 +74,10 @@
       "period": "2020-02 to 2021-03",
       "stack": ["Kotlin", "AndroidX", "Retrofit", "Spring Boot", "Firebase"],
       "notes": [
-        "Led Android dev solo",
-        "Implemented REST integrations & Firebase services"
+        "Led Android development as the sole developer, taking full ownership of feature delivery, code quality, and all release cycles.",
+        "Architected and integrated comprehensive Firebase services, including Realtime Database, Crashlytics, Analytics, and Push Notifications to enhance app reliability and engagement.",
+        "Implemented Bluetooth printer support, empowering users to print receipts and reports directly from the mobile app.",
+        "Implemented barcode scanning capabilities using the device camera for fast product lookup and inventory operations, streamlining in-app workflows."
       ]
     },
     {
