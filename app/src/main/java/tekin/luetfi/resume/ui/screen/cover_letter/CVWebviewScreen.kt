@@ -33,33 +33,40 @@ import kotlin.collections.component2
 fun CvWebViewScreen(
     modifier: Modifier = Modifier,
     url: String = CV_BASE_URL,
+    uri: Uri? = null,
     viewModel: PdfViewModel = hiltViewModel(),
     onPdfReady: (Uri) -> Unit = {}
 ) {
-    var pdfUri by remember { mutableStateOf<Uri?>(null) }
+    var pdfUri by remember(uri) { mutableStateOf(uri) }
 
     LaunchedEffect(pdfUri) {
         pdfUri?.let {
             //wait for loading animation to settle
-            delay(3000)
+            if (uri == null) { //first time download
+                delay(3000)
+            }
             onPdfReady(it)
         }
     }
-
-    AndroidView(
-        modifier = modifier,
-        factory = { context ->
-            WebView(context).apply {
-                // setupForPdf needs the use case and a callback
-                setupForPdf(savePdf = viewModel.savePdf) { uri: Uri ->
-                    viewModel.onPdfSaved(uri)
-                    //openPdf(context, uri) // or call sharePdf(context, uri)
-                    pdfUri = uri
+    //Downloaded pdf uri is supplied do not draw any UI
+    if (pdfUri != null && uri != null)
+        return
+    if (pdfUri == null) {
+        AndroidView(
+            modifier = modifier,
+            factory = { context ->
+                WebView(context).apply {
+                    // setupForPdf needs the use case and a callback
+                    setupForPdf(savePdf = viewModel.savePdf) { uri: Uri ->
+                        viewModel.onPdfSaved(uri)
+                        //openPdf(context, uri) // or call sharePdf(context, uri)
+                        pdfUri = uri
+                    }
+                    loadUrl(url) // setupForPdf will append ?pdf automatically
                 }
-                loadUrl(url) // setupForPdf will append ?pdf automatically
             }
-        }
-    )
+        )
+    }
     Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         val associations = if (pdfUri != null){
             mapOf(

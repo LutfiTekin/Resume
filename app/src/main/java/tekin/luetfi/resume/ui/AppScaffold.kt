@@ -1,5 +1,7 @@
 @file:Suppress("KotlinConstantConditions", "SimplifyBooleanWithConstants")
+
 package tekin.luetfi.resume.ui
+
 import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -60,14 +62,21 @@ fun AppScaffold(
     val uiState by vm.uiState.collectAsStateWithLifecycle()
     val cv by vm.uiState.mapNotNull { it.resume }.collectAsStateWithLifecycle(Cv())
     var shareRequested by remember { mutableStateOf(false) }
+    //keep a reference to last downloaded pdf file
+    //so future requests in the same session won't start unnecessary requests
+    var downloadedPdf by remember { mutableStateOf<Uri?>(null) }
 
     if (shareRequested) {
         CvWebViewScreen(
-            modifier = Modifier.fillMaxSize()){
+            modifier = Modifier.fillMaxSize(),
+            uri = downloadedPdf
+        ) {
+            downloadedPdf = it
             sharePdf(context, it)
             shareRequested = false
         }
-        return
+        if (downloadedPdf == null)
+            return
     }
 
 
@@ -77,7 +86,7 @@ fun AppScaffold(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
-                modifier = Modifier.clickable{
+                modifier = Modifier.clickable {
                     navController.navigate(HomeRoute)
                 },
                 title = {
@@ -91,10 +100,10 @@ fun AppScaffold(
                             style = MaterialTheme.typography.labelSmall
                         )
                     }
-                     },
+                },
                 scrollBehavior = scrollBehavior,
                 actions = {
-                    if (BuildConfig.IS_MOCK.not() && uiState.resume != null){
+                    if (BuildConfig.IS_MOCK.not() && uiState.resume != null) {
                         IconButton(onClick = {
                             navController.navigate(JobAnalyzerRoute)
                         }) {
@@ -107,7 +116,7 @@ fun AppScaffold(
                     }
                     IconButton(onClick = {
                         shareRequested = true
-                    }){
+                    }) {
                         Icon(
                             imageVector = Icons.Default.Share,
                             contentDescription = stringResource(R.string.share),
