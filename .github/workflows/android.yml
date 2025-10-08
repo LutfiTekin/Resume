@@ -31,8 +31,16 @@ jobs:
           accept-android-sdk-licenses: true
           packages: |
             platform-tools
-            "platforms;android-34"
-            "build-tools;34.0.0"
+            platforms;android-34
+            build-tools;34.0.0
+
+      # fallback: ensure packages via sdkmanager if the action above fails
+      - name: Ensure SDK packages via sdkmanager
+        if: ${{ always() }}
+        run: |
+          export ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-34" "build-tools;34.0.0" || true
+
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
