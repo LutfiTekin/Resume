@@ -9,13 +9,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # 1. Grant write permissions for the job
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          persist-credentials: true
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -26,21 +28,7 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
-        with:
-          cmdline-tools-version: "12.0"
-          accept-android-sdk-licenses: true
-          packages: |
-            platform-tools
-            platforms;android-34
-            build-tools;34.0.0
-
-      # fallback: ensure packages via sdkmanager if the action above fails
-      - name: Ensure SDK packages via sdkmanager
-        if: ${{ always() }}
-        run: |
-          export ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}
-          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-34" "build-tools;34.0.0" || true
-
+        # Removed the redundant fallback step as this action is reliable
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
@@ -51,7 +39,7 @@ jobs:
       - name: Prepare docs folder
         run: |
           mkdir -p docs/outputs/apk
-          cp app/build/outputs/apk/debug/*.apk docs/outputs/apk/ || true
+          cp app/build/outputs/apk/debug/*.apk docs/outputs/apk/
 
       - name: Upload debug APK artifact
         uses: actions/upload-artifact@v4
@@ -59,14 +47,20 @@ jobs:
           name: app-debug-apk
           path: docs/outputs/apk/*.apk
 
-      - name: Commit APK to main (pushes docs/outputs/apk)
-        if: github.ref == 'refs/heads/main'
+      - name: Commit APK to main
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
           GIT_COMMITTER_NAME: github-actions[bot]
           GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
         run: |
           git config user.name "$GIT_COMMITTER_NAME"
           git config user.email "$GIT_COMMITTER_EMAIL"
-          git add docs/outputs/apk/*.apk || true
-          git commit -m "CI: add built APK" || echo "No APK changes to commit"
-          git push origin HEAD:main || echo "Push failed"
+          git add docs/outputs/apk/
+          # Check if there are changes to commit before proceeding
+          if git diff --staged --quiet; then
+            echo "No APK changes to commit."
+          else
+            # 2. Add [skip ci] to the commit message to prevent a workflow loop
+            git commit -m "CI: add built APK [skip ci]"
+            git push
+          fi
