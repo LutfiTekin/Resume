@@ -248,5 +248,10 @@
     "description": "Open-source project comprising Android Jetpack libraries under the androidx namespace; successor to the deprecated Support Library with backward compatibility and independent versioning.",
     "category": "android",
     "url": "https://developer.android.com/jetpack/androidx"
+  },
+  "Android Automotive": {
+    "description": "Platform and SDK for building car-optimized apps on Android Automotive OS using vehicle-safe UI templates and categories such as media and navigation.",
+    "category": "android",
+    "url": "https://developer.android.com/training/cars"
   }
 }
