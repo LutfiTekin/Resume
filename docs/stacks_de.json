@@ -119,7 +119,7 @@
     "category": "backend",
     "url": "https://spring.io/projects/spring-boot"
   },
-  "REST APIs": {
+  "REST-APIs": {
     "description": "Web API Design-Standard, der HTTP-Methoden für ressourcenorientierten Datenzugriff und -manipulation verwendet.",
     "category": "backend",
     "url": "https://restfulapi.net/"
