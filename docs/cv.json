@@ -101,7 +101,7 @@
   "techStack": {
     "android": [
       "Jetpack Compose", "CameraX", "Android Automotive", "Dagger", "Hilt", "Koin",
-      "Coroutines", "Flows", "Gradle", "MVVM", "MVP", "Retrofit",
+      "Coroutines", "Flows", "Gradle", "MVVM", "MVP", "MVI","Retrofit",
       "ViewBinding", "DataBinding", "Material 3", "ExoPlayer",
       "Clean Architecture", "Jetpack Navigation", "Custom Views", "Room"
     ],

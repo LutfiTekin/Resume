@@ -253,5 +253,10 @@
     "description": "Platform and SDK for building car-optimized apps on Android Automotive OS using vehicle-safe UI templates and categories such as media and navigation.",
     "category": "android",
     "url": "https://developer.android.com/training/cars"
+  },
+  "MVI": {
+    "description": "An architectural pattern that enforces a unidirectional data flow, where user actions (Intents) modify a single state model, and the UI (View) reacts to state changes. This improves predictability and testability.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/guide/ui-layer#udf-principles"
   }
 }
