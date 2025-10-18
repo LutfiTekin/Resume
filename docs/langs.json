@@ -1,0 +1,132 @@
+{
+  "en": {
+    "sectionTitles": {
+      "name": "Name",
+      "location": "Location",
+      "contact": "Contact",
+      "summary": "Summary",
+      "experience": "Experience",
+      "languages": "Languages",
+      "techStack": "Tech Stack"
+    },
+    "labels": {
+      "email": "Email",
+      "linkedin": "LinkedIn",
+      "github": "GitHub",
+      "period": "Period",
+      "location": "Location",
+      "type": "Type",
+      "project": "Project",
+      "stack": "Stack",
+      "tech": "Tech",
+      "careerStart": "Career Start",
+      "openToOpportunities": "Open to Opportunities",
+      "downloadPdf": "Download PDF"
+    },
+    "techCategories": {
+      "languages": "Languages",
+      "android": "Android",
+      "ios": "iOS",
+      "backend": "Backend",
+      "frontend": "Frontend",
+      "devOps": "DevOps",
+      "tools": "Tools",
+      "design": "Design",
+      "firebase": "Firebase",
+      "databases": "Databases"
+    },
+    "opportunityStatus": {
+      "actively_looking": "Actively looking for new opportunities",
+      "passive": "Open to interesting offers",
+      "not_interested": "Not currently seeking new roles"
+    },
+    "timePeriod": {
+      "year": "year",
+      "years": "years",
+      "month": "month",
+      "months": "months",
+      "present": "PRESENT",
+      "now": "now",
+      "to": "to"
+    },
+    "months": {
+      "01": "JAN",
+      "02": "FEB",
+      "03": "MAR",
+      "04": "APR",
+      "05": "MAY",
+      "06": "JUN",
+      "07": "JUL",
+      "08": "AUG",
+      "09": "SEP",
+      "10": "OCT",
+      "11": "NOV",
+      "12": "DEC"
+    }
+  },
+  "de": {
+    "sectionTitles": {
+      "name": "Name",
+      "location": "Standort",
+      "contact": "Kontakt",
+      "summary": "Zusammenfassung",
+      "experience": "Berufserfahrung",
+      "languages": "Sprachen",
+      "techStack": "Technologie-Stack"
+    },
+    "labels": {
+      "email": "E-Mail",
+      "linkedin": "LinkedIn",
+      "github": "GitHub",
+      "period": "Zeitraum",
+      "location": "Standort",
+      "type": "Art",
+      "project": "Projekt",
+      "stack": "Technologien",
+      "tech": "Technologien",
+      "careerStart": "Karrierebeginn",
+      "openToOpportunities": "Verfügbarkeit",
+      "downloadPdf": "PDF herunterladen"
+    },
+    "techCategories": {
+      "languages": "Sprachen",
+      "android": "Android",
+      "ios": "iOS",
+      "backend": "Backend",
+      "frontend": "Frontend",
+      "devOps": "DevOps",
+      "tools": "Werkzeuge",
+      "design": "Design",
+      "firebase": "Firebase",
+      "databases": "Datenbanken"
+    },
+    "opportunityStatus": {
+      "actively_looking": "Aktiv auf der Suche nach neuen Möglichkeiten",
+      "passive": "Offen für interessante Angebote",
+      "not_interested": "Derzeit keine neuen Rollen gesucht"
+    },
+    "timePeriod": {
+      "year": "Jahr",
+      "years": "Jahre",
+      "month": "Monat",
+      "months": "Monate",
+      "present": "GEGENWART",
+      "now": "jetzt",
+      "to": "bis"
+    },
+    "months": {
+      "01": "JAN",
+      "02": "FEB",
+      "03": "MÄR",
+      "04": "APR",
+      "05": "MAI",
+      "06": "JUN",
+      "07": "JUL",
+      "08": "AUG",
+      "09": "SEP",
+      "10": "OKT",
+      "11": "NOV",
+      "12": "DEZ"
+    }
+  }
+}

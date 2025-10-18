@@ -1,0 +1,257 @@
+{
+  "Kotlin": {
+    "description": "Moderne, prägnante, statisch typisierte Programmiersprache, bevorzugt für Android- und Multiplattform-Entwicklung.",
+    "category": "languages",
+    "url": "https://kotlinlang.org/"
+  },
+  "Swift": {
+    "description": "Moderne, sichere und schnelle Allzweck-Programmiersprache, entwickelt von Apple für iOS, macOS, watchOS, tvOS und plattformübergreifende Entwicklung.",
+    "category": "languages",
+    "url": "https://swift.org/"
+  },
+  "Java": {
+    "description": "Eine High-Level, objektorientierte Programmiersprache, konzipiert für Plattformunabhängigkeit; weit verbreitet für Unternehmens- und Android-Anwendungen.",
+    "category": "languages",
+    "url": "https://www.oracle.com/java/"
+  },
+  "JavaScript": {
+    "description": "Eine High-Level, dynamische Skriptsprache, unerlässlich für die Webentwicklung, die ereignisgesteuerte, objektorientierte und funktionale Programmierstile unterstützt.",
+    "category": "languages",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+  },
+  "Jetpack Compose": {
+    "description": "Das moderne UI-Toolkit von Android zum schnellen und deklarativen Erstellen nativer Benutzeroberflächen mit Kotlin.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/compose"
+  },
+  "CameraX": {
+    "description": "Jetpack-Bibliothek zur Vereinfachung der Kamerafunktionalität auf Android-Geräten, die Bild-, Videoaufnahme und -analyse unterstützt.",
+    "category": "android",
+    "url": "https://developer.android.com/media/camera/camerax"
+  },
+  "Dagger": {
+    "description": "Compile-Time Dependency Injection Framework für Java und Android; hilft bei der effizienten Verwaltung von Objektabhängigkeiten.",
+    "category": "android",
+    "url": "https://dagger.dev/"
+  },
+  "Hilt": {
+    "description": "Das offizielle Android DI-Framework, das auf Dagger basiert und Dependency Injection für Android einfacher und standardisierter macht.",
+    "category": "android",
+    "url": "https://dagger.dev/hilt/"
+  },
+  "Koin": {
+    "description": "Pragmatisches, leichtgewichtiges Kotlin Dependency Injection Framework, das auf Einfachheit und Testbarkeit fokussiert ist.",
+    "category": "android",
+    "url": "https://insert-koin.io/"
+  },
+  "Coroutines": {
+    "description": "Nebenläufigkeits-Designmuster in Kotlin für asynchronen und nicht-blockierenden Code, das Hintergrundoperationen vereinfacht.",
+    "category": "android",
+    "url": "https://kotlinlang.org/docs/coroutines-overview.html"
+  },
+  "Flows": {
+    "description": "Reaktive Streams API in Kotlin zur Verarbeitung asynchroner Datenflüsse, die kalte und heiße Stream-Typen wie StateFlow und SharedFlow unterstützt.",
+    "category": "android",
+    "url": "https://kotlinlang.org/docs/flow.html"
+  },
+  "Gradle": {
+    "description": "Flexibles Build-Automatisierungstool für mehrsprachige Software, einschließlich Android-Apps, das Abhängigkeitsverwaltung und Build-Skripte unterstützt.",
+    "category": "android",
+    "url": "https://gradle.org/"
+  },
+  "MVVM": {
+    "description": "Designmuster zur Organisation von Code in Model, View, ViewModel in modernen Apps; verbessert die Trennung und Testbarkeit.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/guide#recommended-app-arch"
+  },
+  "MVP": {
+    "description": "Model-View-Presenter-Architekturmuster zur Trennung von Präsentations- und Geschäftslogik, zur Verbesserung der Wartbarkeit.",
+    "category": "android",
+    "url": "https://learn.microsoft.com/en-us/archive/msdn-magazine/2006/august/design-patterns-model-view-presenter"
+  },
+  "Retrofit": {
+    "description": "Typensicherer HTTP-Client für Android und Java, der die API-Kommunikation und den Datenabruf vereinfacht.",
+    "category": "android",
+    "url": "https://square.github.io/retrofit/"
+  },
+  "ViewBinding": {
+    "description": "Android-Bibliothek, die typsicheren Zugriff auf Ansichten in XML-Layouts für verbesserte Code-Sicherheit bietet.",
+    "category": "android",
+    "url": "https://developer.android.com/topic/libraries/view-binding"
+  },
+  "DataBinding": {
+    "description": "Android-Bibliothek, die die deklarative Bindung von UI-Komponenten an Datenquellen innerhalb von XML-Layouts ermöglicht.",
+    "category": "android",
+    "url": "https://developer.android.com/topic/libraries/data-binding"
+  },
+  "Material 3": {
+    "description": "Googles neuestes Material Design System, das moderne UI-Komponenten und Theming in Jetpack Compose bereitstellt.",
+    "category": "android",
+    "url": "https://m3.material.io/develop/android/jetpack-compose"
+  },
+  "ExoPlayer": {
+    "description": "Leistungsstarker, anpassbarer Mediaplayer für Android, der Audio- und Videowiedergabe unterstützt.",
+    "category": "android",
+    "url": "https://exoplayer.dev/"
+  },
+  "Clean Architecture": {
+    "description": "Software-Architekturprinzip, das Belange mit Schichten trennt; fördert Testbarkeit und Wartbarkeit.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/guide#recommended-app-arch"
+  },
+  "Jetpack Navigation": {
+    "description": "Android Jetpack-Komponente zur Vereinfachung der Navigation zwischen App-Bildschirmen und der Verwaltung des Back Stacks.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/navigation"
+  },
+  "Custom Views": {
+    "description": "Android-Konzept zur Erstellung spezialisierter UI-Elemente durch Unterklassenbildung von View für einzigartige Interaktion oder Anzeige.",
+    "category": "android",
+    "url": "https://developer.android.com/guide/topics/ui/custom-components"
+  },
+  "Node.js": {
+    "description": "JavaScript-Laufzeitumgebung, die serverseitiges Skripting und skalierbare Backend-Lösungen ermöglicht.",
+    "category": "backend",
+    "url": "https://nodejs.org/"
+  },
+  "Spring Boot": {
+    "description": "Java-basiertes Framework zum einfachen Erstellen von eigenständigen, produktionsreifen Backend-Anwendungen.",
+    "category": "backend",
+    "url": "https://spring.io/projects/spring-boot"
+  },
+  "REST APIs": {
+    "description": "Web API Design-Standard, der HTTP-Methoden für ressourcenorientierten Datenzugriff und -manipulation verwendet.",
+    "category": "backend",
+    "url": "https://restfulapi.net/"
+  },
+  "Github Actions": {
+    "description": "Workflow-Automatisierungstool in GitHub für CI/CD-Prozesse, Testen, Bauen und Deployment.",
+    "category": "devOps",
+    "url": "https://github.com/features/actions"
+  },
+  "Azure": {
+    "description": "Microsofts Cloud-Computing-Plattform, die Hosting, Datenbanken, Analysen, Speicher und mehr bietet.",
+    "category": "devOps",
+    "url": "https://azure.microsoft.com/"
+  },
+  "Appcenter": {
+    "description": "Microsoft-Plattform für mobile App-Distribution, Testen, Analysen, Absturzberichterstattung und CI/CD.",
+    "category": "devOps",
+    "url": "https://appcenter.ms/"
+  },
+  "Fastlane": {
+    "description": "Automatisierungstool für mobile App-Release-Workflows: Bauen, Testen und Deployment, mit Integrationen für gängige Plattformen.",
+    "category": "devOps",
+    "url": "https://fastlane.tools/"
+  },
+  "Git": {
+    "description": "Verteiltes Versionskontrollsystem für die Verwaltung von Quellcode, unerlässlich für Zusammenarbeit und Verfolgung von Änderungen.",
+    "category": "tools",
+    "url": "https://git-scm.com/"
+  },
+  "GitHub": {
+    "description": "Web-basiertes Hosting für Git-Repositories, das Zusammenarbeit, Issue-Tracking und Code-Verwaltung unterstützt.",
+    "category": "tools",
+    "url": "https://github.com/"
+  },
+  "GitLab": {
+    "description": "Umfassende DevOps-Plattform für Git-Repository-Hosting und CI/CD-Pipeline-Management.",
+    "category": "tools",
+    "url": "https://gitlab.com/"
+  },
+  "Bitbucket": {
+    "description": "Git-basierte Quellcode-Hosting-Plattform, die mit Jira und CI/CD-Pipelines integriert ist.",
+    "category": "tools",
+    "url": "https://bitbucket.org/"
+  },
+  "JIRA": {
+    "description": "Unternehmens-Tool für Projektmanagement, Issue-Tracking und agile Entwicklungsworkflows.",
+    "category": "tools",
+    "url": "https://jira.atlassian.com/"
+  },
+  "Figma": {
+    "description": "Cloud-basiertes Design- und Prototyping-Tool für die UI/UX-Zusammenarbeit, das Vektorbearbeitung und interaktive Mockups bietet.",
+    "category": "design",
+    "url": "https://figma.com/"
+  },
+  "Zeplin": {
+    "description": "Design-Handoff-Tool, das Designer und Entwickler verbindet und Spezifikationen, Assets und Richtlinien aus Mockups generiert.",
+    "category": "design",
+    "url": "https://zeplin.io/"
+  },
+  "Firebase": {
+    "description": "Googles umfassende Backend-as-a-Service-Plattform, die Cloud-basierte Tools zum Erstellen, Ausführen und Skalieren von mobilen und Web-Anwendungen bereitstellt, ohne die Infrastruktur verwalten zu müssen.",
+    "category": "backend",
+    "url": "https://firebase.google.com/"
+  },
+  "Analytics": {
+    "description": "Sammelt, verarbeitet und visualisiert App-Nutzungsdaten, um das Engagement zu optimieren und Produktentscheidungen zu fundieren.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/analytics"
+  },
+  "Crashlytics": {
+    "description": "Echtzeit-Absturzberichterstattungstool, das Einblicke in die App-Stabilität und benutzerrelevante Fehler liefert.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/crashlytics"
+  },
+  "Hosting": {
+    "description": "Dienste, die die Bereitstellung und das Servieren von Web- und mobilen App-Ressourcen im großen Maßstab ermöglichen.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/hosting"
+  },
+  "Push Notifications": {
+    "description": "System zum Senden zeitgerechter und relevanter Nachrichten an Benutzergeräte, das zur erneuten Bindung und Aktualisierungen beiträgt.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/cloud-messaging"
+  },
+  "App Distribution": {
+    "description": "Plattform für die Verteilung von Vorab- und Produktions-App-Builds an Tester, Stakeholder und Benutzer.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/app-distribution"
+  },
+  "Cloud Functions": {
+    "description": "Serverlose Backend-Logik, ausgelöst durch Ereignisse von Firebase oder externen Diensten, die dynamische Verarbeitung ermöglicht.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/functions"
+  },
+  "Realtime DB": {
+    "description": "Cloud-gehostete NoSQL-Datenbank, die Echtzeit-Synchronisation über Geräte und Clients hinweg liefert.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/realtime-database"
+  },
+  "Firestore": {
+    "description": "Flexible, skalierbare NoSQL-Cloud-Datenbank für mobile und Web-Apps, mit Echtzeit-Synchronisation und Offline-Unterstützung.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/firestore"
+  },
+  "Authentication": {
+    "description": "Infrastruktur für die Benutzeranmeldung und -verwaltung, die E-Mail-, soziale und föderierte Anmeldeanbieter unterstützt.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/auth"
+  },
+  "Remote Config": {
+    "description": "Cloud-Dienst zur dynamischen Änderung des App-Verhaltens und Erscheinungsbildes, ohne App-Updates zu erfordern.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/remote-config"
+  },
+  "Room": {
+    "description": "Eine Persistenzbibliothek in Android Jetpack, die eine Abstraktionsschicht über SQLite bietet, robusten Datenbankzugriff ermöglicht und dabei die volle Leistung von SQLite nutzt. Sie vereinfacht Datenbankaufgaben durch Reduzierung von Boilerplate-Code und Überprüfung von SQL-Abfragen zur Kompilierungszeit.",
+    "category": "android",
+    "url": "https://developer.android.com/training/data-storage/room"
+  },
+  "Play Store": {
+    "description": "Googles offizielle App-Vertriebsplattform für Android, die über 2,5 Milliarden aktive Geräte erreicht und integrierte Monetarisierungs-, Sicherheits- und Veröffentlichungstools bietet.",
+    "category": "android",
+    "url": "https://developer.android.com/distribute"
+  },
+  "AndroidX": {
+    "description": "Open-Source-Projekt, das Android Jetpack-Bibliotheken unter dem androidx-Namespace umfasst; Nachfolger der veralteten Support Library mit Abwärtskompatibilität und unabhängiger Versionierung.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/androidx"
+  },
+  "Android Automotive": {
+    "description": "Plattform und SDK zum Erstellen von Auto-optimierten Apps auf Android Automotive OS unter Verwendung fahrzeugsicherer UI-Vorlagen und Kategorien wie Medien und Navigation.",
+    "category": "android",
+    "url": "https://developer.android.com/training/cars"
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "name": "Lütfi Tekin",
+  "location": "Leipzig, Deutschland",
+  "openToOpportunities": "actively_looking",
+  "careerStart": "2017-02",
+  "contact": {
+    "email": "contact@lutfitek.in",
+    "linkedin": "https://linkedin.com/in/lutfitekin",
+    "github": "https://github.com/LutfiTekin"
+  },
+  "summary": "Erfahrener Android-Entwickler mit über sieben Jahren Berufserfahrung. Versiert in Kotlin und Java, zusätzlich mit Kenntnissen in Swift und JavaScript. Vielseitiger Profi mit Erfahrung in Vor-Ort-, Remote- und Hybrid-Umgebungen. Anfang 2023 nach Deutschland umgezogen. Fließend in Englisch und mit mittleren Deutschkenntnissen. Offen für Remote- oder Hybrid-Positionen im Umkreis von zwei Stunden um Leipzig (z. B. Dresden, Berlin, Magdeburg) sowie für Rollen in Hamburg oder vollständig remote in ganz Deutschland.",
+  "experience": [
+    {
+      "title": "Android-Entwickler",
+      "type": "Vollzeit",
+      "company": "AQMS GmbH",
+      "companyWebsite": "https://aqms.de",
+      "location": "Radebeul, Deutschland (Hybrid)",
+      "period": "2025-05 bis 2025-09",
+      "project": "tv.de",
+      "stack": ["Kotlin", "Java", "Jetpack Compose","Figma", "Material 3", "Exoplayer"],
+      "notes": [
+        "Leitete einen vollständigen UI-Relaunch der Android-App, einschließlich einer umfassenden Neugestaltung der Videoplayer-Steuerung und der Inhaltsnavigation, was zu einem intuitiveren und ansprechenderen Seherlebnis führte.",
+        "Migrierte Legacy-Layouts von XML zu Jetpack Compose, modernisierte den Code, reduzierte die UI-Komplexität und verbesserte Wartbarkeit sowie Entwicklungsgeschwindigkeit."
+      ]
+    },
+    {
+      "title": "Android-Entwickler",
+      "type": "Berater",
+      "company": "BestNET",
+      "companyWebsite": "https://bestnet.com.tr",
+      "location": "Remote",
+      "period": "2024-09 to 2025-03",
+      "stack": ["Kotlin", "Play Store", "Architektur", "Performance"],
+      "notes": [
+        "Refaktorierte die Architektur der App, führte modulare Strukturen, Dependency Injection und eine klare Trennung der Verantwortlichkeiten ein, um Wartbarkeit, Testbarkeit und die Geschwindigkeit der Entwickler-Einarbeitung zu erhöhen.",
+        "Verantwortete den vollständigen Google-Play-Release-Prozess: bereitete Release-Builds vor, konfigurierte Play-Console-Assets, verwaltete Release-Tracks und koordinierte produktive sowie gestaffelte Rollouts, unter Einhaltung der Play-Store-Richtlinien und für eine reibungslose Nutzeraktualisierung."
+      ]
+    },
+    {
+      "title": "Android-Entwickler",
+      "type": "Vollzeit",
+      "company": "Appsfactory GmbH",
+      "companyWebsite": "https://appsfactory.de",
+      "location": "Leipzig, Deutschland (Vor Ort)",
+      "period": "2023-01 to 2024-08",
+      "stack": ["Kotlin", "Java", "Azure","Figma","Room", "Android Automotive"],
+      "notes": [
+        "Betreute und erweiterte eine führende Nachrichten-App, lieferte neue Features und UI-Verbesserungen und stellte hohe Stabilität unter starkem Tagesverkehr sicher.",
+        "Verantwortete den Android-Code, einschließlich Releases, Bugfixes und Performance-Tuning, in enger Zusammenarbeit mit Backend- und QA-Teams.",
+        "Trug zu mehreren prominenten Apps und parallelen Projekten in der Media- und Health-Unit bei und passte App-Architekturen an unterschiedliche Kundenanforderungen an."
+      ]
+    },
+    {
+      "title": "Android-Entwickler",
+      "type": "Vollzeit",
+      "company": "PATH - Product and Software House",
+      "companyWebsite": "https://path.com.tr",
+      "location": "Remote",
+      "period": "2021-03 to 2022-10",
+      "project": "tuttur.com",
+      "stack": ["Kotlin", "Java", "Retrofit", "Firebase", "DataBinding", "ViewBinding", "Fastlane"],
+      "notes": [
+        "Verantwortete den gesamten Entwicklungszyklus der Android-App von tuttur.com, leitete Planung, Implementierung und Release-Aktivitäten eigenständig in einem Remote-Setup.",
+        "Modernisierte und refaktorierte den Legacy-Code, migrierte veraltete Komponenten auf aktuelle Android-Standards und steigerte Wartbarkeit, Performance und Sicherheit."
+      ]
+    },
+    {
+      "title": "Mobile App-Entwickler",
+      "type": "Vollzeit",
+      "company": "BestNET",
+      "companyWebsite": "https://bestnet.com.tr",
+      "location": "Antalya, Türkiye (Vor Ort)",
+      "period": "2020-02 to 2021-03",
+      "stack": ["Kotlin", "AndroidX", "Retrofit", "Spring Boot", "Firebase"],
+      "notes": [
+        "Leitete die Android-Entwicklung als alleiniger Entwickler und übernahm vollständige Verantwortung für Feature-Lieferung, Codequalität und alle Release-Zyklen.",
+        "Entwarf und integrierte umfassende Firebase-Dienste, einschließlich Realtime Database, Crashlytics, Analytics und Push-Benachrichtigungen, um Zuverlässigkeit und Engagement der App zu erhöhen.",
+        "Implementierte Unterstützung für Bluetooth-Drucker, sodass Nutzer Belege und Berichte direkt aus der mobilen App drucken können.",
+        "Implementierte Barcode-Scanning mit der Gerätekamera für schnellen Produktabruf und Bestandsvorgänge, wodurch In-App-Workflows gestrafft wurden."
+      ]
+    },
+    {
+      "title": "Mobile App-Entwickler",
+      "type": "Freelance",
+      "company": "Selbstständig",
+      "location": "Remote",
+      "period": "2017-02 to 2019-12",
+      "stack": ["Kotlin", "Swift", "Java"],
+      "notes": [
+        "Entwickelte und veröffentlichte Android/iOS-Apps",
+        "Lieferte End-to-End-Projekte unter engen Deadlines",
+        "Unterstützte bei Bedarf auch Backend-Entwicklung"
+      ]
+    }
+  ],
+  "languages": {
+    "english": "Fließend",
+    "german": "Mittelstufe"
+  },
+  "techStack": {
+    "languages": ["Kotlin", "Java", "JavaScript"],
+    "android": [
+      "Jetpack Compose", "CameraX", "Android Automotive", "Dagger", "Hilt", "Koin",
+      "Coroutines", "Flows", "Gradle", "MVVM", "MVP", "Retrofit",
+      "ViewBinding", "DataBinding", "Material 3", "ExoPlayer",
+      "Clean Architecture", "Jetpack Navigation", "Custom Views", "Room"
+    ],
+    "backend": ["Node.js", "Spring Boot", "REST-APIs"],
+    "devOps": ["Github Actions", "Azure", "Appcenter", "Fastlane"],
+    "tools": ["Git", "GitHub", "GitLab", "Bitbucket", "JIRA"],
+    "design": ["Figma", "Zeplin"],
+    "firebase": [
+      "Analytics", "Crashlytics", "Hosting", "Push-Benachrichtigungen",
+      "App Distribution", "Cloud Functions", "Realtime DB",
+      "Firestore", "Authentication", "Remote Config"
+    ]
+  }
+}
