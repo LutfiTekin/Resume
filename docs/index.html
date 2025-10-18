@@ -15,9 +15,65 @@
     #download-pdf { margin-top: 15px; padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; }
     #download-pdf:hover { background: #219150; }
 
-    /* Language Switcher Styles */
-    #lang-switcher-container { position: absolute; top: 20px; right: 20px; }
-    #lang-switcher { padding: 5px; border-radius: 4px; border: 1px solid #ccc; font-family: Georgia, serif; background: #fff; }
+    /* Language Switcher Styles - MODIFIED */
+    #lang-switcher-container {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        /* To contain the visual switcher */
+        display: flex;
+        align-items: center;
+    }
+
+    /* The visual element for the current selection */
+    #lang-visual-selector {
+        display: flex;
+        align-items: center;
+        padding: 5px 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        background: #fff;
+        cursor: pointer;
+        z-index: 1; /* Above the native select's dropdown */
+        font-family: Georgia, serif;
+    }
+
+    #lang-visual-selector img {
+        width: 20px;
+        height: auto;
+        margin-right: 8px;
+        /* Simple border to make it distinct */
+        border: 1px solid #eee;
+    }
+
+    /* Native select element for functionality and dropdown */
+    #lang-switcher {
+        /* Hide the native select visually, but keep it accessible/functional */
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* The hidden select needs a surrounding container to set its dimensions */
+    #lang-dropdown-wrapper {
+        position: relative;
+        width: 70px; /* Adjust width to fit the content */
+        height: 30px; /* Adjust height to match the visual selector */
+    }
+
+    /* Dropdown styles for options (optional, as native select styling is limited) */
+    #lang-switcher option {
+        background-image: var(--flag-url); /* This won't work on native <option> elements */
+        padding-left: 25px;
+        background-repeat: no-repeat;
+        background-size: 20px 15px;
+        background-position: 5px center;
+    }
+
 
     section { margin-bottom: 30px; }
     section h2 { border-bottom: 2px solid #eee; padding-bottom: 5px; text-transform: uppercase; }
@@ -66,7 +122,11 @@
 <div id="cv-container">
   <header>
     <div id="lang-switcher-container">
-      <select id="lang-switcher"></select>
+      <div id="lang-dropdown-wrapper">
+        <div id="lang-visual-selector">
+        </div>
+        <select id="lang-switcher"></select>
+      </div>
     </div>
     <h1 id="name"></h1>
     <div class="contact">
@@ -168,26 +228,26 @@
 
   // Helper: try localized file first (e.g. cv_de.json), fall back to base file (cv.json)
   async function fetchLocalized(baseName, lang) {
-    const localized = `./${baseName}_${lang}.json`;
-    const fallback = `./${baseName}.json`;
+      const localized = `./${baseName}_${lang}.json`;
+      const fallback = `./${baseName}.json`;
 
-    // If language is 'en' and you prefer the base file directly, you can short-circuit here:
-    // if (lang === 'en') return (await fetch(fallback)).json();
+      // If language is 'en' and you prefer the base file directly, you can short-circuit here:
+      // if (lang === 'en') return (await fetch(fallback)).json();
 
-    try {
-      const res = await fetch(localized);
-      if (res.ok) return res.json();
-      // if not ok (404, 500), we'll try the fallback
-    } catch (e) {
-      // network error, continue to fallback
-    }
+      try {
+          const res = await fetch(localized);
+          if (res.ok) return res.json();
+          // if not ok (404, 500), we'll try the fallback
+      } catch (e) {
+          // network error, continue to fallback
+      }
 
-    const resFallback = await fetch(fallback);
-    if (!resFallback.ok) throw new Error(`Unable to load ${localized} or ${fallback}`);
-    return resFallback.json();
+      const resFallback = await fetch(fallback);
+      if (!resFallback.ok) throw new Error(`Unable to load ${localized} or ${fallback}`);
+      return resFallback.json();
   }
 
-  // Initialize tooltips using the stacks object
+  // Initialize tooltips using the stacks object (unchanged)
   function initTooltips(stacks) {
       if (!stacks) return;
       let activeTooltip = null;
@@ -278,11 +338,24 @@
           li.addEventListener('blur', hideTooltip);
           li.addEventListener('click', () => {
               if (info.url) window.open(info.url.startsWith('http') ? info.url : 'https://' + info.url, '_blank');
-            });
+          });
       });
 
       window.addEventListener('beforeunload', hideTooltip);
   }
+
+  // New helper to update the visual flag/code
+  function updateVisualSelector(langCode) {
+      const visualSelector = document.getElementById('lang-visual-selector');
+      const flagPath = `res/icons/${langCode}.svg`; // Construct the path
+
+      // Use innerHTML to inject the image and text
+      visualSelector.innerHTML = `<img src="${flagPath}" alt="${langCode.toUpperCase()} flag" /> ${langCode.toUpperCase()}`;
+
+      // Also ensure the hidden select reflects the correct value
+      document.getElementById('lang-switcher').value = langCode;
+  }
+
 
   // === MAIN SCRIPT LOGIC ===
   async function main() {
@@ -301,16 +374,26 @@
               window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
           }
 
-          // 3. Setup language switcher
+          // 3. Setup language switcher - MODIFIED
           const langSwitcher = document.getElementById('lang-switcher');
+          langSwitcher.innerHTML = ''; // Clear existing options
           availableLangs.forEach(code => {
               const option = document.createElement('option');
               option.value = code;
               option.textContent = code.toUpperCase(); // e.g., "EN", "DE"
               if (code === lang) option.selected = true;
+
+              // Add an image path as a custom attribute (though only visible on some native dropdowns)
+              option.setAttribute('data-flag', `res/icons/${code}.svg`);
+
               langSwitcher.appendChild(option);
           });
+
+          // Update the visual selector immediately
+          updateVisualSelector(lang);
+
           langSwitcher.addEventListener('change', () => {
+              // The native select change event triggers the page reload
               urlParams.set('lang', langSwitcher.value);
               window.location.search = urlParams.toString(); // Reload page with new lang
           });
@@ -324,7 +407,7 @@
 
           // --- Start of rendering logic ---
 
-          // Helpers that depend on translations
+          // Helpers that depend on translations (unchanged)
           const formatDate = (ym) => {
               const [year, month] = ym.split('-');
               return `${t.months[month]} ${year}`;
@@ -371,7 +454,7 @@
               return `${formatDate(start)} - ${end} (${duration})`;
           };
 
-          // Render CV data and apply translations
+          // Render CV data and apply translations (unchanged)
           document.title = `CV - ${data.name}`;
           document.getElementById('download-pdf').textContent = t.labels.downloadPdf;
           document.querySelector('#summary h2').textContent = t.sectionTitles.summary;
