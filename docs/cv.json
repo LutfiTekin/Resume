@@ -99,7 +99,6 @@
     "german": "Intermediate"
   },
   "techStack": {
-    "languages": ["Kotlin", "Java", "JavaScript"],
     "android": [
       "Jetpack Compose", "CameraX", "Android Automotive", "Dagger", "Hilt", "Koin",
       "Coroutines", "Flows", "Gradle", "MVVM", "MVP", "Retrofit",
