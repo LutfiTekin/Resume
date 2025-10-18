@@ -276,6 +276,9 @@
 
           li.addEventListener('focus', (e) => showTooltipFor(li, info, { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 }));
           li.addEventListener('blur', hideTooltip);
+          li.addEventListener('click', () => {
+              if (info.url) window.open(info.url.startsWith('http') ? info.url : 'https://' + info.url, '_blank');
+            });
       });
 
       window.addEventListener('beforeunload', hideTooltip);
