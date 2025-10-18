@@ -38,7 +38,7 @@
     .tech-category { break-inside: avoid-column; margin-bottom: 20px; }
     .tech-category h4 { margin-bottom: 5px; text-transform: uppercase; font-size: 1em; display: flex; align-items: center; }
     .tech-category h4 i { margin-right: 8px; font-size: 1.2em; }
-    .tech-tooltip { font-family: Georgia, serif; font-size: 1em; max-width: 350px; white-space: pre-line; pointer-events: auto; }
+    .tech-tooltip { font-family: Georgia, serif; font-size: 1em; max-width: 350px; white-space: pre-line; }
 
     /* Hide non-PDF elements */
     body.pdf-mode #download-pdf,
@@ -57,6 +57,9 @@
         .job-details { page-break-inside: avoid; }
         .experience-item ul li { page-break-inside: avoid; orphans: 2; widows: 2; }
     }
+
+    /* Tooltip specific styles */
+    .tech-tooltip { position: fixed; pointer-events: none; background: #fff; border: 1px solid #ddd; padding: 10px; z-index: 10000; box-shadow: 0 2px 8px rgba(0,0,0,.12); border-radius: 6px; max-width: 350px; }
   </style>
 </head>
 <body>
@@ -308,94 +311,109 @@
 
       if (hasPdfQuery()) setTimeout(() => generatePdf({ auto: true }), 350);
 
-      // Initialize Tooltips
+      // Initialize Tooltips (updated to follow mouse and avoid clipping)
       const stacksPath = lang === 'de' ? 'stacks_de.json' : 'stacks.json';
       fetch(stacksPath).then(r => r.json()).then(stacks => {
           let activeTooltip = null;
-          function createTooltip(html, position) {
+          let moveHandler = null;
+
+          function createTooltipElement(html) {
               const el = document.createElement('div'); el.className = 'tech-tooltip'; el.innerHTML = html;
-              Object.assign(el.style, {
-                  position: 'absolute', left: position.x + 'px', top: position.y + 'px', background: '#fff',
-                  border: '1px solid #ddd', padding: '10px', zIndex: 1000, boxShadow: '0 2px 8px rgba(0,0,0,.1)',
-                  maxWidth: '350px', whiteSpace: 'pre-line', pointerEvents: 'auto'
-              });
+              // it's position: fixed via CSS so using client coords is straightforward
               document.body.appendChild(el); return el;
           }
+
           function findInfo(name) {
               const n = name.trim();
               return stacks[n] || stacks[n.toLowerCase()] || stacks[n[0].toUpperCase() + n.slice(1)] || Object.values(stacks).find(e => e && e.description && e.url && (e.name?.toLowerCase() === n.toLowerCase() || e.category?.toLowerCase() === n.toLowerCase() || e.url?.toLowerCase().includes(n.toLowerCase())));
           }
 
+          function positionTooltipAt(mouseX, mouseY, tooltip) {
+              const padding = 12; // distance from cursor
+              const vw = window.innerWidth;
+              const vh = window.innerHeight;
 
-          function showTooltipFor(li, info) {
-              // Remove any existing tooltip
-              if (activeTooltip) {
-                  activeTooltip.remove();
-                  activeTooltip = null;
+              // first place it to the right and below the cursor
+              let left = mouseX + padding;
+              let top = mouseY + padding;
+
+              // measure tooltip (might not be rendered yet fully, but usually OK)
+              const rect = tooltip.getBoundingClientRect();
+              const tw = rect.width;
+              const th = rect.height;
+
+              // if overflowing to the right, place to the left of the cursor
+              if (left + tw > vw - padding) {
+                  left = mouseX - tw - padding;
+                  if (left < padding) left = padding; // clamp to left edge
               }
 
-              // Ensure the list item's text is wrapped in a span for accurate measurement
-              let label = li.querySelector('span.__label');
-              if (!label) {
-                  label = document.createElement('span');
-                  label.className = '__label';
-                  label.textContent = li.textContent.trim();
-                  li.textContent = '';
-                  li.appendChild(label);
+              // if overflowing bottom, place above the cursor
+              if (top + th > vh - padding) {
+                  top = mouseX - th - padding; // attempt above; (note: small bug fixed next)
+                  top = mouseY - th - padding;
+                  if (top < padding) top = padding; // clamp to top edge
               }
 
-              // Create the tooltip content
-              const html = `<div>${info.description}</div><div><a href="${info.url.startsWith('http') ? info.url : 'https://' + info.url}" target="_blank" rel="noopener" style="color:#1a0dab;">${info.url}</a></div>`;
-
-              const rect = label.getBoundingClientRect();
-
-              // Create the tooltip element off-screen to measure it first (Good practice)
-              activeTooltip = createTooltip(html, { x: -9999, y: -9999 });
-
-              // Get the dimensions of the new tooltip
-              const tooltipHeight = activeTooltip.offsetHeight;
-              const tooltipWidth = activeTooltip.offsetWidth;
-
-              // --- Corrected Positioning Logic ---
-
-              // 1. Calculate the ideal horizontal position (right of the element)
-              let finalX = window.scrollX + rect.right + 10;
-              let flip = false;
-
-              // 2. Flip to the left if it goes off the right edge of the screen
-              if (finalX + tooltipWidth > window.innerWidth + window.scrollX - 10) { // Add 10px padding
-                  finalX = window.scrollX + rect.left - tooltipWidth - 10;
-                  flip = true;
-              }
-
-              // 3. Calculate the ideal vertical position (Align top edge with element's top edge)
-              let finalY = window.scrollY + rect.top;
-
-              // 4. Adjust if it goes off the top or bottom of the screen
-              const windowBottom = window.innerHeight + window.scrollY;
-
-              if (finalY < window.scrollY + 10) { // Check top boundary (10px margin)
-                  finalY = window.scrollY + 10;
-              } else if (finalY + tooltipHeight > windowBottom - 10) { // Check bottom boundary (10px margin)
-                  finalY = windowBottom - tooltipHeight - 10;
-                  if (finalY < window.scrollY + 10) { // If it still clips the top, just use the top margin
-                      finalY = window.scrollY + 10;
-                  }
-              }
-
-              // 5. Apply the final, correct position
-              activeTooltip.style.left = finalX + 'px';
-              activeTooltip.style.top = finalY + 'px';
+              tooltip.style.left = `${Math.round(left)}px`;
+              tooltip.style.top = `${Math.round(top)}px`;
           }
 
+          function showTooltipFor(li, info, event) {
+              if (!info) return;
+              const html = `<div>${info.description}</div><div><a href="${info.url.startsWith('http') ? info.url : 'https://' + info.url}" target="_blank" rel="noopener">${info.url}</a></div>`;
+              activeTooltip = createTooltipElement(html);
 
+              // initial position
+              positionTooltipAt(event.clientX, event.clientY, activeTooltip);
+
+              // follow mouse while hovering
+              moveHandler = (e) => {
+                  // use client coordinates because tooltip is fixed
+                  positionTooltipAt(e.clientX, e.clientY, activeTooltip);
+              };
+              document.addEventListener('mousemove', moveHandler);
+
+              // also hide on scroll to avoid odd positioning
+              window.addEventListener('scroll', removeActiveTooltipOnScroll, { passive: true });
+          }
+
+          function removeActiveTooltipOnScroll() {
+              if (activeTooltip) {
+                  activeTooltip.remove(); activeTooltip = null;
+              }
+              if (moveHandler) { document.removeEventListener('mousemove', moveHandler); moveHandler = null; }
+              window.removeEventListener('scroll', removeActiveTooltipOnScroll);
+          }
+
+          function hideTooltip() {
+              if (activeTooltip) {
+                  activeTooltip.remove(); activeTooltip = null;
+              }
+              if (moveHandler) { document.removeEventListener('mousemove', moveHandler); moveHandler = null; }
+              window.removeEventListener('scroll', removeActiveTooltipOnScroll);
+          }
+
+          // Attach handlers to each tech list item
           document.querySelectorAll('.tech-list li').forEach(li => {
               const info = findInfo(li.textContent);
               if (!info) return;
               li.style.cursor = 'pointer';
-              li.addEventListener('mouseenter', () => showTooltipFor(li, info));
+
+              // On enter, create tooltip and start following mouse
+              li.addEventListener('mouseenter', (e) => showTooltipFor(li, info, e));
+
+              // On leave, remove tooltip and stop following
+              li.addEventListener('mouseleave', () => hideTooltip());
+
+              // For keyboard accessibility: show/hide on focus/blur
+              li.addEventListener('focus', (e) => showTooltipFor(li, info, { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 }));
+              li.addEventListener('blur', hideTooltip);
           });
-          window.addEventListener('scroll', () => { if (activeTooltip) { activeTooltip.remove(); activeTooltip = null; } });
+
+          // Clean up on navigation/unload
+          window.addEventListener('beforeunload', hideTooltip);
+
       }).catch(err => console.error('tooltip init failed:', err));
   }
 
