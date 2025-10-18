@@ -95,8 +95,8 @@
     }
   ],
   "languages": {
-    "english": "Fließend",
-    "german": "Mittelstufe"
+    "englisch": "Fließend",
+    "deutsch": "Mittelstufe"
   },
   "techStack": {
     "android": [
