@@ -202,8 +202,8 @@
       const filename = `CV_${safeName}_${month}_${year}_${lang}.pdf`;
 
       const opt = {
-          margin: 0.5, filename: filename, image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+          margin: 0.5, filename: filename, image: { type: 'jpeg', quality: 0.80 },
+          html2canvas: { scale: 1.55, useCORS: true, backgroundColor: '#ffffff'   }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
           pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };
       try {
