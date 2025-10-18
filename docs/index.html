@@ -134,7 +134,7 @@
       const now = new Date();
       const month = String(now.getMonth() + 1).padStart(2, '0');
       const year = now.getFullYear();
-      const safeName = rawName.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_-]/g, '');
+      const safeName = rawName.normalize('NFD').replace(/[^\w\-\s]/g, '').replace(/\s+/g, '_');
       const filename = `CV_${safeName}_${month}_${year}.pdf`;
       const opt = {
           margin: 0.5, filename: filename, image: { type: 'jpeg', quality: 0.98 },
@@ -166,259 +166,281 @@
   }
   document.getElementById('download-pdf').addEventListener('click', () => generatePdf({ auto: false }));
 
+  // Helper: try localized file first (e.g. cv_de.json), fall back to base file (cv.json)
+  async function fetchLocalized(baseName, lang) {
+    const localized = `./${baseName}_${lang}.json`;
+    const fallback = `./${baseName}.json`;
+
+    // If language is 'en' and you prefer the base file directly, you can short-circuit here:
+    // if (lang === 'en') return (await fetch(fallback)).json();
+
+    try {
+      const res = await fetch(localized);
+      if (res.ok) return res.json();
+      // if not ok (404, 500), we'll try the fallback
+    } catch (e) {
+      // network error, continue to fallback
+    }
+
+    const resFallback = await fetch(fallback);
+    if (!resFallback.ok) throw new Error(`Unable to load ${localized} or ${fallback}`);
+    return resFallback.json();
+  }
+
+  // Initialize tooltips using the stacks object
+  function initTooltips(stacks) {
+      if (!stacks) return;
+      let activeTooltip = null;
+      let moveHandler = null;
+
+      function createTooltipElement(html) {
+          const el = document.createElement('div'); el.className = 'tech-tooltip'; el.innerHTML = html;
+          document.body.appendChild(el); return el;
+      }
+
+      function findInfo(name) {
+          const n = name.trim();
+          return stacks[n] || stacks[n.toLowerCase()] || stacks[n[0].toUpperCase() + n.slice(1)] || Object.values(stacks).find(e => e && e.description && e.url && (e.name?.toLowerCase() === n.toLowerCase() || e.category?.toLowerCase() === n.toLowerCase() || e.url?.toLowerCase().includes(n.toLowerCase())));
+      }
+
+      function positionTooltipAt(mouseX, mouseY, tooltip) {
+          const padding = 12; // distance from cursor
+          const vw = window.innerWidth;
+          const vh = window.innerHeight;
+
+          // first place it to the right and below the cursor
+          let left = mouseX + padding;
+          let top = mouseY + padding;
+
+          const rect = tooltip.getBoundingClientRect();
+          const tw = rect.width;
+          const th = rect.height;
+
+          // if overflowing to the right, place to the left of the cursor
+          if (left + tw > vw - padding) {
+              left = mouseX - tw - padding;
+              if (left < padding) left = padding; // clamp to left edge
+          }
+
+          // if overflowing bottom, place above the cursor
+          if (top + th > vh - padding) {
+              top = mouseY - th - padding;
+              if (top < padding) top = padding; // clamp to top edge
+          }
+
+          tooltip.style.left = `${Math.round(left)}px`;
+          tooltip.style.top = `${Math.round(top)}px`;
+      }
+
+      function showTooltipFor(li, info, event) {
+          if (!info) return;
+          const html = `<div>${info.description}</div><div><a href="${info.url.startsWith('http') ? info.url : 'https://' + info.url}" target="_blank" rel="noopener">${info.url}</a></div>`;
+          activeTooltip = createTooltipElement(html);
+
+          // initial position
+          positionTooltipAt(event.clientX, event.clientY, activeTooltip);
+
+          // follow mouse while hovering
+          moveHandler = (e) => {
+              positionTooltipAt(e.clientX, e.clientY, activeTooltip);
+          };
+          document.addEventListener('mousemove', moveHandler);
+
+          // also hide on scroll to avoid odd positioning
+          window.addEventListener('scroll', removeActiveTooltipOnScroll, { passive: true });
+      }
+
+      function removeActiveTooltipOnScroll() {
+          if (activeTooltip) {
+              activeTooltip.remove(); activeTooltip = null;
+          }
+          if (moveHandler) { document.removeEventListener('mousemove', moveHandler); moveHandler = null; }
+          window.removeEventListener('scroll', removeActiveTooltipOnScroll);
+      }
+
+      function hideTooltip() {
+          if (activeTooltip) {
+              activeTooltip.remove(); activeTooltip = null;
+          }
+          if (moveHandler) { document.removeEventListener('mousemove', moveHandler); moveHandler = null; }
+          window.removeEventListener('scroll', removeActiveTooltipOnScroll);
+      }
+
+      document.querySelectorAll('.tech-list li').forEach(li => {
+          const info = findInfo(li.textContent);
+          if (!info) return;
+          li.style.cursor = 'pointer';
+
+          li.addEventListener('mouseenter', (e) => showTooltipFor(li, info, e));
+          li.addEventListener('mouseleave', () => hideTooltip());
+
+          li.addEventListener('focus', (e) => showTooltipFor(li, info, { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 }));
+          li.addEventListener('blur', hideTooltip);
+      });
+
+      window.addEventListener('beforeunload', hideTooltip);
+  }
+
   // === MAIN SCRIPT LOGIC ===
   async function main() {
-      // 1. Fetch language definitions first
-      const allLangs = await fetch('./langs.json').then(res => res.json());
-      const availableLangs = Object.keys(allLangs);
+      try {
+          // 1. Fetch language definitions first
+          const allLangs = await fetch('./langs.json').then(res => res.json());
+          const availableLangs = Object.keys(allLangs);
 
-      // 2. Determine initial language (URL param -> browser locale -> fallback)
-      const urlParams = new URLSearchParams(window.location.search);
-      let lang = urlParams.get('lang');
-      if (!lang || !availableLangs.includes(lang)) {
-          const browserLang = (navigator.language || navigator.userLanguage).split('-')[0];
-          lang = availableLangs.includes(browserLang) ? browserLang : 'en'; // Default to 'en'
-          urlParams.set('lang', lang);
-          window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
-      }
-
-      // 3. Setup language switcher
-      const langSwitcher = document.getElementById('lang-switcher');
-      availableLangs.forEach(code => {
-          const option = document.createElement('option');
-          option.value = code;
-          option.textContent = code.toUpperCase(); // e.g., "EN", "DE"
-          if (code === lang) option.selected = true;
-          langSwitcher.appendChild(option);
-      });
-      langSwitcher.addEventListener('change', () => {
-          urlParams.set('lang', langSwitcher.value);
-          window.location.search = urlParams.toString(); // Reload page with new lang
-      });
-
-      // 4. Fetch the correct CV data
-      const cvPath = lang === 'de' ? './cv_de.json' : './cv.json';
-      document.documentElement.lang = lang;
-      const data = await fetch(cvPath).then(res => res.json());
-
-      // 5. Get the correct translation object
-      const t = allLangs[lang];
-
-      // --- Start of rendering logic ---
-
-      // Helpers that depend on translations
-      const formatDate = (ym) => {
-          const [year, month] = ym.split('-');
-          return `${t.months[month]} ${year}`;
-      };
-      const computePeriod = (period) => {
-          const translatedTo = (t.timePeriod.to || 'to').toLowerCase();
-          const separators = ['to', '–'];
-          if (translatedTo !== 'to' && translatedTo) separators.push(translatedTo);
-          const safeSeparators = separators.map(s => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'));
-          const separatorRegex = new RegExp(`\\s*(?:${safeSeparators.join('|')})\\s*`, 'i');
-          const parts = period.split(separatorRegex);
-          let [start, end] = parts;
-          if (!end) {
-              const translatedNow = (t.timePeriod.now || 'now').toLowerCase();
-              const englishNow = 'now';
-              if (start.toLowerCase() === translatedNow || start.toLowerCase() === englishNow) return t.timePeriod.present || 'PRESENT';
-              return period;
-          }
-          const [sy, sm] = start.split('-').map(Number);
-          let endYear, endMonth;
-          const translatedNow = (t.timePeriod.now || 'now').toLowerCase();
-          const englishNow = 'now';
-          if (end.toLowerCase() === translatedNow || end.toLowerCase() === englishNow) {
-              const now = new Date();
-              endYear = now.getFullYear(); endMonth = now.getMonth() + 1;
-              end = t.timePeriod.present || 'PRESENT';
-          } else {
-              [endYear, endMonth] = end.split('-').map(Number);
-              end = formatDate(end);
-          }
-          if (isNaN(sy) || isNaN(sm) || isNaN(endYear) || isNaN(endMonth)) return `${formatDate(start)} - ${end}`;
-          const totalMonths = (endYear - sy) * 12 + (endMonth - sm) + 1;
-          const yearsCount = Math.floor(totalMonths / 12);
-          const monthsCount = totalMonths % 12;
-          let duration = '';
-          const yearStr = yearsCount > 1 ? t.timePeriod.years : t.timePeriod.year;
-          const monthStr = monthsCount > 1 ? t.timePeriod.months : t.timePeriod.month;
-          if (yearsCount > 0) duration += `${yearsCount} ${yearStr}`;
-          if (monthsCount > 0) {
-              if (duration) duration += ' ';
-              duration += `${monthsCount} ${monthStr}`;
-          }
-          if (!duration) duration = `0 ${t.timePeriod.months || 'months'}`;
-          return `${formatDate(start)} - ${end} (${duration})`;
-      };
-
-      // Render CV data and apply translations
-      document.title = `CV - ${data.name}`;
-      document.getElementById('download-pdf').textContent = t.labels.downloadPdf;
-      document.querySelector('#summary h2').textContent = t.sectionTitles.summary;
-      document.querySelector('#experience h2').textContent = t.sectionTitles.experience;
-      document.querySelector('#languages h2').textContent = t.sectionTitles.languages;
-      document.querySelector('#tech-stack h2').textContent = t.sectionTitles.techStack;
-      document.getElementById('name').textContent = data.name;
-      const email = document.getElementById('email');
-      email.href = `mailto:${data.contact.email}`; email.textContent = data.contact.email;
-      const linkedin = document.getElementById('linkedin');
-      linkedin.href = data.contact.linkedin; linkedin.textContent = t.labels.linkedin;
-      const github = document.getElementById('github');
-      github.href = data.contact.github; github.textContent = t.labels.github;
-      document.getElementById('summary-text').textContent = data.summary;
-      const openDiv = document.getElementById('openness');
-      if (data.openToOpportunities && t.opportunityStatus[data.openToOpportunities]) {
-          openDiv.textContent = t.opportunityStatus[data.openToOpportunities];
-      }
-      const careerStartYear = parseInt(data.careerStart.split('-')[0], 10);
-      const startYears = data.experience.map(exp => parseInt((exp.period || "0-0").split(/\s*(?:to|–|bis)\s*/i)[0].split('-')[0], 10)).filter(y => !isNaN(y) && y > 1900);
-      const minYear = Math.min(careerStartYear, ...startYears);
-      const years = buildTimeline(minYear);
-      const tl = document.getElementById('timeline-years'); tl.innerHTML = '';
-      years.forEach(year => {
-          const li = document.createElement('li');
-          if (startYears.includes(year)) li.innerHTML = `<strong>${year}</strong>`;
-          else li.textContent = year;
-          tl.appendChild(li);
-      });
-      const expContainer = document.getElementById('experience-list'); expContainer.innerHTML = '';
-      data.experience.forEach(exp => {
-          const div = document.createElement('div'); div.className = 'experience-item';
-          const periodText = computePeriod(exp.period);
-          let html = `<h3>${exp.title} <span>${periodText}</span></h3><h4 class="company">${exp.company}</h4><p><em>${exp.location} | ${exp.type}</em></p>`;
-          if (exp.notes && exp.notes.length) html += '<ul class="notes-list">' + exp.notes.map(n => `<li>${n}</li>`).join('') + '</ul>';
-          if (exp.stack) html += `<p><strong>${t.labels.tech || 'Tech'}:</strong> ${exp.stack.join(', ')}</p>`;
-          div.innerHTML = html; expContainer.appendChild(div);
-      });
-      const langList = document.getElementById('languages-list'); langList.innerHTML = '';
-      Object.entries(data.languages).forEach(([lang, lvl]) => {
-          const li = document.createElement('li');
-          li.textContent = `${lang.charAt(0).toUpperCase() + lang.slice(1)}: ${lvl}`;
-          langList.appendChild(li);
-      });
-      const techCont = document.getElementById('tech-stack-categories'); techCont.innerHTML = '';
-      Object.entries(data.techStack).forEach(([cat, items]) => {
-          const div = document.createElement('div'); div.className = 'tech-category';
-          const hd = document.createElement('h4');
-          const categoryTitle = t.techCategories[cat] || (cat.charAt(0).toUpperCase() + cat.slice(1));
-          hd.innerHTML = `<i class="${iconMap[cat.toLowerCase()] || 'fas fa-code'}"></i>${categoryTitle}`;
-          const ul = document.createElement('ul'); ul.className = 'tech-list';
-          items.forEach(item => { const li = document.createElement('li'); li.textContent = item; ul.appendChild(li); });
-          div.appendChild(hd); div.appendChild(ul); techCont.appendChild(div);
-      });
-
-      if (hasPdfQuery()) setTimeout(() => generatePdf({ auto: true }), 350);
-
-      // Initialize Tooltips (updated to follow mouse and avoid clipping)
-      const stacksPath = lang === 'de' ? 'stacks_de.json' : 'stacks.json';
-      fetch(stacksPath).then(r => r.json()).then(stacks => {
-          let activeTooltip = null;
-          let moveHandler = null;
-
-          function createTooltipElement(html) {
-              const el = document.createElement('div'); el.className = 'tech-tooltip'; el.innerHTML = html;
-              // it's position: fixed via CSS so using client coords is straightforward
-              document.body.appendChild(el); return el;
+          // 2. Determine initial language (URL param -> browser locale -> fallback)
+          const urlParams = new URLSearchParams(window.location.search);
+          let lang = urlParams.get('lang');
+          if (!lang || !availableLangs.includes(lang)) {
+              const browserLang = (navigator.language || navigator.userLanguage).split('-')[0];
+              lang = availableLangs.includes(browserLang) ? browserLang : 'en'; // Default to 'en'
+              urlParams.set('lang', lang);
+              window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
           }
 
-          function findInfo(name) {
-              const n = name.trim();
-              return stacks[n] || stacks[n.toLowerCase()] || stacks[n[0].toUpperCase() + n.slice(1)] || Object.values(stacks).find(e => e && e.description && e.url && (e.name?.toLowerCase() === n.toLowerCase() || e.category?.toLowerCase() === n.toLowerCase() || e.url?.toLowerCase().includes(n.toLowerCase())));
-          }
-
-          function positionTooltipAt(mouseX, mouseY, tooltip) {
-              const padding = 12; // distance from cursor
-              const vw = window.innerWidth;
-              const vh = window.innerHeight;
-
-              // first place it to the right and below the cursor
-              let left = mouseX + padding;
-              let top = mouseY + padding;
-
-              // measure tooltip (might not be rendered yet fully, but usually OK)
-              const rect = tooltip.getBoundingClientRect();
-              const tw = rect.width;
-              const th = rect.height;
-
-              // if overflowing to the right, place to the left of the cursor
-              if (left + tw > vw - padding) {
-                  left = mouseX - tw - padding;
-                  if (left < padding) left = padding; // clamp to left edge
-              }
-
-              // if overflowing bottom, place above the cursor
-              if (top + th > vh - padding) {
-                  top = mouseX - th - padding; // attempt above; (note: small bug fixed next)
-                  top = mouseY - th - padding;
-                  if (top < padding) top = padding; // clamp to top edge
-              }
-
-              tooltip.style.left = `${Math.round(left)}px`;
-              tooltip.style.top = `${Math.round(top)}px`;
-          }
-
-          function showTooltipFor(li, info, event) {
-              if (!info) return;
-              const html = `<div>${info.description}</div><div><a href="${info.url.startsWith('http') ? info.url : 'https://' + info.url}" target="_blank" rel="noopener">${info.url}</a></div>`;
-              activeTooltip = createTooltipElement(html);
-
-              // initial position
-              positionTooltipAt(event.clientX, event.clientY, activeTooltip);
-
-              // follow mouse while hovering
-              moveHandler = (e) => {
-                  // use client coordinates because tooltip is fixed
-                  positionTooltipAt(e.clientX, e.clientY, activeTooltip);
-              };
-              document.addEventListener('mousemove', moveHandler);
-
-              // also hide on scroll to avoid odd positioning
-              window.addEventListener('scroll', removeActiveTooltipOnScroll, { passive: true });
-          }
-
-          function removeActiveTooltipOnScroll() {
-              if (activeTooltip) {
-                  activeTooltip.remove(); activeTooltip = null;
-              }
-              if (moveHandler) { document.removeEventListener('mousemove', moveHandler); moveHandler = null; }
-              window.removeEventListener('scroll', removeActiveTooltipOnScroll);
-          }
-
-          function hideTooltip() {
-              if (activeTooltip) {
-                  activeTooltip.remove(); activeTooltip = null;
-              }
-              if (moveHandler) { document.removeEventListener('mousemove', moveHandler); moveHandler = null; }
-              window.removeEventListener('scroll', removeActiveTooltipOnScroll);
-          }
-
-          // Attach handlers to each tech list item
-          document.querySelectorAll('.tech-list li').forEach(li => {
-              const info = findInfo(li.textContent);
-              if (!info) return;
-              li.style.cursor = 'pointer';
-
-              // On enter, create tooltip and start following mouse
-              li.addEventListener('mouseenter', (e) => showTooltipFor(li, info, e));
-
-              // On leave, remove tooltip and stop following
-              li.addEventListener('mouseleave', () => hideTooltip());
-
-              // For keyboard accessibility: show/hide on focus/blur
-              li.addEventListener('focus', (e) => showTooltipFor(li, info, { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 }));
-              li.addEventListener('blur', hideTooltip);
+          // 3. Setup language switcher
+          const langSwitcher = document.getElementById('lang-switcher');
+          availableLangs.forEach(code => {
+              const option = document.createElement('option');
+              option.value = code;
+              option.textContent = code.toUpperCase(); // e.g., "EN", "DE"
+              if (code === lang) option.selected = true;
+              langSwitcher.appendChild(option);
+          });
+          langSwitcher.addEventListener('change', () => {
+              urlParams.set('lang', langSwitcher.value);
+              window.location.search = urlParams.toString(); // Reload page with new lang
           });
 
-          // Clean up on navigation/unload
-          window.addEventListener('beforeunload', hideTooltip);
+          // 4. Fetch the correct CV data (try localized first, fall back to base)
+          document.documentElement.lang = lang;
+          const data = await fetchLocalized('cv', lang);
 
-      }).catch(err => console.error('tooltip init failed:', err));
+          // 5. Get the correct translation object
+          const t = allLangs[lang];
+
+          // --- Start of rendering logic ---
+
+          // Helpers that depend on translations
+          const formatDate = (ym) => {
+              const [year, month] = ym.split('-');
+              return `${t.months[month]} ${year}`;
+          };
+          const computePeriod = (period) => {
+              const translatedTo = (t.timePeriod.to || 'to').toLowerCase();
+              const separators = ['to', '–'];
+              if (translatedTo !== 'to' && translatedTo) separators.push(translatedTo);
+              const safeSeparators = separators.map(s => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'));
+              const separatorRegex = new RegExp(`\\s*(?:${safeSeparators.join('|')})\\s*`, 'i');
+              const parts = period.split(separatorRegex);
+              let [start, end] = parts;
+              if (!end) {
+                  const translatedNow = (t.timePeriod.now || 'now').toLowerCase();
+                  const englishNow = 'now';
+                  if (start.toLowerCase() === translatedNow || start.toLowerCase() === englishNow) return t.timePeriod.present || 'PRESENT';
+                  return period;
+              }
+              const [sy, sm] = start.split('-').map(Number);
+              let endYear, endMonth;
+              const translatedNow = (t.timePeriod.now || 'now').toLowerCase();
+              const englishNow = 'now';
+              if (end.toLowerCase() === translatedNow || end.toLowerCase() === englishNow) {
+                  const now = new Date();
+                  endYear = now.getFullYear(); endMonth = now.getMonth() + 1;
+                  end = t.timePeriod.present || 'PRESENT';
+              } else {
+                  [endYear, endMonth] = end.split('-').map(Number);
+                  end = formatDate(end);
+              }
+              if (isNaN(sy) || isNaN(sm) || isNaN(endYear) || isNaN(endMonth)) return `${formatDate(start)} - ${end}`;
+              const totalMonths = (endYear - sy) * 12 + (endMonth - sm) + 1;
+              const yearsCount = Math.floor(totalMonths / 12);
+              const monthsCount = totalMonths % 12;
+              let duration = '';
+              const yearStr = yearsCount > 1 ? t.timePeriod.years : t.timePeriod.year;
+              const monthStr = monthsCount > 1 ? t.timePeriod.months : t.timePeriod.month;
+              if (yearsCount > 0) duration += `${yearsCount} ${yearStr}`;
+              if (monthsCount > 0) {
+                  if (duration) duration += ' ';
+                  duration += `${monthsCount} ${monthStr}`;
+              }
+              if (!duration) duration = `0 ${t.timePeriod.months || 'months'}`;
+              return `${formatDate(start)} - ${end} (${duration})`;
+          };
+
+          // Render CV data and apply translations
+          document.title = `CV - ${data.name}`;
+          document.getElementById('download-pdf').textContent = t.labels.downloadPdf;
+          document.querySelector('#summary h2').textContent = t.sectionTitles.summary;
+          document.querySelector('#experience h2').textContent = t.sectionTitles.experience;
+          document.querySelector('#languages h2').textContent = t.sectionTitles.languages;
+          document.querySelector('#tech-stack h2').textContent = t.sectionTitles.techStack;
+          document.getElementById('name').textContent = data.name;
+          const email = document.getElementById('email');
+          email.href = `mailto:${data.contact.email}`; email.textContent = data.contact.email;
+          const linkedin = document.getElementById('linkedin');
+          linkedin.href = data.contact.linkedin; linkedin.textContent = t.labels.linkedin;
+          const github = document.getElementById('github');
+          github.href = data.contact.github; github.textContent = t.labels.github;
+          document.getElementById('summary-text').textContent = data.summary;
+          const openDiv = document.getElementById('openness');
+          if (data.openToOpportunities && t.opportunityStatus[data.openToOpportunities]) {
+              openDiv.textContent = t.opportunityStatus[data.openToOpportunities];
+          }
+          const careerStartYear = parseInt(data.careerStart.split('-')[0], 10);
+          const startYears = data.experience.map(exp => parseInt((exp.period || "0-0").split(/\s*(?:to|–|bis)\s*/i)[0].split('-')[0], 10)).filter(y => !isNaN(y) && y > 1900);
+          const minYear = Math.min(careerStartYear, ...startYears);
+          const years = buildTimeline(minYear);
+          const tl = document.getElementById('timeline-years'); tl.innerHTML = '';
+          years.forEach(year => {
+              const li = document.createElement('li');
+              if (startYears.includes(year)) li.innerHTML = `<strong>${year}</strong>`;
+              else li.textContent = year;
+              tl.appendChild(li);
+          });
+          const expContainer = document.getElementById('experience-list'); expContainer.innerHTML = '';
+          data.experience.forEach(exp => {
+              const div = document.createElement('div'); div.className = 'experience-item';
+              const periodText = computePeriod(exp.period);
+              let html = `<h3>${exp.title} <span>${periodText}</span></h3><h4 class="company">${exp.company}</h4><p><em>${exp.location} | ${exp.type}</em></p>`;
+              if (exp.notes && exp.notes.length) html += '<ul class="notes-list">' + exp.notes.map(n => `<li>${n}</li>`).join('') + '</ul>';
+              if (exp.stack) html += `<p><strong>${t.labels.tech || 'Tech'}:</strong> ${exp.stack.join(', ')}</p>`;
+              div.innerHTML = html; expContainer.appendChild(div);
+          });
+          const langList = document.getElementById('languages-list'); langList.innerHTML = '';
+          Object.entries(data.languages).forEach(([lang, lvl]) => {
+              const li = document.createElement('li');
+              li.textContent = `${lang.charAt(0).toUpperCase() + lang.slice(1)}: ${lvl}`;
+              langList.appendChild(li);
+          });
+          const techCont = document.getElementById('tech-stack-categories'); techCont.innerHTML = '';
+          Object.entries(data.techStack).forEach(([cat, items]) => {
+              const div = document.createElement('div'); div.className = 'tech-category';
+              const hd = document.createElement('h4');
+              const categoryTitle = t.techCategories[cat] || (cat.charAt(0).toUpperCase() + cat.slice(1));
+              hd.innerHTML = `<i class="${iconMap[cat.toLowerCase()] || 'fas fa-code'}"></i>${categoryTitle}`;
+              const ul = document.createElement('ul'); ul.className = 'tech-list';
+              items.forEach(item => { const li = document.createElement('li'); li.textContent = item; ul.appendChild(li); });
+              div.appendChild(hd); div.appendChild(ul); techCont.appendChild(div);
+          });
+
+          // Initialize tooltips: try localized stacks first, fall back handled by fetchLocalized
+          try {
+              const stacks = await fetchLocalized('stacks', lang);
+              initTooltips(stacks);
+          } catch (e) {
+              console.warn('Could not load stacks data for tooltips:', e);
+          }
+
+          if (hasPdfQuery()) setTimeout(() => generatePdf({ auto: true }), 350);
+
+      } catch (e) {
+          console.error('Error initializing CV:', e);
+      }
   }
 
   // Run the main logic, catching any errors
-  main().catch(e => console.error('Error initializing CV:', e));
+  main().catch(e => console.error('Error initializing CV (outer):', e));
 </script>
 </body>
 </html>
