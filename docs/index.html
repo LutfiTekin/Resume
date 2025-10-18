@@ -186,7 +186,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script type="text/javascript">
-  // Generate PDF function (unchanged)
+  // Generate PDF function
   async function generatePdf({ auto = false } = {}) {
       document.body.classList.add('pdf-mode');
       const element = document.getElementById('cv-container');
@@ -194,8 +194,13 @@
       const now = new Date();
       const month = String(now.getMonth() + 1).padStart(2, '0');
       const year = now.getFullYear();
+      // 1. Get the current language code from the select element
+      const lang = document.getElementById('lang-switcher').value || 'en';
       const safeName = rawName.normalize('NFD').replace(/[^\w\-\s]/g, '').replace(/\s+/g, '_');
-      const filename = `CV_${safeName}_${month}_${year}.pdf`;
+
+      // 2. Construct the filename with the language code
+      const filename = `CV_${safeName}_${month}_${year}_${lang}.pdf`;
+
       const opt = {
           margin: 0.5, filename: filename, image: { type: 'jpeg', quality: 0.98 },
           html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
