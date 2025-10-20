@@ -14,19 +14,19 @@ interface Api {
     suspend fun getCv(): Cv
 
     @Headers("Cache-Control: no-cache")
-    @GET("job_analysis_prompt.txt")
+    @GET("res/prompts/job_analysis_prompt.txt")
     suspend fun getSystemPrompt(): ResponseBody
 
     @Headers("Cache-Control: no-cache")
-    @GET("fit_summary_prompt.txt")
+    @GET("res/prompts/fit_summary_prompt.txt")
     suspend fun getSummaryPrompt(): ResponseBody
 
     @Headers("Cache-Control: no-cache")
-    @GET("job_application_email_prompt.txt")
+    @GET("res/prompts/job_application_email_prompt.txt")
     suspend fun getCoverLetterPrompt(): ResponseBody
 
     @Headers("Cache-Control: public, max-age=3600, immutable")
-    @GET("models.json")
+    @GET("config/models.json")
     suspend fun getAvailableModels(): List<AnalyzeModel>
 
     @Headers("Cache-Control: public, max-age=604800, immutable")
