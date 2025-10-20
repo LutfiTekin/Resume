@@ -1,13 +1,11 @@
 package tekin.luetfi.resume.di
 
 
-import android.content.Context
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -75,12 +73,12 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOpenRouterAuthInterceptor(@ApplicationContext context: Context): Interceptor = Interceptor { chain ->
+    fun provideOpenRouterAuthInterceptor(): Interceptor = Interceptor { chain ->
         val original = chain.request()
         val builder = original.newBuilder()
             .header("Authorization", "Bearer ${BuildConfig.OPENAI_API_KEY}")
             //Optional but recommended by OpenRouter
-            .header("HTTP-Referer", context.packageName)
+            .header("HTTP-Referer", BuildConfig.CV_BASE_URL)
             .header("X-Title", "CVDEMO")
 
         chain.proceed(builder.build())
