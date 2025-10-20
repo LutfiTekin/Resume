@@ -24,9 +24,6 @@ import kotlin.math.floor
 /**
  * Constants
  */
-const val CV_BASE_URL = "https://lutfitek.in/"
-const val OPEN_ROUTER_AI_BASE_URL = "https://openrouter.ai/api/v1/"
-
 const val REPORTS_DATABASE = "rdb"
 const val REPORTS_TABLE = "rt"
 

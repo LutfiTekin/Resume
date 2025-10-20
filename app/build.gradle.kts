@@ -54,6 +54,8 @@ android {
 
         buildConfigField("String", "OPENAI_API_KEY", "\"$openAiKey\"")
         buildConfigField("boolean", "IS_MOCK", isMock.toString())
+        buildConfigField("String", "CV_BASE_URL", "\"https://lutfitek.in/\"")
+        buildConfigField("String", "OPENROUTERAI_API", "\"https://openrouter.ai/api/v1/\"")
     }
 
     buildTypes {

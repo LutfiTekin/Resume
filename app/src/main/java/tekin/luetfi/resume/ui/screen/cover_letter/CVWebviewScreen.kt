@@ -20,19 +20,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.delay
+import tekin.luetfi.resume.BuildConfig
 import tekin.luetfi.resume.ui.component.AnimatedConfirmation
 import tekin.luetfi.resume.ui.component.setupForPdf
-import tekin.luetfi.resume.util.CV_BASE_URL
 import tekin.luetfi.resume.util.SynonymsDictionary
 import tekin.luetfi.resume.util.SynonymsDictionary.createSynonymsList
 import tekin.luetfi.resume.util.SynonymsDictionary.loadingSynonyms
-import kotlin.collections.component1
-import kotlin.collections.component2
 
 @Composable
 fun CvWebViewScreen(
     modifier: Modifier = Modifier,
-    url: String = CV_BASE_URL,
+    url: String = BuildConfig.CV_BASE_URL,
     uri: Uri? = null,
     viewModel: PdfViewModel = hiltViewModel(),
     onPdfReady: (Uri) -> Unit = {}

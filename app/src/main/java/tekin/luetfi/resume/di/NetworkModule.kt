@@ -15,8 +15,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import tekin.luetfi.resume.BuildConfig
-import tekin.luetfi.resume.util.CV_BASE_URL
-import tekin.luetfi.resume.util.OPEN_ROUTER_AI_BASE_URL
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -115,13 +113,13 @@ object NetworkModule {
     @CvApi
     fun provideRetrofit(
         @CvOkHttp okHttpClient: OkHttpClient, moshiConverter: MoshiConverterFactory
-    ): Retrofit = retrofit(CV_BASE_URL, okHttpClient, moshiConverter)
+    ): Retrofit = retrofit(BuildConfig.CV_BASE_URL, okHttpClient, moshiConverter)
 
     @Provides
     @Singleton
     @OpenRouterApi
     fun provideRetrofitORA(
         @OpenRouterOkHttp okHttpClient: OkHttpClient, moshiConverter: MoshiConverterFactory
-    ): Retrofit = retrofit(OPEN_ROUTER_AI_BASE_URL, okHttpClient, moshiConverter)
+    ): Retrofit = retrofit(BuildConfig.OPENROUTERAI_API, okHttpClient, moshiConverter)
 
 }
