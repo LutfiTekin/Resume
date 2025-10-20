@@ -26,7 +26,7 @@ interface Api {
     suspend fun getCoverLetterPrompt(): ResponseBody
 
     @Headers("Cache-Control: public, max-age=3600, immutable")
-    @GET("config/models.json")
+    @GET("res/config/models.json")
     suspend fun getAvailableModels(): List<AnalyzeModel>
 
     @Headers("Cache-Control: public, max-age=604800, immutable")
