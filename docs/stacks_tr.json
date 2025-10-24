@@ -1,0 +1,262 @@
+{
+  "Kotlin": {
+    "description": "Android ve çoklu platform geliştirme için tercih edilen modern, özlü, statik olarak yazılmış programlama dili.",
+    "category": "languages",
+    "url": "https://kotlinlang.org/"
+  },
+  "Swift": {
+    "description": "Apple tarafından iOS, macOS, watchOS, tvOS ve çapraz platform geliştirme için geliştirilmiş modern, güvenli ve hızlı genel amaçlı programlama dili.",
+    "category": "languages",
+    "url": "https://swift.org/"
+  },
+  "Java": {
+    "description": "Platform bağımsızlığı için tasarlanmış, yüksek seviyeli, nesne yönelimli programlama dili; kurumsal ve Android uygulamaları için yaygın olarak kullanılır.",
+    "category": "languages",
+    "url": "https://www.oracle.com/java/"
+  },
+  "JavaScript": {
+    "description": "Web geliştirme için gerekli olan, olay tabanlı, nesne yönelimli ve fonksiyonel programlama stillerini destekleyen, yüksek seviyeli, dinamik bir betik dilidir.",
+    "category": "languages",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+  },
+  "Jetpack Compose": {
+    "description": "Android'in, Kotlin kullanarak yerel kullanıcı arayüzlerini hızlı ve bildirimsel bir şekilde oluşturmaya yarayan modern UI araç takımı.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/compose"
+  },
+  "CameraX": {
+    "description": "Görüntü, video yakalama ve analizini destekleyen, Android cihazlarda kamera işlevselliğini basitleştiren Jetpack kütüphanesi.",
+    "category": "android",
+    "url": "https://developer.android.com/media/camera/camerax"
+  },
+  "Dagger": {
+    "description": "Java ve Android için derleme zamanlı bağımlılık enjeksiyonu çatısı; nesne bağımlılıklarını verimli bir şekilde yönetmeye yardımcı olur.",
+    "category": "android",
+    "url": "https://dagger.dev/"
+  },
+  "Hilt": {
+    "description": "Dagger üzerine inşa edilmiş, Android için bağımlılık enjeksiyonunu daha kolay ve standart hale getiren resmi Android DI çatısı.",
+    "category": "android",
+    "url": "https://dagger.dev/hilt/"
+  },
+  "Koin": {
+    "description": "Pragmatik, hafif Kotlin bağımlılık enjeksiyonu çatısı, basitlik ve test edilebilirliğe odaklanır.",
+    "category": "android",
+    "url": "https://insert-koin.io/"
+  },
+  "Coroutines": {
+    "description": "Arka plan işlemlerini basitleştiren, eşzamansız ve engellemeyen kod için Kotlin'de bir eşzamanlılık tasarım deseni.",
+    "category": "android",
+    "url": "https://kotlinlang.org/docs/coroutines-overview.html"
+  },
+  "Flows": {
+    "description": "Eşzamansız veri akışlarını işlemek için Kotlin'de reaktif akışlar API'si; StateFlow ve SharedFlow gibi soğuk ve sıcak akış türlerini destekler.",
+    "category": "android",
+    "url": "https://kotlinlang.org/docs/flow.html"
+  },
+  "Gradle": {
+    "description": "Bağımlılık yönetimini ve yapı betiği oluşturmayı destekleyen, Android uygulamaları dahil çok dilli yazılımlar için esnek yapı otomasyon aracı.",
+    "category": "android",
+    "url": "https://gradle.org/"
+  },
+  "MVVM": {
+    "description": "Modern uygulamalarda kodu Model, View, ViewModel olarak düzenlemek için bir tasarım deseni; ayrımı ve test edilebilirliği iyileştirir.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/guide#recommended-app-arch"
+  },
+  "MVP": {
+    "description": "Sunum ve iş mantığını ayırarak sürdürülebilirliği artıran Model-View-Presenter mimari deseni.",
+    "category": "android",
+    "url": "https://learn.microsoft.com/en-us/archive/msdn-magazine/2006/august/design-patterns-model-view-presenter"
+  },
+  "Retrofit": {
+    "description": "Android ve Java için tür güvenli HTTP istemcisi, API iletişimini ve veri alımını basitleştirir.",
+    "category": "android",
+    "url": "https://square.github.io/retrofit/"
+  },
+  "ViewBinding": {
+    "description": "Gelişmiş kod güvenliği için XML düzenlerindeki görünümlere tür güvenli erişim sağlayan Android kütüphanesi.",
+    "category": "android",
+    "url": "https://developer.android.com/topic/libraries/view-binding"
+  },
+  "DataBinding": {
+    "description": "UI bileşenlerinin XML düzenleri içinde veri kaynaklarına bildirimsel olarak bağlanmasını sağlayan Android kütüphanesi.",
+    "category": "android",
+    "url": "https://developer.android.com/topic/libraries/data-binding"
+  },
+  "Material 3": {
+    "description": "Google'ın en son Materyal Tasarım sistemi, Jetpack Compose'da modern UI bileşenleri ve temalandırma sağlar.",
+    "category": "android",
+    "url": "https://m3.material.io/develop/android/jetpack-compose"
+  },
+  "ExoPlayer": {
+    "description": "Ses ve video oynatmayı destekleyen Android için güçlü, özelleştirilebilir medya oynatıcısı.",
+    "category": "android",
+    "url": "https://exoplayer.dev/"
+  },
+  "Clean Architecture": {
+    "description": "Katmanlarla sorumlulukları ayıran yazılım mimarisi prensibi; test edilebilirliği ve sürdürülebilirliği destekler.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/guide#recommended-app-arch"
+  },
+  "Jetpack Navigation": {
+    "description": "Uygulama ekranları arasında gezinmeyi basitleştiren ve geri yığınını yöneten Android Jetpack bileşeni.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/navigation"
+  },
+  "Custom Views": {
+    "description": "Benzersiz etkileşim veya görüntüleme için View'dan alt sınıf oluşturarak özel UI öğeleri oluşturma Android konsepti.",
+    "category": "android",
+    "url": "https://developer.android.com/guide/topics/ui/custom-components"
+  },
+  "Node.js": {
+    "description": "Sunucu tarafı betik oluşturmayı ve ölçeklenebilir backend çözümlerini sağlayan JavaScript çalışma zamanı ortamı.",
+    "category": "backend",
+    "url": "https://nodejs.org/"
+  },
+  "Spring Boot": {
+    "description": "Tek başına, üretime uygun backend uygulamalarını kolayca oluşturmak için Java tabanlı bir çatıdır.",
+    "category": "backend",
+    "url": "https://spring.io/projects/spring-boot"
+  },
+  "REST APIs": {
+    "description": "Kaynak odaklı veri erişimi ve manipülasyonu için HTTP yöntemlerini kullanan Web API tasarım standardı.",
+    "category": "backend",
+    "url": "https://restfulapi.net/"
+  },
+  "Github Actions": {
+    "description": "CI/CD süreçleri, test etme, oluşturma ve dağıtım için GitHub'da iş akışı otomasyon aracı.",
+    "category": "devOps",
+    "url": "https://github.com/features/actions"
+  },
+  "Azure": {
+    "description": "Microsoft'un barındırma, veritabanları, analitik, depolama ve daha fazlasını sunan bulut bilişim platformu.",
+    "category": "devOps",
+    "url": "https://azure.microsoft.com/"
+  },
+  "Appcenter": {
+    "description": "Mobil uygulama dağıtımı, testi, analitiği, kilitlenme raporlaması ve CI/CD için Microsoft platformu.",
+    "category": "devOps",
+    "url": "https://appcenter.ms/"
+  },
+  "Fastlane": {
+    "description": "Başlıca platformlar için entegrasyonlarla mobil uygulama yayınlama iş akışlarını (oluşturma, test etme ve dağıtma) otomasyon aracı.",
+    "category": "devOps",
+    "url": "https://fastlane.tools/"
+  },
+  "Git": {
+    "description": "İşbirliği ve değişiklikleri izleme için gerekli olan, kaynak kodu yönetimi için dağıtılmış sürüm kontrol sistemi.",
+    "category": "tools",
+    "url": "https://git-scm.com/"
+  },
+  "GitHub": {
+    "description": "İşbirliğini, sorun takibini ve kod yönetimini destekleyen Git depoları için web tabanlı barındırma.",
+    "category": "tools",
+    "url": "https://github.com/"
+  },
+  "GitLab": {
+    "description": "Git deposu barındırma ve CI/CD ardışık düzeni yönetimi için kapsamlı DevOps platformu.",
+    "category": "tools",
+    "url": "https://gitlab.com/"
+  },
+  "Bitbucket": {
+    "description": "Jira ve CI/CD ardışık düzenleri ile entegre olan Git tabanlı kaynak kodu barındırma platformu.",
+    "category": "tools",
+    "url": "https://bitbucket.org/"
+  },
+  "JIRA": {
+    "description": "Proje yönetimi, sorun takibi ve çevik geliştirme iş akışları için kurumsal araç.",
+    "category": "tools",
+    "url": "https://jira.atlassian.com/"
+  },
+  "Figma": {
+    "description": "Vektör düzenleme ve etkileşimli maketler sunan, UI/UX işbirliği için bulut tabanlı tasarım ve prototipleme aracı.",
+    "category": "design",
+    "url": "https://figma.com/"
+  },
+  "Zeplin": {
+    "description": "Tasarımcılar ve geliştiriciler arasında köprü kuran, maketlerden özellikler, varlıklar ve kılavuzlar oluşturan tasarım aktarma aracı.",
+    "category": "design",
+    "url": "https://zeplin.io/"
+  },
+  "Firebase": {
+    "description": "Altyapıyı yönetmeden mobil ve web uygulamaları oluşturmak, çalıştırmak ve ölçeklendirmek için bulut tabanlı araçlar sağlayan Google'ın kapsamlı Backend-as-a-Service platformu.",
+    "category": "backend",
+    "url": "https://firebase.google.com/"
+  },
+  "Analytics": {
+    "description": "Etkileşimi optimize etmek ve ürün kararlarını bilgilendirmek için uygulama kullanım verilerini toplar, işler ve görselleştirir.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/analytics"
+  },
+  "Crashlytics": {
+    "description": "Uygulama istikrarı ve kullanıcıyı etkileyen hatalar hakkında bilgi sağlayan gerçek zamanlı kilitlenme raporlama aracı.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/crashlytics"
+  },
+  "Hosting": {
+    "description": "Web ve mobil uygulama kaynaklarının ölçekli olarak dağıtımını ve sunulmasını sağlayan hizmetler.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/hosting"
+  },
+  "Push Notifications": {
+    "description": "Kullanıcı cihazlarına zamanında ve ilgili mesajlar göndererek yeniden etkileşimi ve güncellemeleri kolaylaştıran sistem.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/cloud-messaging"
+  },
+  "App Distribution": {
+    "description": "Yayın öncesi ve üretim uygulama yapılarını test edenlere, paydaşlara ve kullanıcılara dağıtmak için platform.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/app-distribution"
+  },
+  "Cloud Functions": {
+    "description": "Firebase veya harici hizmetlerden gelen olaylarla tetiklenen, dinamik işlemeyi sağlayan sunucusuz backend mantığı.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/functions"
+  },
+  "Realtime DB": {
+    "description": "Cihazlar ve istemciler arasında gerçek zamanlı senkronizasyon sağlayan, bulutta barındırılan, NoSQL veritabanı.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/realtime-database"
+  },
+  "Firestore": {
+    "description": "Gerçek zamanlı senkronizasyon ve çevrimdışı desteği olan, mobil ve web uygulamaları için esnek, ölçeklenebilir NoSQL bulut veritabanı.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/firestore"
+  },
+  "Authentication": {
+    "description": "E-posta, sosyal ve birleşik oturum açma sağlayıcılarını destekleyen, kullanıcı oturum açma ve yönetimi için altyapı.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/auth"
+  },
+  "Remote Config": {
+    "description": "Uygulama güncellemeleri gerektirmeden uygulama davranışını ve görünümünü dinamik olarak değiştirmek için bulut hizmeti.",
+    "category": "firebase",
+    "url": "https://firebase.google.com/products/remote-config"
+  },
+  "Room": {
+    "description": "Sağlam veritabanı erişimi sağlarken SQLite'ın tüm gücünden yararlanan, SQLite üzerinde bir soyutlama katmanı sunan Android Jetpack'teki bir kalıcılık kütüphanesidir. Tekrar eden kodu azaltarak ve SQL sorgularını derleme zamanında doğrulayarak veritabanı görevlerini basitleştirir.",
+    "category": "android",
+    "url": "https://developer.android.com/training/data-storage/room"
+  },
+  "Play Store": {
+    "description": "Entegre para kazanma, güvenlik ve yayınlama araçlarıyla 2,5 milyardan fazla aktif cihaza ulaşan Android için Google'ın resmi uygulama dağıtım platformu.",
+    "category": "android",
+    "url": "https://developer.android.com/distribute"
+  },
+  "AndroidX": {
+    "description": "Androidx ad alanı altındaki Android Jetpack kütüphanelerinden oluşan açık kaynak projesi; geriye dönük uyumluluk ve bağımsız sürümleme ile kullanımdan kaldırılmış Destek Kütüphanesi'nin halefidir.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/androidx"
+  },
+  "Android Automotive": {
+    "description": "Medya ve navigasyon gibi araç güvenli UI şablonları ve kategorilerini kullanarak Android Automotive OS üzerinde araba için optimize edilmiş uygulamalar oluşturmaya yarayan platform ve SDK.",
+    "category": "android",
+    "url": "https://developer.android.com/training/cars"
+  },
+  "MVI": {
+    "description": "Tek yönlü veri akışını zorlayan, kullanıcı eylemlerinin (Intent'ler) tek bir durum modelini değiştirdiği ve UI'nın (View) durum değişikliklerine tepki verdiği bir mimari desen. Bu, tahmin edilebilirliği ve test edilebilirliği artırır.",
+    "category": "android",
+    "url": "https://developer.android.com/jetpack/guide/ui-layer#udf-principles"
+  }
+}

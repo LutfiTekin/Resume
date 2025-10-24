@@ -128,5 +128,70 @@
       "11": "NOV",
       "12": "DEZ"
     }
+  },
+  "tr": {
+    "sectionTitles": {
+      "name": "İsim",
+      "location": "Konum",
+      "contact": "İletişim",
+      "summary": "Özet",
+      "experience": "Deneyim",
+      "languages": "Diller",
+      "techStack": "Teknoloji Yığını"
+    },
+    "labels": {
+      "email": "E-posta",
+      "linkedin": "LinkedIn",
+      "github": "GitHub",
+      "period": "Dönem",
+      "location": "Konum",
+      "type": "Tür",
+      "project": "Proje",
+      "stack": "Yığın",
+      "tech": "Teknoloji",
+      "careerStart": "Kariyer Başlangıcı",
+      "openToOpportunities": "Fırsatlara Açık",
+      "downloadPdf": "PDF İndir"
+    },
+    "techCategories": {
+      "languages": "Diller",
+      "android": "Android",
+      "ios": "iOS",
+      "backend": "Arka Uç",
+      "frontend": "Ön Uç",
+      "devOps": "DevOps",
+      "tools": "Araçlar",
+      "design": "Tasarım",
+      "firebase": "Firebase",
+      "databases": "Veritabanları"
+    },
+    "opportunityStatus": {
+      "actively_looking": "Aktif olarak iş arıyor",
+      "passive": "İlginç tekliflere açık",
+      "not_interested": "Şu anda yeni pozisyon aramıyor"
+    },
+    "timePeriod": {
+      "year": "yıl",
+      "years": "yıl",
+      "month": "ay",
+      "months": "ay",
+      "present": "ŞİMDİ",
+      "now": "şimdi",
+      "to": "-"
+    },
+    "months": {
+      "01": "OCA",
+      "02": "ŞUB",
+      "03": "MAR",
+      "04": "NIS",
+      "05": "MAY",
+      "06": "HAZ",
+      "07": "TEM",
+      "08": "AĞU",
+      "09": "EYL",
+      "10": "EKİ",
+      "11": "KAS",
+      "12": "ARA"
+    }
   }
 }
