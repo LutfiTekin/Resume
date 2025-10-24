@@ -3,8 +3,8 @@ name: Generate and Convert CV Markdown to PDF
 on:
   push:
     paths:
-      - 'docs/cv.json'
-      - 'docs/cv_de.json'
+      - 'docs/**'
+      - 'langs.json'
   workflow_dispatch:
 
 jobs:
@@ -19,60 +19,72 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Generate Markdown from JSON
+      - name: Generate Markdown and PDFs for all languages
         run: |
+          sudo apt-get update && sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-extra
+          mkdir -p docs/outputs/pdf
+
           node << 'EOF'
           const fs = require('fs');
+          const { execSync } = require('child_process');
+
+          // Load all supported languages dynamically
+          const langs = JSON.parse(fs.readFileSync('langs.json', 'utf8'));
+          const supportedLangs = Object.keys(langs);
+
           function generateMarkdown(jsonPath, outputPath) {
             const cv = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
             let md = `# ${cv.name}\n\n`;
-            md += `**Location:** ${cv.location}  \n`;
-            md += `**Email:** ${cv.contact.email}  \n`;
-            md += `**LinkedIn:** [${cv.contact.linkedin}](${cv.contact.linkedin})  \n`;
-            md += `**GitHub:** [${cv.contact.github}](${cv.contact.github})  \n\n`;
+            md += `**Location:** ${cv.location} \n`;
+            md += `**Email:** ${cv.contact.email} \n`;
+            md += `**LinkedIn:** [${cv.contact.linkedin}](${cv.contact.linkedin}) \n`;
+            md += `**GitHub:** [${cv.contact.github}](${cv.contact.github}) \n\n`;
             md += `## Summary\n\n${cv.summary}\n\n`;
             md += `## Experience\n\n`;
+            md += `---\n`
             cv.experience.forEach(exp => {
               md += `### ${exp.title} - ${exp.company}\n\n`;
               md += `**${exp.type}** | ${exp.location} | ${exp.period}\n\n`;
-              if (exp.stack) {
-                md += `**Tech Stack:** ${exp.stack.join(', ')}\n\n`;
-              }
-              exp.notes.forEach(note => {
-                md += `- ${note}\n`;
-              });
+              if (exp.stack) md += `**Tech Stack:** ${exp.stack.join(', ')}\n\n`;
+              exp.notes.forEach(note => md += `- ${note}\n`);
               md += `\n`;
             });
-            md += `## Tech Stack\n\n`;
+             md += `---\n`
             if (cv.techStack) {
+              md += `## Tech Stack\n\n`;
               Object.entries(cv.techStack).forEach(([category, items]) => {
                 md += `**${category.charAt(0).toUpperCase() + category.slice(1)}:** ${items.join(', ')}\n\n`;
               });
             }
+            md += `---\n`
             if (cv.languages) {
               md += `## Languages\n\n`;
               Object.entries(cv.languages).forEach(([lang, level]) => {
                 md += `- **${lang.charAt(0).toUpperCase() + lang.slice(1)}:** ${level}\n`;
               });
-              md += `\n`;
             }
             fs.writeFileSync(outputPath, md);
             console.log(`Generated ${outputPath}`);
           }
-          generateMarkdown('docs/cv.json', 'docs/outputs/cv.md');
-          generateMarkdown('docs/cv_de.json', 'docs/outputs/cv_de.md');
+
+          supportedLangs.forEach(lang => {
+            const suffix = lang === 'en' ? '' : `_${lang}`;
+            const jsonPath = `docs/cv${suffix}.json`;
+            const mdPath = `docs/outputs/cv${suffix}.md`;
+            const pdfPath = `docs/outputs/pdf/cv${suffix}.pdf`;
+
+            if (!fs.existsSync(jsonPath)) {
+              console.warn(`⚠ No file found for ${jsonPath}, skipping.`);
+              return;
+            }
+
+            generateMarkdown(jsonPath, mdPath);
+            execSync(`pandoc "${mdPath}" -o "${pdfPath}" --pdf-engine=xelatex -V geometry:margin=1.5cm`);
+            console.log(`📄 Created PDF: ${pdfPath}`);
+          });
           EOF
 
-      - name: Install Pandoc and XeLaTeX
-        run: sudo apt-get update && sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-extra
-
-      - name: Convert Markdown to PDF with custom margins
-        run: |
-          mkdir -p docs/outputs/pdf
-          pandoc docs/outputs/cv.md -o docs/outputs/pdf/cv_en.pdf --pdf-engine=xelatex -V geometry:margin=1.5cm
-          pandoc docs/outputs/cv_de.md -o docs/outputs/pdf/cv_de.pdf --pdf-engine=xelatex -V geometry:margin=1.5cm
-
-      - name: Commit PDF files
+      - name: Commit generated PDFs
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
