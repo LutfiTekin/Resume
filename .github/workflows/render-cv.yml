@@ -63,19 +63,14 @@ jobs:
           generateMarkdown('docs/cv_de.json', 'docs/outputs/cv_de.md');
           EOF
 
-          
+      - name: Install Pandoc and XeLaTeX
+        run: sudo apt-get update && sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-extra
 
-      - name: Install Pandoc
-        run: sudo apt-get update && sudo apt-get install -y pandoc
-
-      - name: Install wkhtmltopdf
-        run: sudo apt-get install -y wkhtmltopdf
-
-      - name: Convert Markdown to PDF
+      - name: Convert Markdown to PDF with custom margins
         run: |
           mkdir -p docs/outputs/pdf
-          pandoc docs/outputs/cv.md -o docs/outputs/pdf/CV_Lutfi_Tekin_10_2025_en.pdf --pdf-engine=wkhtmltopdf
-          pandoc docs/outputs/cv_de.md -o docs/outputs/pdf/CV_Lutfi_Tekin_10_2025_de.pdf --pdf-engine=wkhtmltopdf
+          pandoc docs/outputs/cv.md -o docs/outputs/pdf/cv_en.pdf --pdf-engine=xelatex -V geometry:margin=1.5cm
+          pandoc docs/outputs/cv_de.md -o docs/outputs/pdf/cv_de.pdf --pdf-engine=xelatex -V geometry:margin=1.5cm
 
       - name: Commit PDF files
         run: |
