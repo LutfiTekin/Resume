@@ -82,17 +82,17 @@ jobs:
             }
 
             fs.writeFileSync(outputPath, md);
-            console.log(\`Generated \${outputPath}\`);
+            console.log(`Generated ${outputPath}`);
           }
 
           supportedLangs.forEach(lang => {
-            const suffix = lang === "en" ? "" : `_\${lang}`;
-            const jsonPath = \`docs/cv\${suffix}.json\`;
-            const mdPath = \`docs/outputs/cv\${suffix}.md\`;
-            const pdfPath = \`docs/outputs/pdf/cv\${suffix}.pdf\`;
+            const suffix = lang === "en" ? "" : `_${lang}`;
+            const jsonPath = `docs/cv${suffix}.json`;
+            const mdPath = `docs/outputs/cv${suffix}.md`;
+            const pdfPath = `docs/outputs/pdf/cv${suffix}.pdf`;
 
             if (!fs.existsSync(jsonPath)) {
-              console.warn(\`⚠ No file found for \${jsonPath}, skipping.\`);
+              console.warn(`⚠ No file found for ${jsonPath}, skipping.`);
               return;
             }
 
@@ -102,8 +102,8 @@ jobs:
               mdPath,
               langs[lang]
             );
-            execSync(\`pandoc "\${mdPath}" -o "\${pdfPath}" --pdf-engine=xelatex -V geometry:margin=1.5cm\`);
-            console.log(\`Created PDF: \${pdfPath}\`);
+            execSync(`pandoc "${mdPath}" -o "${pdfPath}" --pdf-engine=xelatex -V geometry:margin=1.5cm`);
+            console.log(`Created PDF: ${pdfPath}`);
           });
           EOF
 
