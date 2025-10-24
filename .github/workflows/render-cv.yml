@@ -68,14 +68,14 @@ jobs:
             }
 
             if (cv.techStack) {
-              md += `---\n# ${dict.sectionTitles.techStack}\n\n`;
+              md += `\n# ${dict.sectionTitles.techStack}\n\n`;
               Object.entries(cv.techStack).forEach(([category, items]) => {
                 md += `**${capitalize(category)}:** ${items.join(', ')}\n\n`;
               });
             }
 
             if (cv.languages) {
-              md += `---\n# ${dict.sectionTitles.languages}\n\n`;
+              md += `\n# ${dict.sectionTitles.languages}\n\n`;
               Object.entries(cv.languages).forEach(([lang, level]) => {
                 md += `- **${capitalize(lang)}:** ${level}\n`;
               });
