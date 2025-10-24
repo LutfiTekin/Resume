@@ -44,7 +44,7 @@
       "companyWebsite": "https://appsfactory.de",
       "location": "Leipzig, Germany (On-Site)",
       "period": "2023-01 to 2024-08",
-      "stack": ["Kotlin", "Java", "Azure","Figma","Room", "Android Automotive"],
+      "stack": ["Kotlin", "Java", "Azure","Figma","Room", "Android Automotive", "Appcenter", "Jetpack Compose"],
       "notes": [
         "Maintained and extended a flagship news application, delivering new features and UI improvements while ensuring high stability under heavy daily traffic.",
         "Owned the Android codebase, managing releases, bug fixes, and performance tuning in close collaboration with backend and QA teams.",
