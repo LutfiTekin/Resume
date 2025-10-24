@@ -4,7 +4,6 @@ on:
   push:
     paths:
       - 'docs/**'
-      - 'docs/langs.json'
   workflow_dispatch:
 
 jobs:
@@ -23,7 +22,6 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-extra
           mkdir -p docs/outputs/pdf
-
           node << 'EOF'
           const fs = require('fs');
           const { execSync } = require('child_process');
@@ -32,55 +30,80 @@ jobs:
           const langs = JSON.parse(fs.readFileSync('docs/langs.json', 'utf8'));
           const supportedLangs = Object.keys(langs);
 
-          function generateMarkdown(jsonPath, outputPath) {
+          function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+          }
+
+          function generateMarkdown(jsonPath, outputPath, dict) {
             const cv = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
             let md = `# ${cv.name}\n\n`;
-            md += `**Location:** ${cv.location} \n`;
-            md += `**Email:** ${cv.contact.email} \n`;
-            md += `**LinkedIn:** [${cv.contact.linkedin}](${cv.contact.linkedin}) \n`;
-            md += `**GitHub:** [${cv.contact.github}](${cv.contact.github}) \n\n`;
-            md += `## Summary\n\n${cv.summary}\n\n`;
-            md += `## Experience\n\n`;
-            md += `---\n`
-            cv.experience.forEach(exp => {
-              md += `### ${exp.title} - ${exp.company}\n\n`;
-              md += `**${exp.type}** | ${exp.location} | ${exp.period}\n\n`;
-              if (exp.stack) md += `**Tech Stack:** ${exp.stack.join(', ')}\n\n`;
-              exp.notes.forEach(note => md += `- ${note}\n`);
-              md += `\n`;
-            });
-             md += `---\n`
+
+            md += `**${dict.sectionTitles.location}:** ${cv.location}  \n`;
+            md += `**${dict.labels.email}:** ${cv.contact.email}  \n`;
+            if (cv.contact.linkedin) {
+              md += `**${dict.labels.linkedin}:** [${cv.contact.linkedin}](${cv.contact.linkedin})  \n`;
+            }
+            if (cv.contact.github) {
+              md += `**${dict.labels.github}:** [${cv.contact.github}](${cv.contact.github})  \n`;
+            }
+            md += `\n`;
+
+            if (cv.summary) {
+              md += `# ${dict.sectionTitles.summary}\n\n${cv.summary}\n\n`;
+            }
+
+            if (cv.experience && cv.experience.length > 0) {
+              md += `# ${dict.sectionTitles.experience}\n\n`;
+              cv.experience.forEach(exp => {
+                md += `### ${exp.title} - ${exp.company}\n\n`;
+                md += `**${exp.type}** | ${exp.location} | ${exp.period}\n\n`;
+                if (exp.stack) {
+                  md += `**${dict.sectionTitles.techStack}:** ${exp.stack.join(', ')}\n\n`;
+                }
+                if (exp.notes && exp.notes.length > 0) {
+                  exp.notes.forEach(note => md += `- ${note}\n`);
+                  md += `\n`;
+                }
+              });
+            }
+
             if (cv.techStack) {
-              md += `## Tech Stack\n\n`;
+              md += `---\n# ${dict.sectionTitles.techStack}\n\n`;
               Object.entries(cv.techStack).forEach(([category, items]) => {
-                md += `**${category.charAt(0).toUpperCase() + category.slice(1)}:** ${items.join(', ')}\n\n`;
+                md += `**${capitalize(category)}:** ${items.join(', ')}\n\n`;
               });
             }
-            md += `---\n`
+
             if (cv.languages) {
-              md += `## Languages\n\n`;
+              md += `---\n# ${dict.sectionTitles.languages}\n\n`;
               Object.entries(cv.languages).forEach(([lang, level]) => {
-                md += `- **${lang.charAt(0).toUpperCase() + lang.slice(1)}:** ${level}\n`;
+                md += `- **${capitalize(lang)}:** ${level}\n`;
               });
             }
+
             fs.writeFileSync(outputPath, md);
-            console.log(`Generated ${outputPath}`);
+            console.log(\`Generated \${outputPath}\`);
           }
 
           supportedLangs.forEach(lang => {
-            const suffix = lang === 'en' ? '' : `_${lang}`;
-            const jsonPath = `docs/cv${suffix}.json`;
-            const mdPath = `docs/outputs/cv${suffix}.md`;
-            const pdfPath = `docs/outputs/pdf/cv${suffix}.pdf`;
+            const suffix = lang === "en" ? "" : `_\${lang}`;
+            const jsonPath = \`docs/cv\${suffix}.json\`;
+            const mdPath = \`docs/outputs/cv\${suffix}.md\`;
+            const pdfPath = \`docs/outputs/pdf/cv\${suffix}.pdf\`;
 
             if (!fs.existsSync(jsonPath)) {
-              console.warn(`⚠ No file found for ${jsonPath}, skipping.`);
+              console.warn(\`⚠ No file found for \${jsonPath}, skipping.\`);
               return;
             }
 
-            generateMarkdown(jsonPath, mdPath);
-            execSync(`pandoc "${mdPath}" -o "${pdfPath}" --pdf-engine=xelatex -V geometry:margin=1.5cm`);
-            console.log(`📄 Created PDF: ${pdfPath}`);
+            // Use full dictionary for the language to allow access to labels/sections etc
+            generateMarkdown(
+              jsonPath,
+              mdPath,
+              langs[lang]
+            );
+            execSync(\`pandoc "\${mdPath}" -o "\${pdfPath}" --pdf-engine=xelatex -V geometry:margin=1.5cm\`);
+            console.log(\`Created PDF: \${pdfPath}\`);
           });
           EOF
 
