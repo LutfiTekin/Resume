@@ -258,5 +258,10 @@
     "description": "Ein Architekturmuster, das einen unidirektionalen Datenfluss erzwingt, bei dem Benutzeraktionen (Intents) ein einziges Zustandsmodell modifizieren und die Benutzeroberfläche (View) auf Zustandsänderungen reagiert. Dies verbessert die Vorhersagbarkeit und Testbarkeit.",
     "category": "android",
     "url": "https://developer.android.com/jetpack/guide/ui-layer#udf-principles"
+  },
+  "Wear OS": {
+    "description": "Googles Betriebssystem für Smartwatches und Wearables, basierend auf Android, das native Apps, Benachrichtigungen und Gesundheits-Tracking unterstützt.",
+    "category": "android",
+    "url": "https://developer.android.com/training/wearables"
   }
 }

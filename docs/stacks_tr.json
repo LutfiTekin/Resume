@@ -258,5 +258,10 @@
     "description": "Tek yönlü veri akışını zorlayan, kullanıcı eylemlerinin (Intent'ler) tek bir durum modelini değiştirdiği ve UI'nın (View) durum değişikliklerine tepki verdiği bir mimari desen. Bu, tahmin edilebilirliği ve test edilebilirliği artırır.",
     "category": "android",
     "url": "https://developer.android.com/jetpack/guide/ui-layer#udf-principles"
+  },
+  "Wear OS": {
+    "description": "Google'ın akıllı saatler ve giyilebilir cihazlar için geliştirdiği, Android tabanlı, yerel uygulamaları, bildirimleri ve sağlık takibini destekleyen işletim sistemi.",
+    "category": "android",
+    "url": "https://developer.android.com/training/wearables"
   }
 }
