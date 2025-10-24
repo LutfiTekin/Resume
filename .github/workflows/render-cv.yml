@@ -1,77 +1,81 @@
-name: Render CVs to PDF
+name: Generate and Convert CV Markdown to PDF
 
 on:
-  # Run this action automatically on push to your main branch
   push:
-    branches:
-      - main # Or 'master', depending on your repository's default branch
     paths:
-      # Only run if the CV data or the HTML template changes
       - 'docs/cv.json'
       - 'docs/cv_de.json'
-      - 'docs/index.html'
-      - 'docs/langs.json'
-      - 'docs/res/icons/**' # Watch for changes to language icons
-      - '.github/workflows/render-cv.yml' # Watch for changes to this file
-      - 'generate-pdfs.js' # Watch for changes to the script
-
-  # Allows you to run this action manually from the Actions tab
   workflow_dispatch:
 
 jobs:
-  build-pdf:
-    runs-on: ubuntu-latest # Use a standard Linux runner
-
+  generate:
+    runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '18' # Use Node.js version 18
-          cache: 'npm' # Cache npm packages
+          node-version: '18'
 
-      - name: Install dependencies
-        # Install Puppeteer (headless browser) and a simple web server
-        run: npm install puppeteer http-server
-
-      - name: Create output directory
-        # Ensure the target directory exists
-        run: mkdir -p docs/outputs/pdf
-
-      - name: Start local server
-        # Start the http-server in the background to serve the 'docs' directory
+      - name: Generate Markdown from JSON
         run: |
-          npx http-server ./docs > server.log 2>&1 &
-          echo "SERVER_PID=$!" >> $GITHUB_ENV
-          
-      - name: Wait for server to be ready
-        # Give the server a moment to start up
-        run: |
-          echo "Waiting for server..."
-          # We curl the root, which http-server will serve as /index.html from the ./docs dir
-          timeout 15s bash -c 'until curl -s http://127.0.0.1:8080 > /dev/null; do echo -n "."; sleep 1; done'
-          echo "Server is up!"
+          node << 'EOF'
+          const fs = require('fs');
+          function generateMarkdown(jsonPath, outputPath) {
+            const cv = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+            let md = `# ${cv.name}\n\n`;
+            md += `**Location:** ${cv.location}  \n`;
+            md += `**Email:** ${cv.contact.email}  \n`;
+            md += `**LinkedIn:** [${cv.contact.linkedin}](${cv.contact.linkedin})  \n`;
+            md += `**GitHub:** [${cv.contact.github}](${cv.contact.github})  \n\n`;
+            md += `## Summary\n\n${cv.summary}\n\n`;
+            md += `## Experience\n\n`;
+            cv.experience.forEach(exp => {
+              md += `### ${exp.title} - ${exp.company}\n\n`;
+              md += `**${exp.type}** | ${exp.location} | ${exp.period}\n\n`;
+              if (exp.stack) {
+                md += `**Tech Stack:** ${exp.stack.join(', ')}\n\n`;
+              }
+              exp.notes.forEach(note => {
+                md += `- ${note}\n`;
+              });
+              md += `\n`;
+            });
+            md += `## Tech Stack\n\n`;
+            if (cv.techStack) {
+              Object.entries(cv.techStack).forEach(([category, items]) => {
+                md += `**${category.charAt(0).toUpperCase() + category.slice(1)}:** ${items.join(', ')}\n\n`;
+              });
+            }
+            if (cv.languages) {
+              md += `## Languages\n\n`;
+              Object.entries(cv.languages).forEach(([lang, level]) => {
+                md += `- **${lang.charAt(0).toUpperCase() + lang.slice(1)}:** ${level}\n`;
+              });
+              md += `\n`;
+            }
+            fs.writeFileSync(outputPath, md);
+            console.log(`Generated ${outputPath}`);
+          }
+          generateMarkdown('docs/cv.json', 'docs/outputs/cv.md');
+          generateMarkdown('docs/cv_de.json', 'docs/outputs/cv_de.md');
+          EOF
 
-      - name: Generate PDFs
-        # This is the main step. It runs the Node.js script.
-        # It needs the --no-sandbox args to run Puppeteer inside GitHub's container.
-        run: node generate-pdfs.js --no-sandbox --disable-setuid-sandbox
+      - name: Setup Pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
 
-      - name: Stop local server
-        # Clean up and stop the server
+      - name: Convert Markdown to PDF
         run: |
-          echo "Stopping server (PID: ${{ env.SERVER_PID }})..."
-          kill ${{ env.SERVER_PID }}
-          
-      - name: Commit and push PDFs
-        # Use a pre-built action to automatically commit the new files
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: 'Automated: Update CV PDFs'
-          # Only commit files in this directory
-          file_pattern: 'docs/outputs/pdf/*.pdf'
-          commit_user_name: 'github-actions[bot]'
-          commit_user_email: 'github-actions[bot]@users.noreply.github.com'
-          commit_author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
+          mkdir -p docs/outputs/pdf
+          pandoc docs/outputs/cv.md -o docs/outputs/pdf/CV_Lutfi_Tekin_10_2025_en.pdf
+          pandoc docs/outputs/cv_de.md -o docs/outputs/pdf/CV_Lutfi_Tekin_10_2025_de.pdf
+
+      - name: Commit PDF files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/outputs/pdf/*.pdf
+          git diff --staged --quiet || git commit -m "Auto-generate CV PDFs"
+          git push
