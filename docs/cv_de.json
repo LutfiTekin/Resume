@@ -16,7 +16,7 @@
       "company": "AQMS GmbH",
       "companyWebsite": "https://aqms.de",
       "location": "Radebeul, Deutschland (Hybrid)",
-      "period": "2025-05 - 2025-09",
+      "period": "2025-05 to 2025-09",
       "project": "tv.de",
       "stack": ["Kotlin", "Java", "Jetpack Compose","Figma", "Material 3", "Exoplayer"],
       "notes": [
@@ -31,7 +31,7 @@
       "company": "Appsfactory GmbH",
       "companyWebsite": "https://appsfactory.de",
       "location": "Leipzig, Deutschland (Vor Ort)",
-      "period": "2023-01 - 2024-08",
+      "period": "2023-01 to 2024-08",
       "stack": ["Kotlin", "Java", "Azure","Figma","Room", "Android Automotive", "Appcenter", "Jetpack Compose"],
       "notes": [
         "Betreute und erweiterte eine führende Nachrichten-App, lieferte neue Features und UI-Verbesserungen und stellte hohe Stabilität unter starkem Tagesverkehr sicher.",
@@ -45,7 +45,7 @@
       "company": "PATH - Product and Software House",
       "companyWebsite": "https://path.com.tr",
       "location": "Remote",
-      "period": "2021-03 - 2022-10",
+      "period": "2021-03 to 2022-10",
       "project": "tuttur.com",
       "stack": ["Kotlin", "Java", "Retrofit", "Firebase", "DataBinding", "ViewBinding", "Fastlane"],
       "notes": [
@@ -59,7 +59,7 @@
       "company": "BestNET",
       "companyWebsite": "https://bestnet.com.tr",
       "location": "Antalya, Türkiye (Vor Ort)",
-      "period": "2020-02 - 2021-03",
+      "period": "2020-02 to 2021-03",
       "stack": ["Kotlin", "AndroidX", "Retrofit", "Spring Boot", "Firebase"],
       "notes": [
         "Leitete die Android-Entwicklung als alleiniger Entwickler und übernahm vollständige Verantwortung für Feature-Lieferung, Codequalität und alle Release-Zyklen.",
@@ -73,7 +73,7 @@
       "type": "Freelance",
       "company": "Selbstständig",
       "location": "Remote",
-      "period": "2017-02 - 2019-12",
+      "period": "2017-02 to 2019-12",
       "stack": ["Kotlin", "Swift", "Java"],
       "notes": [
         "Entwickelte und veröffentlichte Android/iOS-Apps",
