@@ -134,8 +134,8 @@
     }
   ],
   "languages": {
-    "english": "Akıcı",
-    "german": "Orta Düzey"
+    "ingilizce": "Akıcı",
+    "almanca": "Orta Düzey"
   },
   "techStack": {
     "android": [
