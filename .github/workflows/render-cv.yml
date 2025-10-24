@@ -55,8 +55,8 @@ jobs:
             if (cv.experience && cv.experience.length > 0) {
               md += `# ${dict.sectionTitles.experience}\n\n`;
               cv.experience.forEach(exp => {
-                md += `### ${exp.title} - ${exp.company}\n\n`;
-                md += `**${exp.type}** | ${exp.location} | ${exp.period}\n\n`;
+                md += `### ${exp.title} - ***${exp.company}***\n\n`;
+                md += `* **${exp.type}** | ${exp.location} | ${exp.period} *\n\n`;
                 if (exp.stack) {
                   md += `**${dict.sectionTitles.techStack}:** ${exp.stack.join(', ')}\n\n`;
                 }
