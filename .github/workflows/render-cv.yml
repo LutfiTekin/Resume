@@ -114,3 +114,27 @@ jobs:
           git add docs/outputs/pdf/*.pdf
           git diff --staged --quiet || git commit -m "Auto-generate CV PDFs"
           git push
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "auto-release-${{ github.run_number }}"
+          name: "Automated Release ${{ github.run_number }}"
+          body: |
+            This release includes:
+            - Updated CV PDFs for all supported languages
+            - Latest debug APK build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload PDFs and APK to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "auto-release-${{ github.run_number }}"
+          files: |
+            docs/outputs/pdf/cv.pdf
+            docs/outputs/pdf/cv_de.pdf
+            docs/outputs/pdf/cv_tr.pdf
+            docs/outputs/apk/app-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
