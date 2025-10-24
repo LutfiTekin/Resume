@@ -63,14 +63,14 @@ jobs:
           generateMarkdown('docs/cv_de.json', 'docs/outputs/cv_de.md');
           EOF
 
-      - name: Setup Pandoc
-        run: sudo apt-get update && sudo apt-get install -y pandoc
+      - name: Install wkhtmltopdf
+        run: sudo apt-get install -y wkhtmltopdf
 
       - name: Convert Markdown to PDF
         run: |
           mkdir -p docs/outputs/pdf
-          pandoc docs/outputs/cv.md -o docs/outputs/pdf/CV_Lutfi_Tekin_10_2025_en.pdf
-          pandoc docs/outputs/cv_de.md -o docs/outputs/pdf/CV_Lutfi_Tekin_10_2025_de.pdf
+          pandoc docs/outputs/cv.md -o docs/outputs/pdf/CV_Lutfi_Tekin_10_2025_en.pdf --pdf-engine=wkhtmltopdf
+          pandoc docs/outputs/cv_de.md -o docs/outputs/pdf/CV_Lutfi_Tekin_10_2025_de.pdf --pdf-engine=wkhtmltopdf
 
       - name: Commit PDF files
         run: |
