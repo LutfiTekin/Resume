@@ -5,10 +5,13 @@ on:
     branches: ["main"]
     paths-ignore:
       - 'docs/**'
+      - '.github/workflows/**'
+
   pull_request:
     branches: ["main"]
     paths-ignore:
       - 'docs/**'
+      - '.github/workflows/**'
 
 jobs:
   build:
