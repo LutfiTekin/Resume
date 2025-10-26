@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CV - Lütfi Tekin</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
   <style>
     body { font-family: Georgia, serif; padding: 20px; max-width: 800px; margin: auto; color: #333; position: relative; }
     header { text-align: center; margin-bottom: 40px; }
@@ -14,67 +13,12 @@
     #openness { margin-top: 10px; font-weight: bold; }
     #download-pdf { margin-top: 15px; padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; }
     #download-pdf:hover { background: #219150; }
-
-    /* Language Switcher Styles - MODIFIED */
-    #lang-switcher-container {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        /* To contain the visual switcher */
-        display: flex;
-        align-items: center;
-    }
-
-    /* The visual element for the current selection */
-    #lang-visual-selector {
-        display: flex;
-        align-items: center;
-        padding: 5px 10px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-        background: #fff;
-        cursor: pointer;
-        z-index: 1; /* Above the native select's dropdown */
-        font-family: Georgia, serif;
-    }
-
-    #lang-visual-selector img {
-        width: 20px;
-        height: auto;
-        margin-right: 8px;
-        /* Simple border to make it distinct */
-        border: 1px solid #eee;
-    }
-
-    /* Native select element for functionality and dropdown */
-    #lang-switcher {
-        /* Hide the native select visually, but keep it accessible/functional */
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        cursor: pointer;
-    }
-
-    /* The hidden select needs a surrounding container to set its dimensions */
-    #lang-dropdown-wrapper {
-        position: relative;
-        width: 70px; /* Adjust width to fit the content */
-        height: 30px; /* Adjust height to match the visual selector */
-    }
-
-    /* Dropdown styles for options (optional, as native select styling is limited) */
-    #lang-switcher option {
-        background-image: var(--flag-url); /* This won't work on native <option> elements */
-        padding-left: 25px;
-        background-repeat: no-repeat;
-        background-size: 20px 15px;
-        background-position: 5px center;
-    }
-
-
+    #lang-switcher-container { position: absolute; top: 20px; right: 20px; display: flex; align-items: center; }
+    #lang-visual-selector { display: flex; align-items: center; padding: 5px 10px; border-radius: 4px; border: 1px solid #ccc; background: #fff; cursor: pointer; z-index: 1; font-family: Georgia, serif; }
+    #lang-visual-selector img { width: 20px; height: auto; margin-right: 8px; border: 1px solid #eee; }
+    #lang-switcher { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+    #lang-dropdown-wrapper { position: relative; width: 70px; height: 30px; }
+    #lang-switcher option { padding-left: 25px; background-repeat: no-repeat; background-size: 20px 15px; background-position: 5px center; }
     section { margin-bottom: 30px; }
     section h2 { border-bottom: 2px solid #eee; padding-bottom: 5px; text-transform: uppercase; }
     #experience-content { display: flex; }
@@ -95,26 +39,8 @@
     .tech-category h4 { margin-bottom: 5px; text-transform: uppercase; font-size: 1em; display: flex; align-items: center; }
     .tech-category h4 i { margin-right: 8px; font-size: 1.2em; }
     .tech-tooltip { font-family: Georgia, serif; font-size: 1em; max-width: 350px; white-space: pre-line; }
-
-    /* Hide non-PDF elements */
-    body.pdf-mode #download-pdf,
-    body.pdf-mode #openness,
-    body.pdf-mode .tech-tooltip,
-    body.pdf-mode #lang-switcher-container {
-        display: none !important;
-    }
     .tech-tooltip a { text-decoration: underline; color: #1a0dab; word-break: break-all; }
-
-    @media print {
-        #download-pdf, #openness, #lang-switcher-container { display: none !important; }
-        html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        .experience-item { page-break-inside: auto; border-bottom: 1px solid #eee; }
-        .job-header { page-break-inside: avoid; page-break-after: avoid; }
-        .job-details { page-break-inside: avoid; }
-        .experience-item ul li { page-break-inside: avoid; orphans: 2; widows: 2; }
-    }
-
-    /* Tooltip specific styles */
+    @media print { #download-pdf, #openness, #lang-switcher-container { display: none !important; } html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .experience-item { page-break-inside: auto; border-bottom: 1px solid #eee; } .job-header { page-break-inside: avoid; page-break-after: avoid; } .job-details { page-break-inside: avoid; } .experience-item ul li { page-break-inside: avoid; orphans: 2; widows: 2; }}
     .tech-tooltip { position: fixed; pointer-events: none; background: #fff; border: 1px solid #ddd; padding: 10px; z-index: 10000; box-shadow: 0 2px 8px rgba(0,0,0,.12); border-radius: 6px; max-width: 350px; }
   </style>
 </head>
@@ -123,8 +49,7 @@
   <header>
     <div id="lang-switcher-container">
       <div id="lang-dropdown-wrapper">
-        <div id="lang-visual-selector">
-        </div>
+        <div id="lang-visual-selector"></div>
         <select id="lang-switcher"></select>
       </div>
     </div>
@@ -165,7 +90,6 @@
 </div>
 
 <script type="text/javascript">
-  // Global helpers
   function buildTimeline(startYear) {
       const currentYear = new Date().getFullYear();
       const years = [];
@@ -181,78 +105,57 @@
       const sp = new URLSearchParams(window.location.search);
       return sp.has('pdf') || sp.get('mode') === 'pdf';
   }
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-<script type="text/javascript">
-  // Generate PDF function
-  async function generatePdf({ auto = false } = {}) {
-      document.body.classList.add('pdf-mode');
-      const element = document.getElementById('cv-container');
-      const rawName = document.getElementById('name').textContent || 'CV';
-      const now = new Date();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const year = now.getFullYear();
-      // 1. Get the current language code from the select element
-      const lang = document.getElementById('lang-switcher').value || 'en';
-      const safeName = rawName.normalize('NFD').replace(/[^\w\-\s]/g, '').replace(/\s+/g, '_');
-
-      // 2. Construct the filename with the language code
-      const filename = `CV_${safeName}_${month}_${year}_${lang}.pdf`;
-
-      const opt = {
-          margin: 0.5, filename: filename, image: { type: 'jpeg', quality: 0.80 },
-          html2canvas: { scale: 1.55, useCORS: true, backgroundColor: '#ffffff'   }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-      };
-      try {
-          const worker = html2pdf().from(element).set(opt).toPdf();
-          const blob = await worker.output('blob');
-          const blobUrl = URL.createObjectURL(blob);
-          const dataUrl = await worker.output('datauristring');
-          window.__lastPdfBlobUrl = blobUrl;
-          window.__lastPdfDataUrl = dataUrl;
-          if (auto && window.Android && typeof window.Android.onPdfReady === 'function') {
-              try { window.Android.onPdfReady(dataUrl); } catch (_) {}
-          }
-          if (auto) {
-              try { window.location.replace(dataUrl); } catch (_) {}
-              const a = document.createElement('a'); a.href = blobUrl; a.download = filename;
-              document.body.appendChild(a); a.click(); a.remove();
-          } else {
-              await html2pdf().from(element).set(opt).save();
-          }
-      } catch (e) {
-          console.error('PDF generation failed:', e);
-      } finally {
-          setTimeout(() => document.body.classList.remove('pdf-mode'), 100);
-      }
+  function getPdfPath(lang) {
+      return lang === 'en'
+          ? `/outputs/pdf/cv.pdf`
+          : `/outputs/pdf/cv_${lang}.pdf`;
   }
-  document.getElementById('download-pdf').addEventListener('click', () => generatePdf({ auto: false }));
+  document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('download-pdf').addEventListener('click', function () {
+          const lang = document.getElementById('lang-switcher').value || 'en';
+          const pdfPath = getPdfPath(lang);
+          const filename = lang === 'en' ? 'cv.pdf' : `cv_${lang}.pdf`;
+          const a = document.createElement('a');
 
-  // Helper: try localized file first (e.g. cv_de.json), fall back to base file (cv.json)
+          const rawName = document.getElementById('name').textContent || 'CV';
+          const now = new Date();
+          const month = String(now.getMonth() + 1).padStart(2, '0');
+          const year = now.getFullYear();
+          const safeName = rawName.normalize('NFD').replace(/[^\w\-\s]/g, '').replace(/\s+/g, '_');
+          const filename = `CV_${safeName}_${month}_${year}_${lang}.pdf`;
+          const a = document.createElement('a');
+          a.href = pdfPath;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+      });
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.has('pdf')) {
+          const lang = sp.get('lang') || 'en';
+          window.location.href = getPdfPath(lang);
+      }
+  });
+
   async function fetchLocalized(baseName, lang) {
       const localized = `./${baseName}_${lang}.json`;
       const fallback = `./${baseName}.json`;
-
-      // If language is 'en' and you prefer the base file directly, you can short-circuit here:
-      // if (lang === 'en') return (await fetch(fallback)).json();
-
       try {
           const res = await fetch(localized);
           if (res.ok) return res.json();
-          // if not ok (404, 500), we'll try the fallback
-      } catch (e) {
-          // network error, continue to fallback
-      }
-
+      } catch (e) {}
       const resFallback = await fetch(fallback);
       if (!resFallback.ok) throw new Error(`Unable to load ${localized} or ${fallback}`);
       return resFallback.json();
   }
 
-  // Initialize tooltips using the stacks object (unchanged)
+  function updateVisualSelector(langCode) {
+      const visualSelector = document.getElementById('lang-visual-selector');
+      const flagPath = `res/icons/${langCode}.svg`;
+      visualSelector.innerHTML = `<img src="${flagPath}" alt="${langCode.toUpperCase()} flag" /> ${langCode.toUpperCase()}`;
+      document.getElementById('lang-switcher').value = langCode;
+  }
+
   function initTooltips(stacks) {
       if (!stacks) return;
       let activeTooltip = null;
@@ -265,34 +168,32 @@
 
       function findInfo(name) {
           const n = name.trim();
-          return stacks[n] || stacks[n.toLowerCase()] || stacks[n[0].toUpperCase() + n.slice(1)] || Object.values(stacks).find(e => e && e.description && e.url && (e.name?.toLowerCase() === n.toLowerCase() || e.category?.toLowerCase() === n.toLowerCase() || e.url?.toLowerCase().includes(n.toLowerCase())));
+          return stacks[n] || stacks[n.toLowerCase()] ||
+              stacks[n[0].toUpperCase() + n.slice(1)] ||
+              Object.values(stacks).find(e => e &&
+                  e.description && e.url &&
+                  (e.name?.toLowerCase() === n.toLowerCase() ||
+                   e.category?.toLowerCase() === n.toLowerCase() ||
+                   e.url?.toLowerCase().includes(n.toLowerCase())));
       }
 
       function positionTooltipAt(mouseX, mouseY, tooltip) {
-          const padding = 12; // distance from cursor
+          const padding = 12;
           const vw = window.innerWidth;
           const vh = window.innerHeight;
-
-          // first place it to the right and below the cursor
           let left = mouseX + padding;
           let top = mouseY + padding;
-
           const rect = tooltip.getBoundingClientRect();
           const tw = rect.width;
           const th = rect.height;
-
-          // if overflowing to the right, place to the left of the cursor
           if (left + tw > vw - padding) {
               left = mouseX - tw - padding;
-              if (left < padding) left = padding; // clamp to left edge
+              if (left < padding) left = padding;
           }
-
-          // if overflowing bottom, place above the cursor
           if (top + th > vh - padding) {
               top = mouseY - th - padding;
-              if (top < padding) top = padding; // clamp to top edge
+              if (top < padding) top = padding;
           }
-
           tooltip.style.left = `${Math.round(left)}px`;
           tooltip.style.top = `${Math.round(top)}px`;
       }
@@ -301,17 +202,11 @@
           if (!info) return;
           const html = `<div>${info.description}</div><div><a href="${info.url.startsWith('http') ? info.url : 'https://' + info.url}" target="_blank" rel="noopener">${info.url}</a></div>`;
           activeTooltip = createTooltipElement(html);
-
-          // initial position
           positionTooltipAt(event.clientX, event.clientY, activeTooltip);
-
-          // follow mouse while hovering
           moveHandler = (e) => {
               positionTooltipAt(e.clientX, e.clientY, activeTooltip);
           };
           document.addEventListener('mousemove', moveHandler);
-
-          // also hide on scroll to avoid odd positioning
           window.addEventListener('scroll', removeActiveTooltipOnScroll, { passive: true });
       }
 
@@ -335,10 +230,8 @@
           const info = findInfo(li.textContent);
           if (!info) return;
           li.style.cursor = 'pointer';
-
           li.addEventListener('mouseenter', (e) => showTooltipFor(li, info, e));
           li.addEventListener('mouseleave', () => hideTooltip());
-
           li.addEventListener('focus', (e) => showTooltipFor(li, info, { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 }));
           li.addEventListener('blur', hideTooltip);
           li.addEventListener('click', () => {
@@ -349,70 +242,36 @@
       window.addEventListener('beforeunload', hideTooltip);
   }
 
-  // New helper to update the visual flag/code
-  function updateVisualSelector(langCode) {
-      const visualSelector = document.getElementById('lang-visual-selector');
-      const flagPath = `res/icons/${langCode}.svg`; // Construct the path
-
-      // Use innerHTML to inject the image and text
-      visualSelector.innerHTML = `<img src="${flagPath}" alt="${langCode.toUpperCase()} flag" /> ${langCode.toUpperCase()}`;
-
-      // Also ensure the hidden select reflects the correct value
-      document.getElementById('lang-switcher').value = langCode;
-  }
-
-
-  // === MAIN SCRIPT LOGIC ===
   async function main() {
       try {
-          // 1. Fetch language definitions first
           const allLangs = await fetch('./langs.json').then(res => res.json());
           const availableLangs = Object.keys(allLangs);
-
-          // 2. Determine initial language (URL param -> browser locale -> fallback)
           const urlParams = new URLSearchParams(window.location.search);
           let lang = urlParams.get('lang');
           if (!lang || !availableLangs.includes(lang)) {
               const browserLang = (navigator.language || navigator.userLanguage).split('-')[0];
-              lang = availableLangs.includes(browserLang) ? browserLang : 'en'; // Default to 'en'
+              lang = availableLangs.includes(browserLang) ? browserLang : 'en';
               urlParams.set('lang', lang);
               window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
           }
-
-          // 3. Setup language switcher - MODIFIED
           const langSwitcher = document.getElementById('lang-switcher');
-          langSwitcher.innerHTML = ''; // Clear existing options
+          langSwitcher.innerHTML = '';
           availableLangs.forEach(code => {
               const option = document.createElement('option');
               option.value = code;
-              option.textContent = code.toUpperCase(); // e.g., "EN", "DE"
+              option.textContent = code.toUpperCase();
               if (code === lang) option.selected = true;
-
-              // Add an image path as a custom attribute (though only visible on some native dropdowns)
               option.setAttribute('data-flag', `res/icons/${code}.svg`);
-
               langSwitcher.appendChild(option);
           });
-
-          // Update the visual selector immediately
           updateVisualSelector(lang);
-
           langSwitcher.addEventListener('change', () => {
-              // The native select change event triggers the page reload
               urlParams.set('lang', langSwitcher.value);
-              window.location.search = urlParams.toString(); // Reload page with new lang
+              window.location.search = urlParams.toString();
           });
-
-          // 4. Fetch the correct CV data (try localized first, fall back to base)
           document.documentElement.lang = lang;
           const data = await fetchLocalized('cv', lang);
-
-          // 5. Get the correct translation object
           const t = allLangs[lang];
-
-          // --- Start of rendering logic ---
-
-          // Helpers that depend on translations (unchanged)
           const formatDate = (ym) => {
               const [year, month] = ym.split('-');
               return `${t.months[month]} ${year}`;
@@ -458,8 +317,6 @@
               if (!duration) duration = `0 ${t.timePeriod.months || 'months'}`;
               return `${formatDate(start)} - ${end} (${duration})`;
           };
-
-          // Render CV data and apply translations (unchanged)
           document.title = `CV - ${data.name}`;
           document.getElementById('download-pdf').textContent = t.labels.downloadPdf;
           document.querySelector('#summary h2').textContent = t.sectionTitles.summary;
@@ -514,23 +371,14 @@
               items.forEach(item => { const li = document.createElement('li'); li.textContent = item; ul.appendChild(li); });
               div.appendChild(hd); div.appendChild(ul); techCont.appendChild(div);
           });
-
-          // Initialize tooltips: try localized stacks first, fall back handled by fetchLocalized
           try {
               const stacks = await fetchLocalized('stacks', lang);
               initTooltips(stacks);
-          } catch (e) {
-              console.warn('Could not load stacks data for tooltips:', e);
-          }
-
-          if (hasPdfQuery()) setTimeout(() => generatePdf({ auto: true }), 350);
-
+          } catch (e) {}
       } catch (e) {
           console.error('Error initializing CV:', e);
       }
   }
-
-  // Run the main logic, catching any errors
   main().catch(e => console.error('Error initializing CV (outer):', e));
 </script>
 </body>
