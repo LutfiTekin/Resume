@@ -114,9 +114,7 @@
       document.getElementById('download-pdf').addEventListener('click', function () {
           const lang = document.getElementById('lang-switcher').value || 'en';
           const pdfPath = getPdfPath(lang);
-          const filename = lang === 'en' ? 'cv.pdf' : `cv_${lang}.pdf`;
-          const a = document.createElement('a');
-
+          // Generate filename according to the new naming convention
           const rawName = document.getElementById('name').textContent || 'CV';
           const now = new Date();
           const month = String(now.getMonth() + 1).padStart(2, '0');
