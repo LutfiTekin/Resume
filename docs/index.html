@@ -110,30 +110,105 @@
           ? `/outputs/pdf/cv.pdf`
           : `/outputs/pdf/cv_${lang}.pdf`;
   }
-  document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('download-pdf').addEventListener('click', function () {
-          const lang = document.getElementById('lang-switcher').value || 'en';
-          const pdfPath = getPdfPath(lang);
-          // Generate filename according to the new naming convention
-          const rawName = document.getElementById('name').textContent || 'CV';
-          const now = new Date();
-          const month = String(now.getMonth() + 1).padStart(2, '0');
-          const year = now.getFullYear();
-          const safeName = rawName.normalize('NFD').replace(/[^\w\-\s]/g, '').replace(/\s+/g, '_');
-          const filename = `CV_${safeName}_${month}_${year}_${lang}.pdf`;
-          const a = document.createElement('a');
-          a.href = pdfPath;
-          a.download = filename;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-      });
-      const sp = new URLSearchParams(window.location.search);
-      if (sp.has('pdf')) {
-          const lang = sp.get('lang') || 'en';
-          window.location.href = getPdfPath(lang);
-      }
-  });
+document.addEventListener('DOMContentLoaded', function () {
+    const downloadBtn = document.getElementById('download-pdf');
+
+    // Function to handle PDF download
+    function handlePdfDownload() {
+        const lang = document.getElementById('lang-switcher').value || 'en';
+        const pdfPath = getPdfPath(lang);
+
+        // Generate filename according to the new naming convention
+        const rawName = document.getElementById('name').textContent || 'CV';
+        const now = new Date();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const year = now.getFullYear();
+        const safeName = rawName.normalize('NFD').replace(/[^\w\-\s]/g, '').replace(/\s+/g, '_');
+        const filename = `CV_${safeName}_${month}_${year}_${lang}.pdf`;
+
+        // Check if Android bridge is available
+        if (window.Android && typeof window.Android.onPdfReady === 'function') {
+            // Android WebView - convert PDF to data URL and send to bridge
+            fetch(pdfPath)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.onerror = reject;
+                        reader.readAsDataURL(blob);
+                    });
+                })
+                .then(dataUrl => {
+                    // Call Android bridge with the data URL
+                    window.Android.onPdfReady(dataUrl);
+                })
+                .catch(error => {
+                    console.error('Error fetching PDF:', error);
+                    // Fallback to normal download
+                    triggerDownload(pdfPath, filename);
+                });
+        } else {
+            // Normal browser behavior
+            triggerDownload(pdfPath, filename);
+        }
+    }
+
+    function triggerDownload(pdfPath, filename) {
+        const a = document.createElement('a');
+        a.href = pdfPath;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    }
+
+    // Set up download button click handler
+    downloadBtn.addEventListener('click', handlePdfDownload);
+
+    // Handle ?pdf parameter in URL
+    const sp = new URLSearchParams(window.location.search);
+    if (sp.has('pdf')) {
+        const lang = sp.get('lang') || 'en';
+
+        // Check if we're in Android WebView
+        if (window.Android && typeof window.Android.onPdfReady === 'function') {
+            // Android client - serve PDF through bridge
+            const pdfPath = getPdfPath(lang);
+            fetch(pdfPath)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.onerror = reject;
+                        reader.readAsDataURL(blob);
+                    });
+                })
+                .then(dataUrl => {
+                    window.Android.onPdfReady(dataUrl);
+                })
+                .catch(error => {
+                    console.error('Error fetching PDF for Android:', error);
+                    // Fallback to normal redirect
+                    window.location.href = getPdfPath(lang);
+                });
+        } else {
+            // Normal browser - redirect to PDF file
+            window.location.href = getPdfPath(lang);
+        }
+    }
+});
 
   async function fetchLocalized(baseName, lang) {
       const localized = `./${baseName}_${lang}.json`;
