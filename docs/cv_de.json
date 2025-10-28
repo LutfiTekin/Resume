@@ -26,19 +26,6 @@
     },
     {
       "title": "Android-Entwickler",
-      "type": "Berater",
-      "company": "BestNET",
-      "companyWebsite": "https://bestnet.com.tr",
-      "location": "Remote",
-      "period": "2024-09 — 2025-03",
-      "stack": ["Kotlin", "Play Store", "ViewBinding", "Architektur", "Performance"],
-      "notes": [
-        "Refaktorierte die Architektur der App, führte modulare Strukturen, Dependency Injection und eine klare Trennung der Verantwortlichkeiten ein, um Wartbarkeit, Testbarkeit und die Geschwindigkeit der Entwickler-Einarbeitung zu erhöhen.",
-        "Verantwortete den vollständigen Google-Play-Release-Prozess: bereitete Release-Builds vor, konfigurierte Play-Console-Assets, verwaltete Release-Tracks und koordinierte produktive sowie gestaffelte Rollouts, unter Einhaltung der Play-Store-Richtlinien und für eine reibungslose Nutzeraktualisierung."
-      ]
-    },
-    {
-      "title": "Android-Entwickler",
       "type": "Vollzeit",
       "company": "Appsfactory GmbH",
       "companyWebsite": "https://appsfactory.de",
