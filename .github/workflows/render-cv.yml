@@ -36,8 +36,7 @@ jobs:
 
           function generateMarkdown(jsonPath, outputPath, dict) {
             const cv = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
-            let md = `# ${cv.name}\n`;
-            md += `${cv.title}  \n\n`;
+            let md = `# ${cv.name}\n\n`;
 
             md += `**${dict.sectionTitles.location}:** ${cv.location}  \n`;
             md += `**${dict.labels.email}:** ${cv.contact.email}  \n`;
