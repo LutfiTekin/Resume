@@ -21,21 +21,9 @@
       "project": "tv.de",
       "stack": ["Kotlin", "Java", "Jetpack Compose","Figma", "Material 3", "Exoplayer"],
       "notes": [
-        "Leitete einen vollständigen UI-Relaunch der Android-App, einschließlich einer umfassenden Neugestaltung der Videoplayer-Steuerung und der Inhaltsnavigation, was zu einem intuitiveren und ansprechenderen Seherlebnis führte.",
-        "Migrierte Legacy-Layouts von XML zu Jetpack Compose, modernisierte den Code, reduzierte die UI-Komplexität und verbesserte Wartbarkeit sowie Entwicklungsgeschwindigkeit."
-      ]
-    },
-    {
-      "title": "Android-Entwickler",
-      "type": "Berater",
-      "company": "BestNET",
-      "companyWebsite": "https://bestnet.com.tr",
-      "location": "Remote",
-      "period": "2024-09 — 2025-03",
-      "stack": ["Kotlin", "Play Store", "ViewBinding", "Architektur", "Performance"],
-      "notes": [
-        "Refaktorierte die Architektur der App, führte modulare Strukturen, Dependency Injection und eine klare Trennung der Verantwortlichkeiten ein, um Wartbarkeit, Testbarkeit und die Geschwindigkeit der Entwickler-Einarbeitung zu erhöhen.",
-        "Verantwortete den vollständigen Google-Play-Release-Prozess: bereitete Release-Builds vor, konfigurierte Play-Console-Assets, verwaltete Release-Tracks und koordinierte produktive sowie gestaffelte Rollouts, unter Einhaltung der Play-Store-Richtlinien und für eine reibungslose Nutzeraktualisierung."
+        "Leitung eines vollständigen UI-Relaunches der Android-App, einschließlich einer umfassenden Neugestaltung der Videoplayer-Steuerung und der Inhaltsnavigation, resultierend in einem intuitiveren und ansprechenderen Seherlebnis",
+        "Migration eines Legacy-Layouts von XML zu Jetpack Compose",
+        "Modernisierung des Codes, Reduktion der UI-Komplexität und Optimierung der Wartbarkeit sowie Entwicklungsgeschwindigkeit."
       ]
     },
     {
@@ -47,9 +35,9 @@
       "period": "2023-01 — 2024-08",
       "stack": ["Kotlin", "Java", "Azure","Figma","Room", "Android Automotive", "Appcenter", "Jetpack Compose"],
       "notes": [
-        "Betreute und erweiterte eine führende Nachrichten-App, lieferte neue Features und UI-Verbesserungen und stellte hohe Stabilität unter starkem Tagesverkehr sicher.",
-        "Verantwortete den Android-Code, einschließlich Releases, Bugfixes und Performance-Tuning, in enger Zusammenarbeit mit Backend- und QA-Teams.",
-        "Trug zu mehreren prominenten Apps und parallelen Projekten in der Media- und Health-Unit bei und passte App-Architekturen an unterschiedliche Kundenanforderungen an."
+        "Betreuung und Erweiterung einer führenden Nachrichten-App, Einführung neuer Features und UI-Verbesserungen ",
+        "Herstellung und Sicherung hoher Stabilität unter starkem Tagesverkehr ",
+        "Verantwortung für den Android-Code, einschließlich Releases, Bugfixes und Performance-Tuning, in enger Zusammenarbeit mit Backend- und QA-Teams. "
       ]
     },
     {
@@ -62,8 +50,9 @@
       "project": "tuttur.com",
       "stack": ["Kotlin", "Java", "Retrofit", "Firebase", "DataBinding", "ViewBinding", "Fastlane"],
       "notes": [
-        "Verantwortete den gesamten Entwicklungszyklus der Android-App von tuttur.com, leitete Planung, Implementierung und Release-Aktivitäten eigenständig in einem Remote-Setup.",
-        "Modernisierte und refaktorierte den Legacy-Code, migrierte veraltete Komponenten auf aktuelle Android-Standards und steigerte Wartbarkeit, Performance und Sicherheit."
+        "Modernisierung und Refaktorierung des Legacy-Codes",
+        "Migration veralteter Komponenten auf aktuelle Android-Standards",
+        "Steigerung der Wartbarkeit, Performance und Sicherheit"
       ]
     },
     {
@@ -75,10 +64,10 @@
       "period": "2020-02 — 2021-03",
       "stack": ["Kotlin", "AndroidX", "Retrofit", "Spring Boot", "Firebase"],
       "notes": [
-        "Leitete die Android-Entwicklung als alleiniger Entwickler und übernahm vollständige Verantwortung für Feature-Lieferung, Codequalität und alle Release-Zyklen.",
-        "Entwarf und integrierte umfassende Firebase-Dienste, einschließlich Realtime Database, Crashlytics, Analytics und Push-Benachrichtigungen, um Zuverlässigkeit und Engagement der App zu erhöhen.",
-        "Implementierte Unterstützung für Bluetooth-Drucker, sodass Nutzer Belege und Berichte direkt aus der mobilen App drucken können.",
-        "Implementierte Barcode-Scanning mit der Gerätekamera für schnellen Produktabruf und Bestandsvorgänge, wodurch In-App-Workflows gestrafft wurden."
+        "Leitung der Android-Entwicklung als alleiniger Entwickler und vollständige Verantwortung für Feature-Lieferung, Codequalität und alle Release-Zyklen",
+        "Entwurf und Integration zentraler Firebase-Dienste (Realtime Database, Crashlytics, Analytics, Push-Benachrichtigungen) mit Verantwortung für App-Stabilität und Nutzerbindung",
+        "Umsetzung der Bluetooth-Druckerunterstützung mit Verantwortung für direkte Ausgabe von Belegen und Berichten aus der App.",
+        "Implementierung des Barcode-Scannings über Gerätekamera mit Verantwortung für beschleunigte Produktabfragen, Bestandsprozesse und optimierte In-App-Workflows"
       ]
     },
     {
@@ -89,9 +78,9 @@
       "period": "2017-02 — 2019-12",
       "stack": ["Kotlin", "Swift", "Java"],
       "notes": [
-        "Entwickelte und veröffentlichte Android/iOS-Apps",
-        "Lieferte End-to-End-Projekte unter engen Deadlines",
-        "Unterstützte bei Bedarf auch Backend-Entwicklung"
+        "Entwicklung und Veröffentlichung von Android- und iOS-Apps mit Verantwortung für vollständige Bereitstellung und Qualitätssicherung",
+        "Lieferung von End-to-End-Projekten unter engen Deadlines mit Verantwortung für Planung, Umsetzung und termingerechte Fertigstellung",
+        "Unterstützung der Backend-Entwicklung bei Bedarf mit Verantwortung für Schnittstellenstabilität und reibungslose Systemintegration"
       ]
     }
   ],
