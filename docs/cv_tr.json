@@ -12,6 +12,24 @@
   "summary": "Yedi yılı aşkın tecrübeye sahip Android Geliştiricisiyim. Kotlin ve Java dillerini kullanarak birçok projeye destek sağladım. 2023 yılının başlarında Almanya'ya taşındım. İngilizce'de akıcı ve Almanca'da orta düzeyde yeterliliğe sahibim.",
   "experience": [
     {
+      "title": "Mobil Uygulama Geliştiricisi",
+      "type": "Tam Zamanlı",
+      "company": "flatexDEGIRO SE",
+      "companyWebsite": "https://flatexdegiro.com/",
+      "location": "Zwickau, Almanya (Hibrit)",
+      "period": "2026-01 to now",
+      "stack": [
+        "Kotlin",
+        "Java",
+        "Swift",
+        "iOS"
+      ],
+      "notes": [
+        "Android geliştirmeye odaklandım.",
+        "iOS kod incelemeleri ve kalite güvencesinden de sorumluydum."
+      ]
+    },
+    {
       "title": "Android Geliştiricisi",
       "type": "Tam Zamanlı",
       "company": "AQMS GmbH",
@@ -140,19 +158,61 @@
   },
   "techStack": {
     "android": [
-      "Jetpack Compose", "CameraX", "Android Automotive", "Wear OS", "Dagger", "Hilt", "Koin",
-      "Coroutines", "Flows", "Gradle", "MVVM", "MVP", "Retrofit",
-      "ViewBinding", "DataBinding", "Material 3", "ExoPlayer",
-      "Clean Architecture", "Jetpack Navigation", "Custom Views", "Room"
+      "Jetpack Compose",
+      "CameraX",
+      "Android Automotive",
+      "Wear OS",
+      "Dagger",
+      "Hilt",
+      "Koin",
+      "Coroutines",
+      "Flows",
+      "Gradle",
+      "MVVM",
+      "MVP",
+      "Retrofit",
+      "ViewBinding",
+      "DataBinding",
+      "Material 3",
+      "ExoPlayer",
+      "Clean Architecture",
+      "Jetpack Navigation",
+      "Custom Views",
+      "Room"
     ],
-    "backend": ["Node.js", "Spring Boot", "REST APIs"],
-    "devOps": ["Github Actions", "Azure", "Appcenter", "Fastlane"],
-    "tools": ["Git", "GitHub", "GitLab", "Bitbucket", "JIRA"],
-    "design": ["Figma", "Zeplin"],
+    "backend": [
+      "Node.js",
+      "Spring Boot",
+      "REST APIs"
+    ],
+    "devOps": [
+      "Github Actions",
+      "Azure",
+      "Appcenter",
+      "Fastlane"
+    ],
+    "tools": [
+      "Git",
+      "GitHub",
+      "GitLab",
+      "Bitbucket",
+      "JIRA"
+    ],
+    "design": [
+      "Figma",
+      "Zeplin"
+    ],
     "firebase": [
-      "Analytics", "Crashlytics", "Hosting", "Push Notifications",
-      "App Distribution", "Cloud Functions", "Realtime DB",
-      "Firestore", "Authentication", "Remote Config"
+      "Analytics",
+      "Crashlytics",
+      "Hosting",
+      "Push Notifications",
+      "App Distribution",
+      "Cloud Functions",
+      "Realtime DB",
+      "Firestore",
+      "Authentication",
+      "Remote Config"
     ]
   }
-  }
+}

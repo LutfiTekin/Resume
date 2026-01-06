@@ -12,6 +12,19 @@
   "summary": "Seasoned Android Developer with over seven years of experience. Proficient in Kotlin and Java, with additional familiarity in Swift and JavaScript. Versatile professional with experience in on-site, remote, and hybrid work environments. Relocated to Germany in early 2023. Fluent in English and have an intermediate level of proficiency in German. Open to remote or hybrid positions within a two-hour radius of Leipzig (e.g. Dresden, Berlin, Magdeburg), as well as on-site roles in Hamburg or Munich, or fully remote opportunities across Germany.",
   "experience": [
     {
+      "title": "Mobile Application Developer",
+      "type": "Full Time",
+      "company": "flatexDEGIRO SE",
+      "companyWebsite": "https://flatexdegiro.com/",
+      "location": "Zwickau, Germany (Hybrid)",
+      "period": "2026-01 to now",
+      "stack": ["Kotlin", "Java", "Swift", "iOS"],
+      "notes": [
+        "Focused on Android development.",
+        "Responsible for iOS code review and quality assurance."
+      ]
+    },
+    {
       "title": "Android Developer",
       "type": "Full Time",
       "company": "AQMS GmbH",
