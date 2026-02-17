@@ -5,5 +5,5 @@
 2. **Add your API key** — Obtain an OpenRouter key and set `OPENAI_API_KEY` in `local.properties`, an environment variable, or `gradle.properties`. Without a key the build falls back to mock mode and hides the analyzer.
 3. **Build & run** — Use Android Studio’s *Run* action or execute `./gradlew :app:installDebug` on a device/emulator running Android 8.1 (API 27) or later.
 
-[For those abour to apply](https://medium.com/@luetfitekin/for-those-about-to-apply-i-salute-you-0bb8b9c42a81)
+[For those about to apply](https://medium.com/@luetfitekin/for-those-about-to-apply-i-salute-you-0bb8b9c42a81)
 
