@@ -18,12 +18,7 @@
       "companyWebsite": "https://flatexdegiro.com/",
       "location": "Zwickau, Almanya (Hibrit)",
       "period": "2026-01 to now",
-      "stack": [
-        "Kotlin",
-        "Java",
-        "Swift",
-        "iOS"
-      ],
+      "stack": ["Kotlin", "Java", "Swift", "iOS"],
       "notes": [
         "Android geliştirmeye odaklandım.",
         "iOS kod incelemeleri ve kalite güvencesinden de sorumluydum."
@@ -37,14 +32,7 @@
       "location": "Radebeul, Almanya (Hibrit)",
       "period": "2025-05 to 2025-09",
       "project": "tv.de",
-      "stack": [
-        "Kotlin",
-        "Java",
-        "Jetpack Compose",
-        "Figma",
-        "Material 3",
-        "Exoplayer"
-      ],
+      "stack": ["Kotlin", "Java", "Jetpack Compose", "Figma", "Material 3", "Exoplayer"],
       "notes": [
         "Video oynatıcı kontrolleri ve içerik navigasyonunda büyük bir yeniden tasarımı içeren Android uygulamasının kullanıcı arayüzünün (UI) tamamen elden geçirilmesine liderlik etti, sonuç olarak daha sezgisel ve ilgi çekici bir izleme deneyimi sağladım.",
         "Eski XML tabanlı düzenleri Jetpack Compose'a taşıyarak kod tabanını modernize etti, kullanıcı arayüzü karmaşıklığını azalttı ve sürdürülebilirliği ile geliştirme hızını artırdım."
@@ -57,13 +45,7 @@
       "companyWebsite": "https://bestnet.com.tr",
       "location": "Uzaktan",
       "period": "2024-09 to 2025-03",
-      "stack": [
-        "Kotlin",
-        "Play Store",
-        "ViewBinding",
-        "Architecture",
-        "Performance"
-      ],
+      "stack": ["Kotlin", "Play Store", "ViewBinding", "Architecture", "Performance"],
       "notes": [
         "Uygulamanın mimarisini yeniden düzenledi, sürdürülebilirliği, test edilebilirliği ve geliştirici oryantasyon hızını artırmak için modüler tasarım, bağımlılık enjeksiyonu ve endişelerin temiz bir şekilde ayrılmasını sağladım.",
         "Tüm Google Play yayın sürecini yönetti: yayın yapılarını hazırladım"
@@ -76,16 +58,7 @@
       "companyWebsite": "https://appsfactory.de",
       "location": "Leipzig, Almanya (Yerinde)",
       "period": "2023-01 to 2024-08",
-      "stack": [
-        "Kotlin",
-        "Java",
-        "Azure",
-        "Figma",
-        "Room",
-        "Android Automotive",
-        "Appcenter",
-        "Jetpack Compose"
-      ],
+      "stack": ["Kotlin", "Java", "Azure", "Figma", "Room", "Android Automotive", "Appcenter", "Jetpack Compose"],
       "notes": [
         "Popüler bir haber uygulamasının bakımını ve geliştirmesini üstlendim, ağır günlük trafik altında yüksek istikrarı sağlarken yeni özellikler ve kullanıcı arayüzü iyileştirmeleri sundum.",
         "Medya Birimi ve Sağlık Birimi'nde çeşitli yüksek görünürlüklü uygulamalara ve birden fazla paralel projeye katkıda bulundum, uygulama mimarilerini çeşitli müşteri gereksinimlerine uyarladım."
@@ -99,15 +72,7 @@
       "location": "Uzaktan",
       "period": "2021-03 to 2022-10",
       "project": "tuttur.com",
-      "stack": [
-        "Kotlin",
-        "Java",
-        "Retrofit",
-        "Firebase",
-        "DataBinding",
-        "ViewBinding",
-        "Fastlane"
-      ],
+      "stack": ["Kotlin", "Java", "Retrofit", "Firebase", "DataBinding", "ViewBinding", "Fastlane"],
       "notes": [
         "tuttur.com Android uygulamasının geliştirilmesine katkıda bulundum",
         "Eski kod tabanını modernize ettim ve yeniden düzenledim, güncel olmayan bileşenleri çağdaş Android standartlarına taşıyarak kod sürdürülebilirliğini, performansını ve güvenliğini artırdım."
@@ -120,13 +85,7 @@
       "companyWebsite": "https://bestnet.com.tr",
       "location": "Antalya, Türkiye (Yerinde)",
       "period": "2020-02 to 2021-03",
-      "stack": [
-        "Kotlin",
-        "AndroidX",
-        "Retrofit",
-        "Spring Boot",
-        "Firebase"
-      ],
+      "stack": ["Kotlin", "AndroidX", "Retrofit", "Spring Boot", "Firebase"],
       "notes": [
         "Tek geliştirici olarak Android geliştirmeye liderlik ettim",
         "Uygulama güvenilirliğini ve etkileşimi artırmak için Realtime Database, Crashlytics, Analytics ve Push Notifications dahil olmak üzere kapsamlı Firebase hizmetlerini mimarileştirdi ve entegre ettim.",
@@ -140,11 +99,7 @@
       "company": "Serbest Çalışan",
       "location": "Uzaktan",
       "period": "2017-02 to 2019-12",
-      "stack": [
-        "Kotlin",
-        "Swift",
-        "Java"
-      ],
+      "stack": ["Kotlin", "Swift", "Java"],
       "notes": [
         "Android ve iOS uygulamaları geliştirdi ve yayınladım.",
         "Sıkı teslim tarihlerinde projeleri uçtan uca (E2E) teslim ettim.",
@@ -158,61 +113,29 @@
   },
   "techStack": {
     "android": [
-      "Jetpack Compose",
-      "CameraX",
-      "Android Automotive",
-      "Wear OS",
-      "Dagger",
-      "Hilt",
-      "Koin",
-      "Coroutines",
-      "Flows",
-      "Gradle",
-      "MVVM",
-      "MVP",
-      "Retrofit",
-      "ViewBinding",
-      "DataBinding",
-      "Material 3",
-      "ExoPlayer",
-      "Clean Architecture",
-      "Jetpack Navigation",
-      "Custom Views",
-      "Room"
+      "Jetpack Compose", "CameraX", "Android Automotive", "Wear OS", "Dagger", "Hilt", "Koin",
+      "Coroutines", "Flows", "Gradle", "MVVM", "MVP", "Retrofit",
+      "ViewBinding", "DataBinding", "Material 3", "ExoPlayer",
+      "Clean Architecture", "Jetpack Navigation", "Custom Views", "Room"
     ],
-    "backend": [
-      "Node.js",
-      "Spring Boot",
-      "REST APIs"
+    "backend": ["Node.js", "Spring Boot", "REST APIs"],
+    "devOps": ["Github Actions", "Azure", "Appcenter", "Fastlane"],
+    "tools": ["Git", "GitHub", "GitLab", "Bitbucket", "JIRA"],
+    "ai": [
+      "GitHub Copilot",
+      "Codex CLI",
+      "Gemini CLI",
+      "Windsurf",
+      "Antigravity",
+      "Prompt mühendisliği",
+      "Yapay zeka destekli kod inceleme",
+      "Yapay zeka destekli refactoring"
     ],
-    "devOps": [
-      "Github Actions",
-      "Azure",
-      "Appcenter",
-      "Fastlane"
-    ],
-    "tools": [
-      "Git",
-      "GitHub",
-      "GitLab",
-      "Bitbucket",
-      "JIRA"
-    ],
-    "design": [
-      "Figma",
-      "Zeplin"
-    ],
+    "design": ["Figma", "Zeplin"],
     "firebase": [
-      "Analytics",
-      "Crashlytics",
-      "Hosting",
-      "Push Notifications",
-      "App Distribution",
-      "Cloud Functions",
-      "Realtime DB",
-      "Firestore",
-      "Authentication",
-      "Remote Config"
+      "Analytics", "Crashlytics", "Hosting", "Push Notifications",
+      "App Distribution", "Cloud Functions", "Realtime DB",
+      "Firestore", "Authentication", "Remote Config"
     ]
   }
 }
