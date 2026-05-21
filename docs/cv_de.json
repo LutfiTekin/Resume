@@ -18,12 +18,7 @@
       "companyWebsite": "https://flatexdegiro.com/",
       "location": "Zwickau, Deutschland (Hybrid)",
       "period": "2026-01 — now",
-      "stack": [
-        "Kotlin",
-        "Java",
-        "Swift",
-        "iOS"
-      ],
+      "stack": ["Kotlin", "Java", "Swift", "iOS"],
       "notes": [
         "Fokus auf Android-Entwicklung.",
         "Verantwortlich für iOS Code-Reviews und Qualitätssicherung."
@@ -37,14 +32,7 @@
       "location": "Radebeul, Deutschland (Hybrid)",
       "period": "2025-05 — 2025-09",
       "project": "tv.de",
-      "stack": [
-        "Kotlin",
-        "Java",
-        "Jetpack Compose",
-        "Figma",
-        "Material 3",
-        "Exoplayer"
-      ],
+      "stack": ["Kotlin", "Java", "Jetpack Compose", "Figma", "Material 3", "Exoplayer"],
       "notes": [
         "Leitung eines vollständigen UI-Relaunches der Android-App, einschließlich einer umfassenden Neugestaltung der Videoplayer-Steuerung und der Inhaltsnavigation, resultierend in einem intuitiveren und ansprechenderen Seherlebnis",
         "Migration eines Legacy-Layouts von XML zu Jetpack Compose",
@@ -58,16 +46,7 @@
       "companyWebsite": "https://appsfactory.de",
       "location": "Leipzig, Deutschland (Vor Ort)",
       "period": "2023-01 — 2024-08",
-      "stack": [
-        "Kotlin",
-        "Java",
-        "Azure",
-        "Figma",
-        "Room",
-        "Android Automotive",
-        "Appcenter",
-        "Jetpack Compose"
-      ],
+      "stack": ["Kotlin", "Java", "Azure", "Figma", "Room", "Android Automotive", "Appcenter", "Jetpack Compose"],
       "notes": [
         "Betreuung und Erweiterung einer führenden Nachrichten-App, Einführung neuer Features und UI-Verbesserungen ",
         "Herstellung und Sicherung hoher Stabilität unter starkem Tagesverkehr ",
@@ -82,15 +61,7 @@
       "location": "Remote",
       "period": "2021-03 — 2022-10",
       "project": "tuttur.com",
-      "stack": [
-        "Kotlin",
-        "Java",
-        "Retrofit",
-        "Firebase",
-        "DataBinding",
-        "ViewBinding",
-        "Fastlane"
-      ],
+      "stack": ["Kotlin", "Java", "Retrofit", "Firebase", "DataBinding", "ViewBinding", "Fastlane"],
       "notes": [
         "Modernisierung und Refaktorierung des Legacy-Codes",
         "Migration veralteter Komponenten auf aktuelle Android-Standards",
@@ -104,13 +75,7 @@
       "companyWebsite": "https://bestnet.com.tr",
       "location": "Antalya, Türkiye (Vor Ort)",
       "period": "2020-02 — 2021-03",
-      "stack": [
-        "Kotlin",
-        "AndroidX",
-        "Retrofit",
-        "Spring Boot",
-        "Firebase"
-      ],
+      "stack": ["Kotlin", "AndroidX", "Retrofit", "Spring Boot", "Firebase"],
       "notes": [
         "Leitung der Android-Entwicklung als alleiniger Entwickler und vollständige Verantwortung für Feature-Lieferung, Codequalität und alle Release-Zyklen",
         "Entwurf und Integration zentraler Firebase-Dienste (Realtime Database, Crashlytics, Analytics, Push-Benachrichtigungen) mit Verantwortung für App-Stabilität und Nutzerbindung",
@@ -124,11 +89,7 @@
       "company": "Selbstständig",
       "location": "Remote",
       "period": "2017-02 — 2019-12",
-      "stack": [
-        "Kotlin",
-        "Swift",
-        "Java"
-      ],
+      "stack": ["Kotlin", "Swift", "Java"],
       "notes": [
         "Entwicklung und Veröffentlichung von Android- und iOS-Apps mit Verantwortung für vollständige Bereitstellung und Qualitätssicherung",
         "Lieferung von End-to-End-Projekten unter engen Deadlines mit Verantwortung für Planung, Umsetzung und termingerechte Fertigstellung",
@@ -142,61 +103,29 @@
   },
   "techStack": {
     "android": [
-      "Jetpack Compose",
-      "CameraX",
-      "Android Automotive",
-      "Wear OS",
-      "Dagger",
-      "Hilt",
-      "Koin",
-      "Coroutines",
-      "Flows",
-      "Gradle",
-      "MVVM",
-      "MVP",
-      "Retrofit",
-      "ViewBinding",
-      "DataBinding",
-      "Material 3",
-      "ExoPlayer",
-      "Clean Architecture",
-      "Jetpack Navigation",
-      "Custom Views",
-      "Room"
+      "Jetpack Compose", "CameraX", "Android Automotive", "Wear OS", "Dagger", "Hilt", "Koin",
+      "Coroutines", "Flows", "Gradle", "MVVM", "MVP", "Retrofit",
+      "ViewBinding", "DataBinding", "Material 3", "ExoPlayer",
+      "Clean Architecture", "Jetpack Navigation", "Custom Views", "Room"
     ],
-    "backend": [
-      "Node.js",
-      "Spring Boot",
-      "REST-APIs"
+    "backend": ["Node.js", "Spring Boot", "REST-APIs"],
+    "devOps": ["Github Actions", "Azure", "Appcenter", "Fastlane"],
+    "tools": ["Git", "GitHub", "GitLab", "Bitbucket", "JIRA"],
+    "ai": [
+      "GitHub Copilot",
+      "Codex CLI",
+      "Gemini CLI",
+      "Windsurf",
+      "Antigravity",
+      "Prompt Engineering",
+      "KI-unterstützte Code-Reviews",
+      "KI-unterstütztes Refactoring"
     ],
-    "devOps": [
-      "Github Actions",
-      "Azure",
-      "Appcenter",
-      "Fastlane"
-    ],
-    "tools": [
-      "Git",
-      "GitHub",
-      "GitLab",
-      "Bitbucket",
-      "JIRA"
-    ],
-    "design": [
-      "Figma",
-      "Zeplin"
-    ],
+    "design": ["Figma", "Zeplin"],
     "firebase": [
-      "Analytics",
-      "Crashlytics",
-      "Hosting",
-      "Push-Benachrichtigungen",
-      "App Distribution",
-      "Cloud Functions",
-      "Realtime DB",
-      "Firestore",
-      "Authentication",
-      "Remote Config"
+      "Analytics", "Crashlytics", "Hosting", "Push-Benachrichtigungen",
+      "App Distribution", "Cloud Functions", "Realtime DB",
+      "Firestore", "Authentication", "Remote Config"
     ]
   }
 }

@@ -31,6 +31,7 @@
       "frontend": "Frontend",
       "devOps": "DevOps",
       "tools": "Tools",
+      "ai": "AI Tooling",
       "design": "Design",
       "firebase": "Firebase",
       "databases": "Databases"
@@ -96,6 +97,7 @@
       "frontend": "Frontend",
       "devOps": "DevOps",
       "tools": "Werkzeuge",
+      "ai": "KI-Werkzeuge",
       "design": "Design",
       "firebase": "Firebase",
       "databases": "Datenbanken"
@@ -161,6 +163,7 @@
       "frontend": "Ön Uç",
       "devOps": "DevOps",
       "tools": "Araçlar",
+      "ai": "Yapay Zeka Araçları",
       "design": "Tasarım",
       "firebase": "Firebase",
       "databases": "Veritabanları"
