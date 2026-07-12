@@ -1,0 +1,14 @@
+{
+  "name": "resume-static-site",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build:site": "node scripts/generate-site.mjs",
+    "build:pdf": "node scripts/generate-pdfs.mjs",
+    "check:pdf": "node scripts/generate-pdfs.mjs --validate-only",
+    "check:site": "node scripts/generate-site.mjs --check && node scripts/test-site.mjs"
+  }
+}

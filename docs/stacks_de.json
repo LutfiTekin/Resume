@@ -199,7 +199,7 @@
     "category": "firebase",
     "url": "https://firebase.google.com/products/hosting"
   },
-  "Push Notifications": {
+  "Push-Benachrichtigungen": {
     "description": "System zum Senden zeitgerechter und relevanter Nachrichten an Benutzergeräte, das zur erneuten Bindung und Aktualisierungen beiträgt.",
     "category": "firebase",
     "url": "https://firebase.google.com/products/cloud-messaging"

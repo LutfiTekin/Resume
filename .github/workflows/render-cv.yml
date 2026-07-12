@@ -1,140 +1,121 @@
-name: Generate and Convert CV Markdown to PDF
+name: Generate CV PDFs
 
 on:
   push:
+    branches: ["main"]
     paths:
-      - 'docs/**'
+      - 'docs/cv*.json'
+      - 'docs/langs.json'
+      - 'scripts/generate-pdfs.mjs'
+      - '.github/workflows/render-cv.yml'
   workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: render-cv-pdfs-main
+  cancel-in-progress: false
 
 jobs:
   generate:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Check out repository
+        uses: actions/checkout@v4
         with:
-          node-version: '18'
+          fetch-depth: 0
 
-      - name: Generate Markdown and PDFs for all languages
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install PDF tooling
         run: |
-          sudo apt-get update && sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-extra
-          mkdir -p docs/outputs/pdf
-          node << 'EOF'
-          const fs = require('fs');
-          const { execSync } = require('child_process');
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-extra
 
-          // Load all supported languages dynamically
-          const langs = JSON.parse(fs.readFileSync('docs/langs.json', 'utf8'));
-          const supportedLangs = Object.keys(langs);
-
-          function capitalize(str) {
-            return str.charAt(0).toUpperCase() + str.slice(1);
-          }
-
-          function generateMarkdown(jsonPath, outputPath, dict) {
-            const cv = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
-            let md = `# ${cv.name}\n\n`;
-
-            md += `**${dict.sectionTitles.location}:** ${cv.location}  \n`;
-            md += `**${dict.labels.email}:** ${cv.contact.email}  \n`;
-            if (cv.contact.linkedin) {
-              md += `**${dict.labels.linkedin}:** [${cv.contact.linkedin}](${cv.contact.linkedin})  \n`;
-            }
-            if (cv.contact.github) {
-              md += `**${dict.labels.github}:** [${cv.contact.github}](${cv.contact.github})  \n`;
-            }
-            md += `\n`;
-
-            if (cv.summary) {
-              md += `# ${dict.sectionTitles.summary}\n\n${cv.summary}\n\n`;
-            }
-
-            if (cv.experience && cv.experience.length > 0) {
-              md += `# ${dict.sectionTitles.experience}\n\n`;
-              cv.experience.forEach(exp => {
-                md += `### ${exp.title} - ***${exp.company}***\n\n`;
-                md += `***${exp.type}*** | *${exp.location}* | *${exp.period}*\n\n`;
-                if (exp.stack) {
-                  md += `**${dict.sectionTitles.techStack}:** ${exp.stack.join(', ')}\n\n`;
-                }
-                if (exp.notes && exp.notes.length > 0) {
-                  exp.notes.forEach(note => md += `- ${note}\n`);
-                  md += `\n`;
-                }
-              });
-            }
-
-            if (cv.techStack) {
-              md += `\n# ${dict.sectionTitles.techStack}\n\n`;
-              Object.entries(cv.techStack).forEach(([category, items]) => {
-                md += `**${capitalize(category)}:** ${items.join(', ')}\n\n`;
-              });
-            }
-
-            if (cv.languages) {
-              md += `\n# ${dict.sectionTitles.languages}\n\n`;
-              Object.entries(cv.languages).forEach(([lang, level]) => {
-                md += `- **${capitalize(lang)}:** ${level}\n`;
-              });
-            }
-
-            fs.writeFileSync(outputPath, md);
-            console.log(`Generated ${outputPath}`);
-          }
-
-          supportedLangs.forEach(lang => {
-            const suffix = lang === "en" ? "" : `_${lang}`;
-            const jsonPath = `docs/cv${suffix}.json`;
-            const mdPath = `docs/outputs/cv${suffix}.md`;
-            const pdfPath = `docs/outputs/pdf/cv${suffix}.pdf`;
-
-            if (!fs.existsSync(jsonPath)) {
-              console.warn(`⚠ No file found for ${jsonPath}, skipping.`);
-              return;
-            }
-
-            // Use full dictionary for the language to allow access to labels/sections etc
-            generateMarkdown(
-              jsonPath,
-              mdPath,
-              langs[lang]
-            );
-            execSync(`pandoc "${mdPath}" -o "${pdfPath}" --pdf-engine=xelatex -V geometry:margin=1.5cm`);
-            console.log(`Created PDF: ${pdfPath}`);
-          });
-          EOF
-
-      - name: Commit generated PDFs
+      - name: Generate and publish PDFs from the latest main revision
+        id: publish
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add docs/outputs/pdf/*.pdf
-          git diff --staged --quiet || git commit -m "Auto-generate CV PDFs"
-          git push
+          set -euo pipefail
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+          published=false
+          changed=false
+          release_needed=false
+          commit_sha=""
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git checkout -B pdf-build origin/main
+
+            source_epoch="$(git log -1 --format=%ct -- ':(glob)docs/cv*.json' docs/langs.json scripts/generate-pdfs.mjs)"
+            if [ -z "$source_epoch" ]; then
+              source_epoch="$(git log -1 --format=%ct)"
+            fi
+            export SOURCE_DATE_EPOCH="$source_epoch"
+            export FORCE_SOURCE_DATE=1
+            export TZ=UTC
+
+            node scripts/generate-site.mjs --check
+            node scripts/test-site.mjs
+            node scripts/generate-pdfs.mjs
+
+            git add docs/outputs/pdf/*.pdf
+            if git diff --staged --quiet; then
+              commit_sha="$(git rev-parse origin/main)"
+              if [ "$(git log -1 --format=%s origin/main)" = "Auto-generate CV PDFs (run ${GITHUB_RUN_NUMBER})" ]; then
+                release_needed=true
+              fi
+              published=true
+              break
+            fi
+
+            git commit -m "Auto-generate CV PDFs (run ${GITHUB_RUN_NUMBER})"
+            if git push origin HEAD:main; then
+              changed=true
+              release_needed=true
+              commit_sha="$(git rev-parse HEAD)"
+              published=true
+              break
+            fi
+
+            echo "Main advanced while PDFs were rendering; retrying from the latest revision ($attempt/3)."
+          done
+
+          if [ "$published" != true ]; then
+            echo "Unable to publish PDFs after three latest-main attempts." >&2
+            exit 1
+          fi
+
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+          echo "release_needed=$release_needed" >> "$GITHUB_OUTPUT"
+          echo "commit_sha=$commit_sha" >> "$GITHUB_OUTPUT"
+
+          # GITHUB_TOKEN pushes do not trigger legacy Pages builds, so request one explicitly.
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds" > /dev/null
+
+      - name: Create release with generated artifacts
+        if: steps.publish.outputs.release_needed == 'true'
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: "auto-release-${{ github.run_number }}"
           name: "Automated Release ${{ github.run_number }}"
+          target_commitish: ${{ steps.publish.outputs.commit_sha }}
+          fail_on_unmatched_files: true
           body: |
             This release includes:
             - Updated CV PDFs for all supported languages
             - Latest debug APK build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload PDFs and APK to Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: "auto-release-${{ github.run_number }}"
           files: |
-            docs/outputs/pdf/cv.pdf
-            docs/outputs/pdf/cv_de.pdf
-            docs/outputs/pdf/cv_tr.pdf
+            docs/outputs/pdf/*.pdf
             docs/outputs/apk/app-debug.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
