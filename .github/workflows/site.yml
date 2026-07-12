@@ -1,0 +1,50 @@
+name: Validate static CV site
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'site/**'
+      - 'scripts/generate-site.mjs'
+      - 'scripts/generate-pdfs.mjs'
+      - 'scripts/test-site.mjs'
+      - 'package.json'
+      - '.github/workflows/render-cv.yml'
+      - '.github/workflows/site.yml'
+  push:
+    branches: ['main']
+    paths:
+      - 'docs/**'
+      - 'site/**'
+      - 'scripts/generate-site.mjs'
+      - 'scripts/generate-pdfs.mjs'
+      - 'scripts/test-site.mjs'
+      - 'package.json'
+      - '.github/workflows/render-cv.yml'
+      - '.github/workflows/site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: static-cv-site-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify generated pages and routes
+        run: npm run check:site
+
+      - name: Validate PDF generator inputs
+        run: npm run check:pdf

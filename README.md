@@ -7,3 +7,13 @@
 
 [For those about to apply](https://medium.com/@luetfitekin/for-those-about-to-apply-i-salute-you-0bb8b9c42a81)
 
+## CV website
+
+The localized JSON files in `docs/` are the source of truth. Generate the static GitHub Pages HTML after changing CV, language, or stack data:
+
+```sh
+npm run build:site
+```
+
+Do not edit `docs/index.html`, `docs/de/index.html`, or `docs/tr/index.html` directly. CI runs `npm run check:site` to verify that every generated page is current and that published routes and Android/PDF compatibility contracts still work. `npm run check:pdf` validates PDF inputs without requiring Pandoc or TeX. Keep the `Validate static CV site / verify` check required on `main`; legacy GitHub Pages deployments are not gated by post-push validation.
+
